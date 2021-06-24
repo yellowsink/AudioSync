@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AudioSync.Client
 {
@@ -13,10 +14,12 @@ namespace AudioSync.Client
 
 		public SyncClient(string url, string name, bool isMaster = false)
 		{
-			url = url.TrimEnd('/');
+			url =  url.TrimEnd('/');
+			url += "/synchub";
 			
 			_connection = new HubConnectionBuilder()
-						 .WithUrl(url + "/synchub")
+						 .AddJsonProtocol()
+						 .WithUrl(url)
 						 .WithAutomaticReconnect()
 						 .Build();
 

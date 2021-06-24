@@ -1,5 +1,6 @@
 using System;
 using AudioSync.Shared;
+using Microsoft.AspNetCore.SignalR.Client;
 using Tmds.DBus;
 
 namespace AudioSync.Client
@@ -21,22 +22,18 @@ namespace AudioSync.Client
 		// Add an event with just a string, for the name of the user who performed the action
 		private void AddOneParamEvent<T>(string signalREvent, EventHandler<T> @event)
 		{
-			_connection.On(signalREvent, new []{typeof(string)},
-						   async (args, o) =>
-						   { 
-							   @event.Invoke(o, (T) args[0]);
-						   },
-						   this);
+			_connection.On<T>(signalREvent, param =>
+											{
+												@event.Invoke(this, param);
+											});
 		}
 
 		private void AddTwoParamEvent<T1, T2>(string signalREvent, EventHandler<(T1, T2)> @event)
 		{
-			_connection.On(signalREvent, new []{typeof(T1), typeof(T2)},
-						   async (args, o) =>
-						   { 
-							   @event.Invoke(o, ((T1) args[0], (T2) args[1]));
-						   },
-						   this);
+			_connection.On<T1, T2>(signalREvent, (param1, param2) =>
+												 {
+													 @event.Invoke(this, (param1, param2));
+												 });
 		}
 
 		public event EventHandler<string>           TransportPlayEvent;
