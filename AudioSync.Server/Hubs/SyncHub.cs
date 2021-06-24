@@ -9,15 +9,17 @@ namespace AudioSync.Server.Hubs
 {
 	public class SyncHub : Hub
 	{
-		private IDataService _store;
+		private readonly IDataService _store;
 		
-		public SyncHub(IDataService store) { _store = store; }
+		public SyncHub(IDataService store) => _store = store;
 
 		#region Auth
 		
 		public bool ConnectMaster(string name)
 		{
 			if (!_store.Exists("master")) return false;
+			
+			Console.WriteLine($"{name} is the new master");
 			
 			_store.Set("master", Context.ConnectionId);
 			SetName(name);
@@ -27,6 +29,8 @@ namespace AudioSync.Server.Hubs
 
 		public void DisconnectMaster()
 		{
+			Console.WriteLine($"Master ({GetName()} left");
+			
 			_store.Remove("master");
 			RemoveName();
 		}
@@ -35,6 +39,8 @@ namespace AudioSync.Server.Hubs
 		{
 			if (IsMaster()) return;
 			
+			Console.WriteLine($"{name} joined");
+			
 			await Groups.AddToGroupAsync(Context.ConnectionId, "clients");
 			SetName(name);
 		}
@@ -42,6 +48,8 @@ namespace AudioSync.Server.Hubs
 		public async Task DisconnectClient()
 		{
 			if (IsMaster()) return;
+			
+			Console.WriteLine($"{GetName()} left");
 
 			await Groups.RemoveFromGroupAsync(Context.ConnectionId, "clients");
 			RemoveName();
@@ -54,16 +62,19 @@ namespace AudioSync.Server.Hubs
 		public async Task Play()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Play", GetName());
+			Console.WriteLine("Transport play");
 		}
 
 		public async Task Pause()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Pause", GetName());
+			Console.WriteLine("Transport pause");
 		}
 
 		public async Task Stop()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Stop", GetName());
+			Console.WriteLine("Transport stop");
 		}
 		
 		#endregion
@@ -73,11 +84,13 @@ namespace AudioSync.Server.Hubs
 		public async Task Next()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Next", GetName());
+			Console.WriteLine("Queue next");
 		}
 
 		public async Task Previous()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Previous", GetName());
+			Console.WriteLine("Queue previous");
 		}
 
 		public async Task SetQueue(Song[] songs)
@@ -87,10 +100,13 @@ namespace AudioSync.Server.Hubs
 			_store.Set("songs", songs.ToList());
 
 			await Clients.Group("clients").SendAsync("SetQueue", GetName(), songs);
+			
+			Console.WriteLine("Set queue");
 		}
 
 		public Song[] GetQueue()
 		{
+			Console.WriteLine($"{GetName()} queried the queue");
 			return _store.TryGet("songs", out var stored)
 				? ((IList<Song>) stored)!.ToArray()
 				: Array.Empty<Song>();
@@ -108,6 +124,8 @@ namespace AudioSync.Server.Hubs
 			_store.Set("songs", songs);
 
 			await Clients.Group("clients").SendAsync("Enqueue", GetName(), song);
+			
+			Console.WriteLine("Song added to the queue");
 		}
 
 		public async Task ClearQueue()
@@ -117,6 +135,8 @@ namespace AudioSync.Server.Hubs
 			_store.Remove("songs");
 
 			await Clients.Group("clients").SendAsync("ClearQueue", GetName());
+			
+			Console.WriteLine("Queue cleared");
 		}
 
 		#endregion

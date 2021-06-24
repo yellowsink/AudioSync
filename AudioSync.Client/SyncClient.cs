@@ -4,32 +4,57 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace AudioSync.Client
 {
-	public class SyncClient : IDisposable
+	public partial class SyncClient : IDisposable
 	{
 		private HubConnection _connection;
-		
-		public SyncClient(string url)
+
+		public bool   IsMaster { get; private set; }
+		public string Name     { get; }
+
+		public SyncClient(string url, string name, bool isMaster = false)
 		{
 			url = url.TrimEnd('/');
 			
 			_connection = new HubConnectionBuilder()
-						 .WithUrl(url + "/chathub")
+						 .WithUrl(url + "/synchub")
 						 .WithAutomaticReconnect()
 						 .Build();
+
+			IsMaster = isMaster;
+			Name     = name;
+			
+			SetupEvents();
 		}
 
-		public async Task Connect() => await _connection.StartAsync();
+		public async Task Connect()
+		{
+			await _connection.StartAsync();
+			if (IsMaster)
+			{
+				var result           = await _connection.InvokeAsync<bool>("ConnectMaster", Name);
+				if (result) IsMaster = false;
+				await _connection.InvokeAsync("ConnectClient", Name);
+			}
+			else
+				await _connection.InvokeAsync("ConnectClient", Name);
+		}
 
-		public async Task Disconnect() => await _connection.StopAsync();
+		public async Task Disconnect()
+		{
+			if (IsMaster)
+				await _connection.InvokeAsync("DisconnectMaster");
+			else
+				await _connection.InvokeAsync("DisconnectClient");
+			
+			await _connection.StopAsync();
+		}
 
-		public async Task Send(string endpoint, params object[] args) => await _connection.InvokeCoreAsync(endpoint, args);
+		public       void Dispose()      => DisposeAsync().Wait();
 
-		public async Task<T> Send<T>(string endpoint, params object[] args) => (T) await _connection.InvokeCoreAsync(endpoint, typeof(T), args);
-
-		public void AddEventHandler(string endpoint, Type[] types, Func<object[], Task> handler) => _connection.On(endpoint, types, handler);
-
-		public       void Dispose()      => DisposeAsync().GetAwaiter().GetResult();
-
-		private async Task DisposeAsync() => await _connection.DisposeAsync();
+		private async Task DisposeAsync()
+		{
+			if (_connection.State != HubConnectionState.Disconnected) await Disconnect();
+			await _connection.DisposeAsync();
+		}
 	}
 }

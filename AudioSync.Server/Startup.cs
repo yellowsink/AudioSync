@@ -19,8 +19,9 @@ namespace AudioSync.Server
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddSingleton<IDataService, DataService>();
-			
+
 			services.AddSignalR();
+			services.AddControllers();
 			services.AddResponseCompression(opts =>
 											{
 												opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -43,6 +44,7 @@ namespace AudioSync.Server
 
 			app.UseEndpoints(endpoints =>
 							 {
+								 endpoints.MapControllers();
 								 endpoints.MapHub<SyncHub>("/synchub");
 							 });
 		}
