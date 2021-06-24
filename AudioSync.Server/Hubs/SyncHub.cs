@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioSync.Shared;
@@ -68,18 +70,53 @@ namespace AudioSync.Server.Hubs
 
 		#region Queue
 
-		public async Task SetSongs(Song[] songs)
+		public async Task Next()
+		{
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Next", GetName());
+		}
+
+		public async Task Previous()
+		{
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Previous", GetName());
+		}
+
+		public async Task SetQueue(Song[] songs)
 		{
 			if (!IsMaster()) return;
 			
 			_store.Set("songs", songs.ToList());
 
-			await Clients.Group("clients").SendAsync("SetSongs", GetName(), songs);
+			await Clients.Group("clients").SendAsync("SetQueue", GetName(), songs);
+		}
+
+		public Song[] GetQueue()
+		{
+			return _store.TryGet("songs", out var stored)
+				? ((IList<Song>) stored)!.ToArray()
+				: Array.Empty<Song>();
 		}
 
 		public async Task Enqueue(Song song)
 		{
+			if (!IsMaster()) return;
+			var songs = _store.TryGet("songs", out var stored)
+				? (IList<Song>) stored
+				: new List<Song>();
+				
+			songs?.Add(song);
 			
+			_store.Set("songs", songs);
+
+			await Clients.Group("clients").SendAsync("Enqueue", GetName(), song);
+		}
+
+		public async Task ClearQueue()
+		{
+			if (!IsMaster()) return;
+			
+			_store.Remove("songs");
+
+			await Clients.Group("clients").SendAsync("ClearQueue", GetName());
 		}
 
 		#endregion
