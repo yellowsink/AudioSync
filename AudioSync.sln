@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSync.Shared", "AudioSync.Shared\AudioSync.Shared.csproj", "{1C5A4B70-C9E2-4420-BA3F-8EE7BB842E6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSync.Client", "AudioSync.Client\AudioSync.Client.csproj", "{14722E69-440F-46C0-9560-68278EEB291E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSync.Server", "AudioSync.Server\AudioSync.Server.csproj", "{AE23BA32-8219-44D0-AD63-296B20A5F8E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C5A4B70-C9E2-4420-BA3F-8EE7BB842E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C5A4B70-C9E2-4420-BA3F-8EE7BB842E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C5A4B70-C9E2-4420-BA3F-8EE7BB842E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C5A4B70-C9E2-4420-BA3F-8EE7BB842E6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14722E69-440F-46C0-9560-68278EEB291E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14722E69-440F-46C0-9560-68278EEB291E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14722E69-440F-46C0-9560-68278EEB291E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14722E69-440F-46C0-9560-68278EEB291E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE23BA32-8219-44D0-AD63-296B20A5F8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE23BA32-8219-44D0-AD63-296B20A5F8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE23BA32-8219-44D0-AD63-296B20A5F8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE23BA32-8219-44D0-AD63-296B20A5F8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
