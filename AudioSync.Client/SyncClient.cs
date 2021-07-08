@@ -9,7 +9,7 @@ namespace AudioSync.Client
 		private HubConnection _connection;
 
 		public bool   IsMaster { get; private set; }
-		public string Name     { get; }
+		public string Name     { get; private set; }
 
 		public SyncClient(string url, string name, bool isMaster = false)
 		{

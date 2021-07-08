@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioSync.Shared;
@@ -7,73 +6,113 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace AudioSync.Server.Hubs
 {
-	public class SyncHub : Hub
+	public partial class SyncHub : Hub
 	{
-		private readonly IDataService _store;
-		
-		public SyncHub(IDataService store) => _store = store;
+		private readonly HubState _state;
+
+		public SyncHub(HubState state) => _state = state;
 
 		#region Auth
 		
-		public bool ConnectMaster(string name)
+		public async Task<bool> ConnectMaster(string name)
 		{
-			if (_store.Exists("master")) return false;
+			if (_state.MasterExists || !RegisterName(name)) return false;
 			
 			Console.WriteLine($"{name} is the new master");
 			
-			_store.Set("master", Context.ConnectionId);
-			SetName(name);
-			
+			_state.MasterId = Context.ConnectionId;
+			SetOrAddUser(new (name)
+			{
+				IsMaster = true
+			});
+
+			await Clients.Group("clients").SendAsync("UpdateUser", GetUser());
+
 			return true;
 		}
 
-		public void DisconnectMaster()
+		public async Task DisconnectMaster()
 		{
-			Console.WriteLine($"Master ({GetName()} left");
-			
-			_store.Remove("master");
-			RemoveName();
+			var name = GetUser().Name;
+			Console.WriteLine($"Master ({name} left");
+
+			_state.MasterId = null;
+			RemoveNameIfRegistered(name);
+			RemoveUser();
+
+			await Clients.Group("clients").SendAsync("RemoveUser", name);
 		}
 
-		public async Task ConnectClient(string name)
+		public async Task<bool> ConnectClient(string name)
 		{
-			if (IsMaster()) return;
+			if (IsMaster() || !RegisterName(name)) return false;
 			
 			Console.WriteLine($"{name} joined");
 			
 			await Groups.AddToGroupAsync(Context.ConnectionId, "clients");
-			SetName(name);
+			SetOrAddUser(new(name));
+			
+			await Clients.Group("clients").SendAsync("UpdateUser", GetUser());
+			return true;
 		}
 
 		public async Task DisconnectClient()
 		{
 			if (IsMaster()) return;
-			
-			Console.WriteLine($"{GetName()} left");
+
+			var name = GetUser().Name;
+			Console.WriteLine($"{name} left");
 
 			await Groups.RemoveFromGroupAsync(Context.ConnectionId, "clients");
-			RemoveName();
+			RemoveNameIfRegistered(name);
+			RemoveUser();
+
+			await Clients.Group("clients").SendAsync("RemoveUser", name);
 		}
-		
+
+		public User[] GetUsers() => _state.Users.Values.ToArray();
+
+		public async Task SetStatus(UserStatus status)
+		{
+			var user = GetUser();
+			user.Status = status;
+			SetOrAddUser(user);
+			await Clients.Group("clients").SendAsync("UpdateUser", GetUser());
+		}
+
+		public async Task<bool> SetName(string name)
+		{
+			if (!RegisterName(name)) return false;
+			
+			var user = GetUser();
+			RemoveNameIfRegistered(user.Name);
+			
+			user.Name = name;
+			SetOrAddUser(user);
+
+			await Clients.Group("clients").SendAsync("UpdateUser", GetUser());
+			return true;
+		}
+
 		#endregion
 		
 		#region Transport
 		
 		public async Task Play()
 		{
-			if (IsMaster()) await Clients.Group("clients").SendAsync("Play", GetName());
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Play", GetUser().Name);
 			Console.WriteLine("Transport play");
 		}
 
 		public async Task Pause()
 		{
-			if (IsMaster()) await Clients.Group("clients").SendAsync("Pause", GetName());
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Pause", GetUser().Name);
 			Console.WriteLine("Transport pause");
 		}
 
 		public async Task Stop()
 		{
-			if (IsMaster()) await Clients.Group("clients").SendAsync("Stop", GetName());
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Stop", GetUser().Name);
 			Console.WriteLine("Transport stop");
 		}
 		
@@ -83,47 +122,40 @@ namespace AudioSync.Server.Hubs
 
 		public async Task Next()
 		{
-			if (IsMaster()) await Clients.Group("clients").SendAsync("Next", GetName());
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Next", GetUser().Name);
 			Console.WriteLine("Queue next");
 		}
 
 		public async Task Previous()
 		{
-			if (IsMaster()) await Clients.Group("clients").SendAsync("Previous", GetName());
+			if (IsMaster()) await Clients.Group("clients").SendAsync("Previous", GetUser().Name);
 			Console.WriteLine("Queue previous");
 		}
 
-		public async Task SetQueue(Song[] songs)
+		public async Task SetQueue(Queue queue)
 		{
 			if (!IsMaster()) return;
-			
-			_store.Set("songs", songs.ToList());
 
-			await Clients.Group("clients").SendAsync("SetQueue", GetName(), songs);
+			_state.Queue = queue;
+
+			await Clients.Group("clients").SendAsync("SetQueue", GetUser().Name, queue);
 			
 			Console.WriteLine("Set queue");
 		}
 
-		public Song[] GetQueue()
+		public Queue GetQueue()
 		{
-			Console.WriteLine($"{GetName()} queried the queue");
-			return _store.TryGet("songs", out var stored)
-				? ((IList<Song>) stored)!.ToArray()
-				: Array.Empty<Song>();
+			Console.WriteLine($"{GetUser().Name} queried the queue");
+			return _state.Queue;
 		}
 
 		public async Task Enqueue(Song song)
 		{
 			if (!IsMaster()) return;
-			var songs = _store.TryGet("songs", out var stored)
-				? (IList<Song>) stored
-				: new List<Song>();
-				
-			songs?.Add(song);
 			
-			_store.Set("songs", songs);
+			_state.Queue.Add(song);
 
-			await Clients.Group("clients").SendAsync("Enqueue", GetName(), song);
+			await Clients.Group("clients").SendAsync("Enqueue", GetUser().Name, song);
 			
 			Console.WriteLine("Song added to the queue");
 		}
@@ -132,26 +164,12 @@ namespace AudioSync.Server.Hubs
 		{
 			if (!IsMaster()) return;
 			
-			_store.Remove("songs");
+			_state.Queue.Clear();
 
-			await Clients.Group("clients").SendAsync("ClearQueue", GetName());
+			await Clients.Group("clients").SendAsync("ClearQueue", GetUser().Name);
 			
 			Console.WriteLine("Queue cleared");
 		}
-
-		#endregion
-		
-		#region Misc
-		
-		private bool IsMaster() => _store.TryGet("master", out var id) && (string)id == Context.ConnectionId;
-
-		private void SetName(string name) => SetName(Context.ConnectionId, name);
-		private string GetName()            => GetName(Context.ConnectionId);
-		private void RemoveName()         => RemoveName(Context.ConnectionId);
-		
-		private void   SetName(string    connectionId, string name) => _store.Set("name_" + connectionId, name);
-		private string GetName(string    connectionId) => (string)_store.Get("name_" + connectionId);
-		private void   RemoveName(string connectionId) => _store.Remove("name_" + connectionId);
 
 		#endregion
 	}
