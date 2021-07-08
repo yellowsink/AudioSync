@@ -1,7 +1,6 @@
 using System;
 using AudioSync.Shared;
 using Microsoft.AspNetCore.SignalR.Client;
-using Tmds.DBus;
 
 namespace AudioSync.Client
 {

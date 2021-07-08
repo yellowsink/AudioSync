@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -34,8 +35,9 @@ namespace AudioSync.Client
 			nameBox.IsEnabled        = false;
 			masterBox.IsEnabled      = false;
 			connnectButton.IsEnabled = false;
-
-			_syncClient.Connect().Wait();
+			
+			// I have to do it like this so that it runs on another thread, and it doesnt hang
+			Task.Factory.StartNew(async () => await _syncClient.Connect()).Wait();
 		}
 	}
 }

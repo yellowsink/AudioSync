@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AudioSync.Client
 {
@@ -18,7 +17,6 @@ namespace AudioSync.Client
 			url += "/synchub";
 			
 			_connection = new HubConnectionBuilder()
-						 .AddJsonProtocol()
 						 .WithUrl(url)
 						 .WithAutomaticReconnect()
 						 .Build();
@@ -34,12 +32,13 @@ namespace AudioSync.Client
 			await _connection.StartAsync();
 			if (IsMaster)
 			{
+				// Will fail if there is already a master.
 				var result           = await _connection.InvokeAsync<bool>("ConnectMaster", Name);
 				if (result) IsMaster = false;
-				await _connection.InvokeAsync("ConnectClient", Name);
 			}
-			else
-				await _connection.InvokeAsync("ConnectClient", Name);
+			
+			// Does nothing if you are the master, else connects as a normal client
+			await _connection.InvokeAsync("ConnectClient", Name);
 		}
 
 		public async Task Disconnect()

@@ -17,7 +17,7 @@ namespace AudioSync.Server.Hubs
 		
 		public bool ConnectMaster(string name)
 		{
-			if (!_store.Exists("master")) return false;
+			if (_store.Exists("master")) return false;
 			
 			Console.WriteLine($"{name} is the new master");
 			
