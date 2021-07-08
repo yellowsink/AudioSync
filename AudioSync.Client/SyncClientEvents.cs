@@ -9,7 +9,7 @@ namespace AudioSync.Client
 		private void SetupEvents()
 		{
 			AddOneParamEvent("UpdateUser", UpdateUserEvent);
-			AddOneParamEvent("RemoveUser", UpdateUserEvent);
+			AddOneParamEvent("RemoveUser", RemoveUserEvent);
 			AddOneParamEvent("Play",       TransportPlayEvent);
 			AddOneParamEvent("Pause",      TransportPauseEvent);
 			AddOneParamEvent("Stop",       TransportStopEvent);

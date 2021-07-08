@@ -11,7 +11,9 @@ namespace AudioSync.Client
 		public bool   IsMaster { get; private set; }
 		public string Name     { get; private set; }
 
+#pragma warning disable 8618
 		public SyncClient(string url, string name, bool isMaster = false)
+#pragma warning restore 8618
 		{
 			url =  url.TrimEnd('/');
 			url += "/synchub";

@@ -8,17 +8,7 @@
 	
 	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
 		
-		<TextBlock Grid.Column="0" Grid.Row="0" FontSize="25" Text="AudioSync" />
 		
-		<Label Grid.Row="1" Grid.Column="0" Content="Server URL (you will be given this)" VerticalAlignment="Center" />
-		<TextBox Grid.Row="1" Grid.Column="1" Name="TextBoxServerUrl" />
-		
-		<CheckBox Grid.Row="2" Grid.Column="1" Content="Attempt to become room master" Name="CheckBoxMaster" />
-		
-		<Label Grid.Row="3" Grid.Column="0" Content="Name" VerticalAlignment="Center" />
-		<TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxName" />
-		
-		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Name="ButtonConnect" Margin="5" VerticalAlignment="Stretch" Click="ButtonConnect_OnClick" />
 		
 	</Grid>
 	
