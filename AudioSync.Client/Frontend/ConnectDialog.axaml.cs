@@ -41,7 +41,8 @@ namespace AudioSync.Client.Frontend
 				
 
 				// I have to run it on another thread, and the HTTP connection doesnt hang
-				SyncClient.Connect().RunOnNewThread();
+				// SyncClient.Connect().RunOnNewThread().Wait(); // why the hell doesnt this work
+				Task.Factory.StartNew(() => SyncClient.Connect().Wait()).Wait();
 				Close();
 			}
 			catch (AggregateException)
