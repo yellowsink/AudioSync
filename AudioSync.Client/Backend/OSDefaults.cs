@@ -13,6 +13,8 @@ namespace AudioSync.Client.Backend
 				  or PlatformID.Win32NT 
 				  or PlatformID.WinCE;
 		
+		#region CacheLocation
+		
 		private static string DefaultWindowsCacheLocation
 			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AudioSyncCache");
 
@@ -34,6 +36,9 @@ namespace AudioSync.Client.Backend
 			_                       => throw new ArgumentOutOfRangeException()
 		};
 		
+		#endregion
+		
+		#region ToolLocation
 		
 		private static string DefaultWindowsToolLocation
 			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AudioSyncTools");
@@ -54,5 +59,32 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacToolLocation,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
+		
+		#endregion
+		
+		#region ConfigLocation
+		
+		private static string DefaultWindowsConfigLocation
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"AudioSync\config.json");
+
+		private static string DefaultUnixConfigLocation
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config/audiosync_config.json");
+
+		private static string DefaultMacConfigLocation
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library/AudioSync/config.json");
+		
+		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+		public static string DefaultConfigLocation => Environment.OSVersion.Platform switch
+		{
+			PlatformID.Win32S       => DefaultWindowsConfigLocation,
+			PlatformID.Win32Windows => DefaultWindowsConfigLocation,
+			PlatformID.Win32NT      => DefaultWindowsConfigLocation,
+			PlatformID.WinCE        => DefaultWindowsConfigLocation,
+			PlatformID.Unix         => DefaultUnixConfigLocation,
+			PlatformID.MacOSX       => DefaultMacConfigLocation,
+			_                       => throw new ArgumentOutOfRangeException()
+		};
+		
+		#endregion
 	}
 }
