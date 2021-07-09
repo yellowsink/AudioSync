@@ -33,12 +33,12 @@ namespace AudioSync.Client.Frontend
 			try
 			{
 				SyncClient = new SyncClient(urlBox.Text, nameBox.Text, masterBox.IsChecked ?? false);
-				
+
 				urlBox.IsEnabled        = false;
 				nameBox.IsEnabled       = false;
 				masterBox.IsEnabled     = false;
 				connectButton.IsEnabled = false;
-				
+
 
 				// I have to run it on another thread, and the HTTP connection doesnt hang
 				// SyncClient.Connect().RunOnNewThread().Wait(); // why the hell doesnt this work
@@ -46,14 +46,24 @@ namespace AudioSync.Client.Frontend
 				Close();
 			}
 			catch (AggregateException)
-			{
-				statusBar.Text          = "Error connecting. Check URL is correct";
-				urlBox.IsEnabled        = true;
-				nameBox.IsEnabled       = true;
-				masterBox.IsEnabled     = true;
-				connectButton.IsEnabled = true;
-				SyncClient              = null;
+			{ // Something went wrong in the Connect() thread
+				statusBar.Text = "Error connecting. Check URL is correct";
 			}
+			catch (UriFormatException)
+			{ // The URL wasn't valid
+				statusBar.Text = "Please enter a valid URL";
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+
+			// if we're here, something went wrong
+			urlBox.IsEnabled        = true;
+			nameBox.IsEnabled       = true;
+			masterBox.IsEnabled     = true;
+			connectButton.IsEnabled = true;
+			SyncClient              = null;
 		}
 	}
 }
