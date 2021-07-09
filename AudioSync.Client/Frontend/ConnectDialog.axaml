@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
-        x:Class="AudioSync.Client.ConnectDialog"
+        x:Class="AudioSync.Client.Frontend.ConnectDialog"
         Title="Connect To Server">
 	
 	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *, Auto">

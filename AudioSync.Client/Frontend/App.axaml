@@ -1,6 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AudioSync.Client.App">
+             x:Class="AudioSync.Client.Frontend.App">
     <Application.Styles>
         <FluentTheme Mode="Dark"/>
     </Application.Styles>

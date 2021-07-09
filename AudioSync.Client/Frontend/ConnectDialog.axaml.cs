@@ -1,14 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using AudioSync.Client.Backend;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.X11;
 
-namespace AudioSync.Client
+namespace AudioSync.Client.Frontend
 {
 	public class ConnectDialog : Window
 	{

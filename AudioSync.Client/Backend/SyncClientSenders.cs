@@ -1,7 +1,7 @@
 using AudioSync.Shared;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace AudioSync.Client
+namespace AudioSync.Client.Backend
 {
 	public partial class SyncClient
 	{

@@ -13,4 +13,18 @@
     <ItemGroup>
       <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Frontend\App.axaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Frontend\ConnectDialog.axaml.cs">
+        <DependentUpon>ConnectDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Frontend\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

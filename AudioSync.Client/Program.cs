@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using AudioSync.Client.Frontend;
+using Avalonia;
 
 namespace AudioSync.Client
 {

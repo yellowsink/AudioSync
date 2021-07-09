@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using AudioSync.Client.Backend;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AudioSync.Client
+namespace AudioSync.Client.Frontend
 {
 	public class MainWindow : Window
 	{
