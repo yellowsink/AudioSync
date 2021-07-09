@@ -38,6 +38,29 @@ namespace AudioSync.Client.Backend
 		
 		#endregion
 		
+		#region DownloadLocation
+		
+		private static string DefaultWindowsDownloadLocation
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Temp\AudioSyncDownloads");
+
+		private const string DefaultUnixDownloadLocation = "/tmp/audiosync_downloads";
+
+		private const string DefaultMacDownloadLocation = DefaultUnixDownloadLocation;
+
+		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+		public static string DefaultDownloadLocation => Environment.OSVersion.Platform switch
+		{
+			PlatformID.Win32S       => DefaultWindowsDownloadLocation,
+			PlatformID.Win32Windows => DefaultWindowsDownloadLocation,
+			PlatformID.Win32NT      => DefaultWindowsDownloadLocation,
+			PlatformID.WinCE        => DefaultWindowsDownloadLocation,
+			PlatformID.Unix         => DefaultUnixDownloadLocation,
+			PlatformID.MacOSX       => DefaultMacDownloadLocation,
+			_                       => throw new ArgumentOutOfRangeException()
+		};
+		
+		#endregion
+		
 		#region ToolLocation
 		
 		private static string DefaultWindowsToolLocation
@@ -57,6 +80,28 @@ namespace AudioSync.Client.Backend
 			PlatformID.WinCE        => DefaultWindowsToolLocation,
 			PlatformID.Unix         => DefaultUnixToolLocation,
 			PlatformID.MacOSX       => DefaultMacToolLocation,
+			_                       => throw new ArgumentOutOfRangeException()
+		};
+		
+		#endregion
+		
+		#region ToolFileNames
+
+		private const string DefaultWindowsYtdlFileName = "ytdl.exe";
+
+		private const string DefaultUnixYtdlFileName = "ytdl";
+
+		private const string DefaultMacYtdlFileName = DefaultUnixYtdlFileName;
+
+		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+		public static string DefaultYtdlFileName => Environment.OSVersion.Platform switch
+		{
+			PlatformID.Win32S       => DefaultWindowsYtdlFileName,
+			PlatformID.Win32Windows => DefaultWindowsYtdlFileName,
+			PlatformID.Win32NT      => DefaultWindowsYtdlFileName,
+			PlatformID.WinCE        => DefaultWindowsYtdlFileName,
+			PlatformID.Unix         => DefaultUnixYtdlFileName,
+			PlatformID.MacOSX       => DefaultMacYtdlFileName,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
 		

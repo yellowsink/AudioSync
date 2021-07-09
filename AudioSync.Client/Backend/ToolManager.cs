@@ -20,8 +20,8 @@ namespace AudioSync.Client.Backend
 
 		public ToolVersions Versions = new();
 
-		public string YtdlExecutableLocation => YtdlCustomLocation
-											 ?? Path.Combine(ToolDirectory, OSDefaults.IsOnWindows ? "ytdl.exe" : "ytdl");
+		public string YtdlExecutableLocation
+			=> YtdlCustomLocation ?? Path.Combine(ToolDirectory, OSDefaults.DefaultYtdlFileName);
 
 		private ILogger<ToolManager> _logger = HelperUtils.CreateLogger<ToolManager>();
 

@@ -1,0 +1,1 @@
+namespace AudioSync.Shared { public class SongUnavailableException : System.Exception { } }
