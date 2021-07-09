@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend.Cache;
 using AudioSync.Shared;
@@ -35,15 +36,15 @@ namespace AudioSync.Client.Backend
 		public async Task DownloadSong(Song song, string? downloadFolder = null)
 		{
 			downloadFolder ??= OSDefaults.DefaultDownloadLocation;
-			var file = await RunYtdl(await song.DownloadableUrlAsync(), $"{song.Artist} - {song.Name}", downloadFolder);
+			var (file, ext) = await RunYtdl(await song.DownloadableUrlAsync(), $"{song.Artist} - {song.Name}", downloadFolder);
 
-			_moveToCacheAction(CreateCacheItem(song, file.Extension), file);
+			_moveToCacheAction(CreateCacheItem(song, ext), file);
 		}
 
 		/// <summary>
 		/// Runs YTDL to download the given url to the given folder with the given filename
 		/// </summary>
-		private async Task<FileInfo> RunYtdl(string url, string filename, string downloadFolder)
+		private async Task<(FileInfo, string)> RunYtdl(string url, string filename, string downloadFolder)
 		{
 			// %(ext)s is a pattern that tells YTDL to insert the correct file extension
 			var startOptions = new ProcessStartInfo(_ytdlPath, $"{url} --print-json -o {filename}.%(ext)s")
@@ -52,10 +53,11 @@ namespace AudioSync.Client.Backend
 			};
 			var process      = Process.Start(startOptions);
 			await process!.WaitForExitAsync();
-			var result             = await process.StandardOutput.ReadToEndAsync();
-			var downloadedFileName = JsonSerializer.Deserialize<YtdlOutputObject>(result)!.Filename;
+			var result = await process.StandardOutput.ReadToEndAsync();
+			
+			var ytdlOutputObject = JsonSerializer.Deserialize<YtdlOutputObject>(result)!;
 
-			return new FileInfo(Path.Combine(downloadFolder, downloadedFileName));
+			return (new FileInfo(ytdlOutputObject.Filename), ytdlOutputObject.Extension);
 		}
 		
 		/// <summary>
@@ -72,6 +74,10 @@ namespace AudioSync.Client.Backend
 	/// </summary>
 	public class YtdlOutputObject
 	{
-		public string Filename { get; set; } = null!;
+		[JsonPropertyName("_filename")]
+		public string Filename { get;  set; } = null!;
+
+		[JsonPropertyName("ext")]
+		public string Extension { get; set; } = null!;
 	}
 }
