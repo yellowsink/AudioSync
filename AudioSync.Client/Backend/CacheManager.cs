@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using AudioSync.Client.Backend.Cache;
+using AudioSync.Shared;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 using NodaTime.Extensions;
@@ -17,7 +18,7 @@ namespace AudioSync.Client.Backend
 	{
 		private bool _disposed;
 		
-		private List<ICacheItem>      _cacheItems;
+		private List<ICacheItem> _cacheItems;
 		public  ICacheItem[]          CacheItems
 		{
 			get => _cacheItems.ToArray();
@@ -27,11 +28,15 @@ namespace AudioSync.Client.Backend
 		public readonly  string                CacheRoot;
 		private readonly ILogger<CacheManager> _logger = HelperUtils.CreateLogger<CacheManager>();
 		
+#pragma warning disable 8618
 		public CacheManager(string? cacheLocation = null)
+#pragma warning restore 8618
 		{
 			CacheRoot  = cacheLocation ?? OSDefaults.DefaultCacheLocation;
-			LoadCache();
 			Directory.CreateDirectory(CacheRoot);
+
+			try { LoadCache(); }
+			catch (FileNotFoundException) { _cacheItems = new(); }
 		}
 
 		public void LoadCache()
@@ -139,6 +144,23 @@ namespace AudioSync.Client.Backend
 			_logger.LogInformation("Removing the cache entirely");
 			Directory.Delete(CacheRoot, true);
 			Dispose();
+		}
+
+		public (ICacheItem, FileInfo)? GetFromCache(Song song)
+		{
+			CheckDisposed();
+
+			var cacheItem = _cacheItems.FirstOrDefault(item => item.SongName == song.Name
+															&& item.ArtistName == song.Artist);
+
+			if (cacheItem == null) return null;
+
+			var file = new FileInfo(Path.Combine(CacheRoot,
+												 cacheItem.CachePrefix,
+												 cacheItem.ArtistName,
+												 cacheItem.SongName + cacheItem.FileExtension));
+
+			return (cacheItem, file);
 		}
 
 		private DiskCacheItem[] GetItemsFromDisk()

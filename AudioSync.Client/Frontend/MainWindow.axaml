@@ -6,9 +6,24 @@
         x:Class="AudioSync.Client.Frontend.MainWindow"
         Title="AudioSync">
 	
-	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+	<Grid Margin="5" RowDefinitions="Auto" ColumnDefinitions="*">
 		
+		<!-- The header design takes inspiration from Cantata and Rhythmbox -->
 		
+		<!-- Header - Player controls etc -->
+		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Name="StackPanelHeader">
+			<!-- Metadata -->
+			<Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
+				<TextBlock Name="TextBlockSong" Grid.Row="0" Grid.Column="0" />
+				<TextBlock Name="TextBlockArtist" Grid.Row="0" Grid.Column="1" />
+				<TextBlock Name="TextBlockAlbum" Grid.Row="1" Grid.Column="0" />
+				<TextBlock Name="TextBlockFormat" Grid.Row="1" Grid.Column="1" />
+			</Grid>
+			
+			<!-- Song progress -->
+			<!-- TODO: Make this slider actually work properly 🤔 -->
+			<Slider Name="SliderProgress" Maximum="100" />
+		</StackPanel>
 		
 	</Grid>
 	
