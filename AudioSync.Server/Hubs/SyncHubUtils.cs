@@ -21,7 +21,7 @@ namespace AudioSync.Server.Hubs
 
 		private bool RegisterName(string name)
 		{
-			if (!IsNameRegistered(name)) return false;
+			if (IsNameRegistered(name)) return false;
 
 			_state.Names.Add(name);
 			return true;
