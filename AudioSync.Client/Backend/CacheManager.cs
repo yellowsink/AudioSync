@@ -27,31 +27,9 @@ namespace AudioSync.Client.Backend
 		public readonly  string                CacheRoot;
 		private readonly ILogger<CacheManager> _logger = HelperUtils.CreateLogger<CacheManager>();
 		
-		private static string DefaultWindowsCacheLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AudioSyncCache");
-
-		private static string DefaultUnixCacheLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache/AudioSync");
-
-		private static string DefaultMacCacheLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library/Caches/AudioSync");
-		
-		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
-		public static string GetDefaultCacheLocation() => Environment.OSVersion.Platform switch
-		{
-			PlatformID.Win32S       => DefaultWindowsCacheLocation,
-			PlatformID.Win32Windows => DefaultWindowsCacheLocation,
-			PlatformID.Win32NT      => DefaultWindowsCacheLocation,
-			PlatformID.WinCE        => DefaultWindowsCacheLocation,
-			PlatformID.Unix         => DefaultUnixCacheLocation,
-			PlatformID.MacOSX       => DefaultMacCacheLocation,
-			_                       => throw new ArgumentOutOfRangeException()
-		};
-		
-		
 		public CacheManager(string? cacheLocation = null)
 		{
-			CacheRoot  = cacheLocation ?? GetDefaultCacheLocation();
+			CacheRoot  = cacheLocation ?? OSDefaults.DefaultCacheLocation;
 			LoadCache();
 			Directory.CreateDirectory(CacheRoot);
 		}
