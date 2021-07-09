@@ -40,8 +40,8 @@ namespace AudioSync.Client.Frontend
 				connectButton.IsEnabled = false;
 				
 
-				// I have to do it like this so that it runs on another thread, and it doesnt hang
-				Task.Factory.StartNew(() => SyncClient.Connect().Wait()).Wait();
+				// I have to run it on another thread, and the HTTP connection doesnt hang
+				SyncClient.Connect().RunOnNewThread();
 				Close();
 			}
 			catch (AggregateException)
