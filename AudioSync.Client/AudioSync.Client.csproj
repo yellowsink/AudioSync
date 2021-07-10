@@ -31,4 +31,8 @@
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
+    <ItemGroup>
+      <None Remove="Frontend\StyleSheet.xaml" />
+      <AvaloniaResource Include="Frontend\StyleSheet.xaml" />
+    </ItemGroup>
 </Project>

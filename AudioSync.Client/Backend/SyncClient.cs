@@ -1,12 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
 
 namespace AudioSync.Client.Backend
 {
 	public partial class SyncClient : IDisposable
 	{
-		private HubConnection _connection;
+		private ILogger<SyncClient> _logger = HelperUtils.CreateLogger<SyncClient>();
+
+		private readonly HubConnection _connection;
 
 		public bool   IsMaster { get; private set; }
 		public string Name     { get; private set; }
@@ -41,6 +44,8 @@ namespace AudioSync.Client.Backend
 			
 			// Does nothing if you are the master, else connects as a normal client
 			await _connection.InvokeAsync("ConnectClient", Name);
+			
+			_logger.LogInformation($"Connected as a {(IsMaster ? "master" : "client")}");
 		}
 
 		public async Task Disconnect()
@@ -51,6 +56,8 @@ namespace AudioSync.Client.Backend
 				await _connection.InvokeAsync("DisconnectClient");
 			
 			await _connection.StopAsync();
+			
+			_logger.LogInformation("Disconnected");
 		}
 
 		public       void Dispose()      => DisposeAsync().Wait();

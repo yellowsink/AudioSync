@@ -4,7 +4,6 @@ using AudioSync.Shared;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 
 namespace AudioSync.Client.Frontend
@@ -33,6 +32,7 @@ namespace AudioSync.Client.Frontend
 #pragma warning restore 4014
 
 
+			// don't leave hanging connections to the server
 			Closing += (_, _)
 				=> Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
 		}
@@ -115,5 +115,11 @@ namespace AudioSync.Client.Frontend
 		}
 
 		#endregion
+
+		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e)
+		{
+			// The crash button™️
+			throw new System.NotImplementedException();
+		}
 	}
 }

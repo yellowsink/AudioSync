@@ -7,28 +7,21 @@
         Title="AudioSync">
 	
 	<Window.Styles>
-		<Style Selector="Button.MediaControl">
-			<Setter Property="Margin" Value="5, 0, 5, 0" />
-			<Setter Property="FontSize" Value="20" />
-			<Setter Property="Width" Value="50" />
-			<Setter Property="Height" Value="50" />
-			<Setter Property="HorizontalContentAlignment" Value="Center" />
-			<Setter Property="VerticalContentAlignment" Value="Center" />
-		</Style>
+		<StyleInclude Source="/Frontend/StyleSheet.xaml" />
 	</Window.Styles>
 	
-	<StackPanel>
+	<Grid RowDefinitions="Auto, Auto, *" Margin="5">
 		
 		<!-- The header design takes inspiration from Cantata and Rhythmbox -->
 		
 		<!-- Header - Player controls etc -->
-		<Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto, *" Margin="5">
+		<Grid Grid.Row="0" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto, *" Margin="5">
 			
 			<!-- Metadata -->
-			<TextBlock Name="TextBlockSong" Grid.Row="0" Grid.Column="0" Margin="5" />
-			<TextBlock Name="TextBlockArtist" Grid.Row="0" Grid.Column="1" Margin="5" />
-			<TextBlock Name="TextBlockAlbum" Grid.Row="1" Grid.Column="0" Margin="5" />
-			<TextBlock Name="TextBlockFormat" Grid.Row="1" Grid.Column="1" Margin="5" />
+			<TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Name="TextBlockSong" Text="Start Again" />
+			<TextBlock Grid.Row="0" Grid.Column="1" Margin="5" Name="TextBlockArtist" Text="ONE OK ROCK" />
+			<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Name="TextBlockAlbum" Text="Ambitions" />
+			<TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Name="TextBlockFormat" Text="MP3" />
 			
 			<!-- Media controls -->
 			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls" Orientation="Horizontal" />
@@ -37,8 +30,25 @@
 			<Slider Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Margin="5" Name="SliderProgress" Maximum="100" IsEnabled="False" />
 		</Grid>
 		
-		<Border BorderBrush="Gray" BorderThickness="1" Margin="5, 0, 5, 0" />
+		<Border Grid.Row="1" Classes="Horizontal Separator" />
 		
-	</StackPanel>
+		<!-- Main UI -->
+		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="3*, Auto, 2*" VerticalAlignment="Stretch">
+			<StackPanel Grid.Row="0" Grid.Column="0" Margin="5" Name="StackPanelSongList" />
+			<StackPanel Grid.Row="0" Grid.Column="2" Margin="5" Name="StackPanelUserList" />
+			
+			<Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Classes="Vertical Separator" />
+			<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
+			
+			<!-- Add panel -->
+			<StackPanel Grid.Row="2" Grid.Column="0" Margin="5" />
+			
+			<!-- Settings button -->
+			<Button Grid.Row="2" Grid.Column="2" Margin="5"
+			        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+			        Content="Settings" Name="ButtonSettings" Click="ButtonSettings_OnClick"/>
+		</Grid>
+		
+	</Grid>
 	
 </Window>
