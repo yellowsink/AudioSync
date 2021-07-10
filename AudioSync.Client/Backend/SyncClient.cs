@@ -36,7 +36,7 @@ namespace AudioSync.Client.Backend
 			{
 				// Will fail if there is already a master.
 				var result           = await _connection.InvokeAsync<bool>("ConnectMaster", Name);
-				if (result) IsMaster = false;
+				if (!result) IsMaster = false;
 			}
 			
 			// Does nothing if you are the master, else connects as a normal client

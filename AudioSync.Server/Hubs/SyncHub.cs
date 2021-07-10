@@ -34,7 +34,7 @@ namespace AudioSync.Server.Hubs
 		public async Task DisconnectMaster()
 		{
 			var name = GetUser().Name;
-			Console.WriteLine($"Master ({name} left");
+			Console.WriteLine($"Master ({name}) left");
 
 			_state.MasterId = null;
 			RemoveNameIfRegistered(name);

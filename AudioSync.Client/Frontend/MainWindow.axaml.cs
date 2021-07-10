@@ -31,6 +31,10 @@ namespace AudioSync.Client.Frontend
 #pragma warning disable 4014
 			RunConnectDialog();
 #pragma warning restore 4014
+
+
+			Closing += (_, _)
+				=> Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -54,44 +58,32 @@ namespace AudioSync.Client.Frontend
 
 		private void ShowMediaControls()
 		{
-			var header = this.FindControl<StackPanel>("StackPanelHeader");
+			var container = this.FindControl<StackPanel>("StackPanelMediaControls");
 
 			_mediaControlPlay = new Button
 			{
-				Content                    = "⯈",
-				FontSize                   = 20,
-				Width                      = 50,
-				Height                     = 50,
-				VerticalContentAlignment   = VerticalAlignment.Center,
-				HorizontalContentAlignment = HorizontalAlignment.Center
+				Content = "⯈",
+				Classes = { "MediaControl" }
 			};
 			_mediaControlPlay.Click += Play;
 
 			_mediaControlPause = new Button
 			{
-				Content                    = "┃┃",
-				FontSize                   = 20,
-				Width                      = 50,
-				Height                     = 50,
-				VerticalContentAlignment   = VerticalAlignment.Center,
-				HorizontalContentAlignment = HorizontalAlignment.Center
+				Content = "┃┃",
+				Classes = { "MediaControl" }
 			};
 			_mediaControlPause.Click += Pause;
 			
 			_mediaControlStop = new Button
 			{
-				Content                    = "⯀",
-				FontSize                   = 20,
-				Width                      = 50,
-				Height                     = 50,
-				VerticalContentAlignment   = VerticalAlignment.Center,
-				HorizontalContentAlignment = HorizontalAlignment.Center
+				Content = "⯀",
+				Classes = { "MediaControl" }
 			};
 			_mediaControlStop.Click += Stop;
 			
-			header.Children.Insert(0, _mediaControlPlay);
-			header.Children.Insert(1, _mediaControlPause);
-			header.Children.Insert(2, _mediaControlStop);
+			container.Children.Add(_mediaControlPlay);
+			container.Children.Add(_mediaControlPause);
+			container.Children.Add(_mediaControlStop);
 		}
 
 		private void Play(object? sender, RoutedEventArgs routedEventArgs)

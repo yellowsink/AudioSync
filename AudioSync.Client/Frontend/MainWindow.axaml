@@ -6,25 +6,39 @@
         x:Class="AudioSync.Client.Frontend.MainWindow"
         Title="AudioSync">
 	
-	<Grid Margin="5" RowDefinitions="Auto" ColumnDefinitions="*">
+	<Window.Styles>
+		<Style Selector="Button.MediaControl">
+			<Setter Property="Margin" Value="5, 0, 5, 0" />
+			<Setter Property="FontSize" Value="20" />
+			<Setter Property="Width" Value="50" />
+			<Setter Property="Height" Value="50" />
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+	</Window.Styles>
+	
+	<StackPanel>
 		
 		<!-- The header design takes inspiration from Cantata and Rhythmbox -->
 		
 		<!-- Header - Player controls etc -->
-		<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Name="StackPanelHeader">
+		<Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto, *" Margin="5">
+			
 			<!-- Metadata -->
-			<Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
-				<TextBlock Name="TextBlockSong" Grid.Row="0" Grid.Column="0" />
-				<TextBlock Name="TextBlockArtist" Grid.Row="0" Grid.Column="1" />
-				<TextBlock Name="TextBlockAlbum" Grid.Row="1" Grid.Column="0" />
-				<TextBlock Name="TextBlockFormat" Grid.Row="1" Grid.Column="1" />
-			</Grid>
+			<TextBlock Name="TextBlockSong" Grid.Row="0" Grid.Column="0" Margin="5" />
+			<TextBlock Name="TextBlockArtist" Grid.Row="0" Grid.Column="1" Margin="5" />
+			<TextBlock Name="TextBlockAlbum" Grid.Row="1" Grid.Column="0" Margin="5" />
+			<TextBlock Name="TextBlockFormat" Grid.Row="1" Grid.Column="1" Margin="5" />
+			
+			<!-- Media controls -->
+			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls" Orientation="Horizontal" />
 			
 			<!-- Song progress -->
-			<!-- TODO: Make this slider actually work properly 🤔 -->
-			<Slider Name="SliderProgress" Maximum="100" />
-		</StackPanel>
+			<Slider Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Margin="5" Name="SliderProgress" Maximum="100" IsEnabled="False" />
+		</Grid>
 		
-	</Grid>
+		<Border BorderBrush="Gray" BorderThickness="1" Margin="5, 0, 5, 0" />
+		
+	</StackPanel>
 	
 </Window>
