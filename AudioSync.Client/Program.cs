@@ -1,5 +1,6 @@
 ﻿using AudioSync.Client.Frontend;
 using Avalonia;
+using Avalonia.ReactiveUI;
 
 namespace AudioSync.Client
 {
@@ -12,6 +13,10 @@ namespace AudioSync.Client
 
 		// Avalonia configuration, don't remove; also used by visual designer.
 		public static AppBuilder BuildAvaloniaApp()
-			=> AppBuilder.Configure<App>().UsePlatformDetect().LogToTrace();
+			=> AppBuilder
+			  .Configure<App>()
+			  .UsePlatformDetect()
+			  .UseReactiveUI()
+			  .LogToTrace();
 	}
 }

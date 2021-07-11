@@ -5,18 +5,18 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.3"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.3"/>
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3"/>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.7"/>
-        <PackageReference Include="NetCoreAudio" Version="1.6.3"/>
-        <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0"/>
-        <PackageReference Include="Octokit" Version="0.50.0"/>
-        <PackageReference Include="ReactiveUI" Version="14.1.1"/>
-        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1"/>
+        <PackageReference Include="Avalonia" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.7" />
+        <PackageReference Include="NetCoreAudio" Version="1.6.3" />
+        <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
+        <PackageReference Include="Octokit" Version="0.50.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj"/>
+        <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Frontend\App.axaml.cs">
@@ -33,7 +33,7 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <None Remove="Frontend\StyleSheet.xaml"/>
-        <AvaloniaResource Include="Frontend\StyleSheet.xaml"/>
+        <None Remove="Frontend\StyleSheet.xaml" />
+        <AvaloniaResource Include="Frontend\StyleSheet.xaml" />
     </ItemGroup>
 </Project>
