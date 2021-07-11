@@ -46,6 +46,12 @@ namespace AudioSync.Client
 			set => this.RaiseAndSetIfChanged(ref _backing.Format, value);
 		}
 
+		public bool ShowMediaControls
+		{
+			get => _backing.ShowMediaControls;
+			set => this.RaiseAndSetIfChanged(ref _backing.ShowMediaControls, value);
+		}
+
 		private class Backing
 		{
 			internal string AlbumName  = string.Empty;
@@ -56,6 +62,8 @@ namespace AudioSync.Client
 			internal SourceList<Song> Songs    = new();
 
 			internal SourceCache<User, string> Users = new(user => user.Name);
+
+			internal bool ShowMediaControls;
 		}
 	}
 }

@@ -25,7 +25,11 @@
 
 			<!-- Media controls -->
 			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls"
-			            Orientation="Horizontal" />
+			            Orientation="Horizontal" IsVisible="{Binding ShowMediaControls}">
+				<Button Classes="MediaControl" Content="⯈" Click="Play" />
+				<Button Classes="MediaControl" Content="┃┃" Click="Pause" />
+				<Button Classes="MediaControl" Content="⯀" Click="Stop" />
+			</StackPanel>
 
 			<!-- Song progress -->
 			<Slider Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Margin="5" Name="SliderProgress" Maximum="100"
@@ -44,6 +48,7 @@
 					</DataGrid.Columns>
 				</DataGrid>
 			</ScrollViewer>
+			
 			<ScrollViewer Grid.Row="0" Grid.Column="2" Margin="5">
 				<DataGrid Name="DataGridUserList" Items="{Binding Users.Items}" AutoGenerateColumns="False">
 					<DataGrid.Columns>

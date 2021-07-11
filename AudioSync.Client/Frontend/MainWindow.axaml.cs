@@ -66,7 +66,7 @@ namespace AudioSync.Client.Frontend
 
 			_syncClient = dialog.SyncClient;
 
-			if (_syncClient is { IsMaster: true }) ShowMediaControls();
+			if (_syncClient is { IsMaster: true }) ShowMediaControls(true);
 		}
 
 		// TODO: This is the crash button™️
@@ -74,37 +74,9 @@ namespace AudioSync.Client.Frontend
 
 #region Media Controls
 
-		private void ShowMediaControls()
-		{
-			var container = this.FindControl<StackPanel>("StackPanelMediaControls");
+		private void ShowMediaControls(bool show) => ((MainWindowViewModel) DataContext!).ShowMediaControls = show;
 
-			var mediaControlPlay = new Button
-			{
-				Content = "⯈",
-				Classes = { "MediaControl" }
-			};
-			mediaControlPlay.Click += Play;
-
-			var mediaControlPause = new Button
-			{
-				Content = "┃┃",
-				Classes = { "MediaControl" }
-			};
-			mediaControlPause.Click += Pause;
-
-			var mediaControlStop = new Button
-			{
-				Content = "⯀",
-				Classes = { "MediaControl" }
-			};
-			mediaControlStop.Click += Stop;
-
-			container.Children.Add(mediaControlPlay);
-			container.Children.Add(mediaControlPause);
-			container.Children.Add(mediaControlStop);
-		}
-
-		private void Play(object? sender, RoutedEventArgs routedEventArgs)
+		private void Play(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
 			if (_audioManager.IsPlaying) return; // We're already playing, so do nothing
 
@@ -122,12 +94,12 @@ namespace AudioSync.Client.Frontend
 			_audioManager.Play();
 		}
 
-		private void Pause(object? sender, RoutedEventArgs routedEventArgs)
+		private void Pause(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
 			if (_audioManager.IsPlaying) _audioManager.Pause();
 		}
 
-		private void Stop(object? sender, RoutedEventArgs routedEventArgs)
+		private void Stop(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
 			if (_audioManager.Status != AudioManagerStatus.Idle) _audioManager.Stop();
 		}
