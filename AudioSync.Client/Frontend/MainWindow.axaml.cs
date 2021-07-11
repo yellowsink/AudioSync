@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using DynamicData;
+using ReactiveUI;
 
 namespace AudioSync.Client.Frontend
 {
@@ -108,13 +108,34 @@ namespace AudioSync.Client.Frontend
 
 #region Lists Management
 
-		private void AddSong(Song song) => ((MainWindowViewModel) DataContext!).Songs.Add(song);
+		private void AddSong(Song song)
+		{
+			
+			var vm = (MainWindowViewModel) DataContext!;
+			vm.Songs.Add(song);
+			vm.RaisePropertyChanged(nameof(vm.Songs));
+		}
 
-		private void RemoveSong(int index) => ((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
+		private void RemoveSong(int index)
+		{
+			var vm = (MainWindowViewModel) DataContext!;
+			vm.Songs.RemoveAt(index);
+			vm.RaisePropertyChanged(nameof(vm.Songs));
+		}
 
-		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
+		private void UpdateUser(User user)
+		{
+			var vm = (MainWindowViewModel) DataContext!;
+			vm.Users[user.Name] = user;
+			vm.RaisePropertyChanged(nameof(vm.Users));
+		}
 
-		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
+		private void RemoveUser(string name)
+		{
+			var vm = (MainWindowViewModel) DataContext!;
+			vm.Users.Remove(name);
+			vm.RaisePropertyChanged(nameof(vm.Users));
+		}
 
 #endregion
 	}

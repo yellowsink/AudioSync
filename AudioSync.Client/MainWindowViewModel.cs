@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using AudioSync.Shared;
-using DynamicData;
 using ReactiveUI;
 
 namespace AudioSync.Client
@@ -8,14 +8,14 @@ namespace AudioSync.Client
 	{
 		private readonly Backing _backing = new();
 
-		public SourceList<Song> Songs
+		public List<Song> Songs
 		{
 			get => _backing.Songs;
 			set => this.RaiseAndSetIfChanged(ref _backing.Songs, value);
 		}
 
 
-		public SourceCache<User, string> Users
+		public Dictionary<string, User> Users
 		{
 			get => _backing.Users;
 			set => this.RaiseAndSetIfChanged(ref _backing.Users, value);
@@ -58,10 +58,10 @@ namespace AudioSync.Client
 			internal string ArtistName = string.Empty;
 			internal string Format     = string.Empty;
 
-			internal string           SongName = string.Empty;
-			internal SourceList<Song> Songs    = new();
+			internal string     SongName = string.Empty;
+			internal List<Song> Songs    = new();
 
-			internal SourceCache<User, string> Users = new(user => user.Name);
+			internal Dictionary<string, User> Users = new();
 
 			internal bool ShowMediaControls;
 		}
