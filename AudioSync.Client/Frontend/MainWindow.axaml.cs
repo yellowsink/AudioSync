@@ -110,7 +110,6 @@ namespace AudioSync.Client.Frontend
 
 		private void AddSong(Song song)
 		{
-			
 			var vm = (MainWindowViewModel) DataContext!;
 			vm.Songs.Add(song);
 			vm.RaisePropertyChanged(nameof(vm.Songs));
@@ -138,5 +137,21 @@ namespace AudioSync.Client.Frontend
 		}
 
 #endregion
+
+		private void ButtonAddSong_OnClick(object? sender, RoutedEventArgs e)
+		{
+			var song   = this.FindControl<TextBox>("TextBoxAddSong").Text;
+			var artist = this.FindControl<TextBox>("TextBoxAddArtist").Text;
+			var album  = this.FindControl<TextBox>("TextBoxAddAlbum").Text;
+			var url    = this.FindControl<TextBox>("TextBoxAddUrl").Text;
+
+			if (string.IsNullOrWhiteSpace(song)
+			 || string.IsNullOrWhiteSpace(artist)
+			 || string.IsNullOrWhiteSpace(album)
+			 || string.IsNullOrWhiteSpace(url))
+				return;
+			
+			AddSong(new Song(song, artist, album, url));
+		}
 	}
 }
