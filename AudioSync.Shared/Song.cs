@@ -20,10 +20,11 @@ namespace AudioSync.Shared
 		/// </summary>
 		public bool UseYoutube;
 
-		public Song(string name, string artist, string rawUrl)
+		public Song(string name, string artist, string album, string rawUrl)
 		{
 			Name   = name;
 			Artist = artist;
+			Album  = album;
 			RawUrl = rawUrl;
 		}
 
@@ -36,6 +37,11 @@ namespace AudioSync.Shared
 		///     The artist of the song
 		/// </summary>
 		public string Artist { get; set; }
+		
+		/// <summary>
+		///		The album the song was on
+		/// </summary>
+		public string Album { get; set; }
 
 		/// <summary>
 		///     Gets the URL to download the song from either soundcloud, or if unavailable youtube

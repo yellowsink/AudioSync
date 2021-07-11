@@ -41,7 +41,7 @@
 		<!-- Main UI -->
 		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*, Auto, *" VerticalAlignment="Stretch">
 			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
-				<DataGrid Name="DataGridSongList" Items="{Binding Songs}" AutoGenerateColumns="False">
+				<DataGrid Name="DataGridSongList" Items="{Binding Songs^.Items}" AutoGenerateColumns="False">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
 						<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
@@ -50,7 +50,7 @@
 			</ScrollViewer>
 			
 			<ScrollViewer Grid.Row="0" Grid.Column="2" Margin="5">
-				<DataGrid Name="DataGridUserList" Items="{Binding Users.Items}" AutoGenerateColumns="False">
+				<DataGrid Name="DataGridUserList" Items="{Binding Users^.Items}" AutoGenerateColumns="False">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
 						<DataGridTextColumn Header="Status" Binding="{Binding Status}" />

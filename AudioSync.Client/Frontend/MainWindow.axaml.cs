@@ -40,8 +40,8 @@ namespace AudioSync.Client.Frontend
 
 #region Test Data - REMOVE ME!!!!
 
-			AddSong(new Song("Start Again", "ONE OK ROCK", "https://soundcloud.com/oneokrock/start-again"));
-			AddSong(new Song("SPARKS", "Takanashi Kiara", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
+			AddSong(new Song("Start Again", "ONE OK ROCK", "Ambitions", "https://soundcloud.com/oneokrock/start-again"));
+			AddSong(new Song("SPARKS", "Takanashi Kiara", "SPARKS - Single", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
 			UpdateUser(new User("Test user 1"));
 			UpdateUser(new User("Test user 2"));
 			((MainWindowViewModel) DataContext).SongName   = "Start Again";
