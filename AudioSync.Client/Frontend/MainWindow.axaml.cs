@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Shared;
@@ -19,7 +20,10 @@ namespace AudioSync.Client.Frontend
 		private Button? _mediaControlPlay;
 		private Button? _mediaControlPause;
 		private Button? _mediaControlStop;
-		
+
+		private List<Song>               Songs = new();
+		private Dictionary<string, User> Users = new();
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -35,6 +39,13 @@ namespace AudioSync.Client.Frontend
 			// don't leave hanging connections to the server
 			Closing += (_, _)
 				=> Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
+			
+			
+			// TODO: REMOVE TEST DATA!!!!
+			AddSong(new Song("Start Again", "ONE OK ROCK",     "https://soundcloud.com/oneokrock/start-again"));
+			AddSong(new Song("SPARKS",      "Takanashi Kiara", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
+			UpdateUser(new User("Test user 1"));
+			UpdateUser(new User("Test user 2"));
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -116,10 +127,42 @@ namespace AudioSync.Client.Frontend
 
 		#endregion
 
+		// TODO: This is the crash button™️
 		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e)
 		{
-			// The crash button™️
 			throw new System.NotImplementedException();
 		}
+
+		#region Lists Management
+
+		private void AddSong(Song song)
+		{
+			Songs.Add(song);
+			var songList = this.FindControl<DataGrid>("DataGridSongList");
+			songList.Items = Songs;
+		}
+
+		private void RemoveSong(int index)
+		{
+			Songs.RemoveAt(index);
+			var songList = this.FindControl<DataGrid>("DataGridSongList");
+			songList.Items = Songs;
+		}
+
+		private void UpdateUser(User user)
+		{
+			Users[user.Name] = user;
+			var userList = this.FindControl<DataGrid>("DataGridUserList");
+			userList.Items = Users.Keys;
+		}
+
+		private void RemoveUser(string name)
+		{
+			Users.Remove(name);
+			var userList = this.FindControl<DataGrid>("DataGridUserList");
+			userList.Items = Users.Keys;
+		}
+
+		#endregion
 	}
 }

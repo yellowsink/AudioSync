@@ -11,9 +11,7 @@ namespace AudioSync.Client.Frontend
 		public override void OnFrameworkInitializationCompleted()
 		{
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-			{
 				desktop.MainWindow = new MainWindow();
-			}
 
 			base.OnFrameworkInitializationCompleted();
 		}

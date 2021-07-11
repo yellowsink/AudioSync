@@ -34,9 +34,13 @@
 		
 		<!-- Main UI -->
 		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="3*, Auto, 2*" VerticalAlignment="Stretch">
-			<StackPanel Grid.Row="0" Grid.Column="0" Margin="5" Name="StackPanelSongList" />
-			<StackPanel Grid.Row="0" Grid.Column="2" Margin="5" Name="StackPanelUserList" />
-			
+			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
+				<DataGrid Name="DataGridSongList" Items="{Binding Songs}" />
+			</ScrollViewer>
+			<ScrollViewer Grid.Row="0" Grid.Column="2" Margin="5">
+				<DataGrid Name="DataGridUserList" Items="{Binding Users}" />
+			</ScrollViewer>
+
 			<Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Classes="Vertical Separator" />
 			<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
 			
