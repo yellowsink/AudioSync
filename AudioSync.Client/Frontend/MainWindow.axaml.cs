@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Shared;
@@ -6,26 +5,22 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using DynamicData;
 
 namespace AudioSync.Client.Frontend
 {
 	public class MainWindow : Window
 	{
 		private Queue _queue = new();
-		
+
 		private SyncClient?  _syncClient;
 		private AudioManager _audioManager = new();
 		private CacheManager _cacheManager = new();
 
-		private Button? _mediaControlPlay;
-		private Button? _mediaControlPause;
-		private Button? _mediaControlStop;
-
-		private List<Song>               Songs = new();
-		private Dictionary<string, User> Users = new();
-
 		public MainWindow()
 		{
+			DataContext = new MainWindowViewModel();
+
 			InitializeComponent();
 #if DEBUG
 			this.AttachDevTools();
@@ -37,15 +32,23 @@ namespace AudioSync.Client.Frontend
 
 
 			// don't leave hanging connections to the server
-			Closing += (_, _)
-				=> Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
-			
-			
+			Closing += (_, _) => Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
+
+
 			// TODO: REMOVE TEST DATA!!!!
-			AddSong(new Song("Start Again", "ONE OK ROCK",     "https://soundcloud.com/oneokrock/start-again"));
-			AddSong(new Song("SPARKS",      "Takanashi Kiara", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
+
+#region Test Data - REMOVE ME!!!!
+
+			AddSong(new Song("Start Again", "ONE OK ROCK", "https://soundcloud.com/oneokrock/start-again"));
+			AddSong(new Song("SPARKS", "Takanashi Kiara", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
 			UpdateUser(new User("Test user 1"));
 			UpdateUser(new User("Test user 2"));
+			((MainWindowViewModel) DataContext).SongName   = "Start Again";
+			((MainWindowViewModel) DataContext).ArtistName = "ONE OK ROCK";
+			((MainWindowViewModel) DataContext).AlbumName  = "Ambitions";
+			((MainWindowViewModel) DataContext).Format     = "MP3";
+
+#endregion
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -57,55 +60,55 @@ namespace AudioSync.Client.Frontend
 		{
 			var dialog = new ConnectDialog();
 			await dialog.ShowDialog(this);
-			
+
 			if (dialog.SyncClient == null) Close(); // dialog was closed early
-			
-			_syncClient      = dialog.SyncClient;
+
+			_syncClient = dialog.SyncClient;
 
 			if (_syncClient is { IsMaster: true }) ShowMediaControls();
 		}
 
-		#region Media Controls
+#region Media Controls
 
 		private void ShowMediaControls()
 		{
 			var container = this.FindControl<StackPanel>("StackPanelMediaControls");
 
-			_mediaControlPlay = new Button
+			var mediaControlPlay = new Button
 			{
 				Content = "⯈",
 				Classes = { "MediaControl" }
 			};
-			_mediaControlPlay.Click += Play;
+			mediaControlPlay.Click += Play;
 
-			_mediaControlPause = new Button
+			var mediaControlPause = new Button
 			{
 				Content = "┃┃",
 				Classes = { "MediaControl" }
 			};
-			_mediaControlPause.Click += Pause;
-			
-			_mediaControlStop = new Button
+			mediaControlPause.Click += Pause;
+
+			var mediaControlStop = new Button
 			{
 				Content = "⯀",
 				Classes = { "MediaControl" }
 			};
-			_mediaControlStop.Click += Stop;
-			
-			container.Children.Add(_mediaControlPlay);
-			container.Children.Add(_mediaControlPause);
-			container.Children.Add(_mediaControlStop);
+			mediaControlStop.Click += Stop;
+
+			container.Children.Add(mediaControlPlay);
+			container.Children.Add(mediaControlPause);
+			container.Children.Add(mediaControlStop);
 		}
 
 		private void Play(object? sender, RoutedEventArgs routedEventArgs)
 		{
 			if (_audioManager.IsPlaying) return; // We're already playing, so do nothing
-			
+
 			// A file is not already loaded into the audioManager
 			if (_audioManager.File == null)
 			{
 				if (_queue.Songs.Length == 0) return; // There's nothing in the queue to use
-				
+
 				var cachedSong = _cacheManager.GetFromCache(_queue.Songs[_queue.CurrentIndex]);
 				if (!cachedSong.HasValue) return; // song not in cache, so do nothing
 
@@ -125,7 +128,7 @@ namespace AudioSync.Client.Frontend
 			if (_audioManager.Status != AudioManagerStatus.Idle) _audioManager.Stop();
 		}
 
-		#endregion
+#endregion
 
 		// TODO: This is the crash button™️
 		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e)
@@ -133,36 +136,16 @@ namespace AudioSync.Client.Frontend
 			throw new System.NotImplementedException();
 		}
 
-		#region Lists Management
+#region Lists Management
 
-		private void AddSong(Song song)
-		{
-			Songs.Add(song);
-			var songList = this.FindControl<DataGrid>("DataGridSongList");
-			songList.Items = Songs;
-		}
+		private void AddSong(Song song) => ((MainWindowViewModel) DataContext!).Songs.Add(song);
 
-		private void RemoveSong(int index)
-		{
-			Songs.RemoveAt(index);
-			var songList = this.FindControl<DataGrid>("DataGridSongList");
-			songList.Items = Songs;
-		}
+		private void RemoveSong(int index) => ((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
 
-		private void UpdateUser(User user)
-		{
-			Users[user.Name] = user;
-			var userList = this.FindControl<DataGrid>("DataGridUserList");
-			userList.Items = Users.Keys;
-		}
+		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
-		private void RemoveUser(string name)
-		{
-			Users.Remove(name);
-			var userList = this.FindControl<DataGrid>("DataGridUserList");
-			userList.Items = Users.Keys;
-		}
+		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
 
-		#endregion
+#endregion
 	}
 }
