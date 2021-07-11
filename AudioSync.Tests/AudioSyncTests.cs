@@ -7,10 +7,10 @@ namespace AudioSync.Tests
 {
 	public class AudioSyncTests
 	{
-		
 		[TestCase("https://soundcloud.com/oneokrock/start-again", "https://soundcloud.com/oneokrock/start-again",
 				  TestName = "Soundcloud -> Soundcloud (Start Again)")]
-		[TestCase("https://open.spotify.com/track/46scODShYFATHbLfLE0dr1", "https://soundcloud.com/user-524915514/sparks-takanashi-kiara",
+		[TestCase("https://open.spotify.com/track/46scODShYFATHbLfLE0dr1",
+				  "https://soundcloud.com/user-524915514/sparks-takanashi-kiara",
 				  TestName = "Spotify -> Soundcloud (SPARKS)")]
 		[TestCase("https://youtu.be/EjlMPu5sEgw", "https://soundcloud.com/soubread/getcha-calliope-suiseicover",
 				  TestName = "YouTube -> Soundcloud (GETCHA!! cover)")]
@@ -21,7 +21,7 @@ namespace AudioSync.Tests
 		{
 			var links  = (await Songlink.Get(url))?.LinksByPlatform;
 			var result = links?.Soundcloud?.Url ?? links?.Youtube?.Url;
-			
+
 			Assert.AreEqual(downloadableUrl, result);
 		}
 	}

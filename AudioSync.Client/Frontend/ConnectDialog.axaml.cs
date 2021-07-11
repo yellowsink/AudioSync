@@ -24,10 +24,10 @@ namespace AudioSync.Client.Frontend
 
 		private void ButtonConnect_OnClick(object? sender, RoutedEventArgs e)
 		{
-			var statusBar      = this.FindControl<TextBlock>("StatusBar");
-			var urlBox         = this.FindControl<TextBox>("TextBoxServerUrl");
-			var nameBox        = this.FindControl<TextBox>("TextBoxName");
-			var masterBox      = this.FindControl<CheckBox>("CheckBoxMaster");
+			var statusBar     = this.FindControl<TextBlock>("StatusBar");
+			var urlBox        = this.FindControl<TextBox>("TextBoxServerUrl");
+			var nameBox       = this.FindControl<TextBox>("TextBoxName");
+			var masterBox     = this.FindControl<CheckBox>("CheckBoxMaster");
 			var connectButton = this.FindControl<Button>("ButtonConnect");
 
 			try

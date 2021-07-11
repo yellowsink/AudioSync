@@ -6,42 +6,56 @@ namespace AudioSync.Shared
 	[DebuggerDisplay("{Name} by {Artist}")]
 	public class Song
 	{
-		/// <summary>
-		/// The name of the song
-		/// </summary>
-		public string Name { get; set; }
-		
-		/// <summary>
-		/// The artist of the song
-		/// </summary>
-		public string Artist { get; set; }
-		
-		/// <summary>
-		/// The raw URL given for the song
-		/// </summary>
-		public string RawUrl;
-
-		/// <summary>
-		/// If using youtube is preferred over soundcloud. Set automatically if a song is not on soundcloud
-		/// </summary>
-		public bool UseYoutube;
-		
 		// Used to prevent unneeded Songlink API requests
 		private string _cachedSoundcloudUrl;
 		private string _cachedYoutubeUrl;
 
 		/// <summary>
-		/// The Soundcloud URL of the song - uses song.link asynchronously and caches seamlessly
+		///     The raw URL given for the song
+		/// </summary>
+		public string RawUrl;
+
+		/// <summary>
+		///     If using youtube is preferred over soundcloud. Set automatically if a song is not on soundcloud
+		/// </summary>
+		public bool UseYoutube;
+
+		public Song(string name, string artist, string rawUrl)
+		{
+			Name   = name;
+			Artist = artist;
+			RawUrl = rawUrl;
+		}
+
+		/// <summary>
+		///     The name of the song
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		///     The artist of the song
+		/// </summary>
+		public string Artist { get; set; }
+
+		/// <summary>
+		///     Gets the URL to download the song from either soundcloud, or if unavailable youtube
+		/// </summary>
+		/// <returns>A URL supported by YTDL to download the song</returns>
+		/// <exception cref="SongUnavailableException">Neither soundcloud nor youtube have the song</exception>
+		public string DownloadableUrl => DownloadableUrlAsync().GetAwaiter().GetResult();
+
+		/// <summary>
+		///     The Soundcloud URL of the song - uses song.link asynchronously and caches seamlessly
 		/// </summary>
 		private async Task<string> SoundcloudUrlAsync() => _cachedSoundcloudUrl ??= await Songlink.Soundcloud(RawUrl);
-		
+
 		/// <summary>
-		/// The Youtube URL of the song - uses song.link asynchronously and caches seamlessly
+		///     The Youtube URL of the song - uses song.link asynchronously and caches seamlessly
 		/// </summary>
 		private async Task<string> YoutubeUrlAsync() => _cachedYoutubeUrl ??= await Songlink.Youtube(RawUrl);
 
 		/// <summary>
-		/// Asynchronously gets the URL to download the song from either soundcloud, or if unavailable youtube
+		///     Asynchronously gets the URL to download the song from either soundcloud, or if unavailable youtube
 		/// </summary>
 		/// <returns>A URL supported by YTDL to download the song</returns>
 		/// <exception cref="SongUnavailableException">Neither soundcloud nor youtube have the song</exception>
@@ -54,20 +68,6 @@ namespace AudioSync.Shared
 			var ytUrl = await YoutubeUrlAsync();
 			if (ytUrl == null) throw new SongUnavailableException();
 			return ytUrl;
-		}
-		
-		/// <summary>
-		/// Gets the URL to download the song from either soundcloud, or if unavailable youtube
-		/// </summary>
-		/// <returns>A URL supported by YTDL to download the song</returns>
-		/// <exception cref="SongUnavailableException">Neither soundcloud nor youtube have the song</exception>
-		public string DownloadableUrl => DownloadableUrlAsync().GetAwaiter().GetResult();
-
-		public Song(string name, string artist, string rawUrl)
-		{
-			Name   = name;
-			Artist = artist;
-			RawUrl = rawUrl;
 		}
 	}
 }

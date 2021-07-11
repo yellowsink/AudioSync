@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Shared;
@@ -11,11 +12,11 @@ namespace AudioSync.Client.Frontend
 {
 	public class MainWindow : Window
 	{
-		private Queue _queue = new();
+		private readonly AudioManager _audioManager = new();
+		private readonly CacheManager _cacheManager = new();
+		private readonly Queue        _queue        = new();
 
-		private SyncClient?  _syncClient;
-		private AudioManager _audioManager = new();
-		private CacheManager _cacheManager = new();
+		private SyncClient? _syncClient;
 
 		public MainWindow()
 		{
@@ -54,7 +55,7 @@ namespace AudioSync.Client.Frontend
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 		/// <summary>
-		/// Shows the connect to server dialog and performs actions based on result
+		///     Shows the connect to server dialog and performs actions based on result
 		/// </summary>
 		private async Task RunConnectDialog()
 		{
@@ -67,6 +68,9 @@ namespace AudioSync.Client.Frontend
 
 			if (_syncClient is { IsMaster: true }) ShowMediaControls();
 		}
+
+		// TODO: This is the crash button™️
+		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e) { throw new NotImplementedException(); }
 
 #region Media Controls
 
@@ -129,12 +133,6 @@ namespace AudioSync.Client.Frontend
 		}
 
 #endregion
-
-		// TODO: This is the crash button™️
-		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e)
-		{
-			throw new System.NotImplementedException();
-		}
 
 #region Lists Management
 

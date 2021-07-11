@@ -10,18 +10,18 @@ namespace AudioSync.Server.Hubs
 	{
 		private readonly HubState _state;
 
-		public SyncHub(HubState state) => _state = state;
+		public SyncHub(HubState state) { _state = state; }
 
-		#region Auth
-		
+#region Auth
+
 		public async Task<bool> ConnectMaster(string name)
 		{
 			if (_state.MasterExists || !RegisterName(name)) return false;
-			
+
 			Console.WriteLine($"{name} is the new master");
-			
+
 			_state.MasterId = Context.ConnectionId;
-			SetOrAddUser(new (name)
+			SetOrAddUser(new User(name)
 			{
 				IsMaster = true
 			});
@@ -46,12 +46,12 @@ namespace AudioSync.Server.Hubs
 		public async Task<bool> ConnectClient(string name)
 		{
 			if (IsMaster() || !RegisterName(name)) return false;
-			
+
 			Console.WriteLine($"{name} joined");
-			
+
 			await Groups.AddToGroupAsync(Context.ConnectionId, "clients");
-			SetOrAddUser(new(name));
-			
+			SetOrAddUser(new User(name));
+
 			await Clients.Group("clients").SendAsync("UpdateUser", GetUser());
 			return true;
 		}
@@ -83,10 +83,10 @@ namespace AudioSync.Server.Hubs
 		public async Task<bool> SetName(string name)
 		{
 			if (!RegisterName(name)) return false;
-			
+
 			var user = GetUser();
 			RemoveNameIfRegistered(user.Name);
-			
+
 			user.Name = name;
 			SetOrAddUser(user);
 
@@ -94,10 +94,10 @@ namespace AudioSync.Server.Hubs
 			return true;
 		}
 
-		#endregion
-		
-		#region Transport
-		
+#endregion
+
+#region Transport
+
 		public async Task Play()
 		{
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Play", GetUser().Name);
@@ -115,10 +115,10 @@ namespace AudioSync.Server.Hubs
 			if (IsMaster()) await Clients.Group("clients").SendAsync("Stop", GetUser().Name);
 			Console.WriteLine("Transport stop");
 		}
-		
-		#endregion
 
-		#region Queue
+#endregion
+
+#region Queue
 
 		public async Task Next()
 		{
@@ -139,7 +139,7 @@ namespace AudioSync.Server.Hubs
 			_state.Queue = queue;
 
 			await Clients.Group("clients").SendAsync("SetQueue", GetUser().Name, queue);
-			
+
 			Console.WriteLine("Set queue");
 		}
 
@@ -152,25 +152,25 @@ namespace AudioSync.Server.Hubs
 		public async Task Enqueue(Song song)
 		{
 			if (!IsMaster()) return;
-			
+
 			_state.Queue.Add(song);
 
 			await Clients.Group("clients").SendAsync("Enqueue", GetUser().Name, song);
-			
+
 			Console.WriteLine("Song added to the queue");
 		}
 
 		public async Task ClearQueue()
 		{
 			if (!IsMaster()) return;
-			
+
 			_state.Queue.Clear();
 
 			await Clients.Group("clients").SendAsync("ClearQueue", GetUser().Name);
-			
+
 			Console.WriteLine("Queue cleared");
 		}
 
-		#endregion
+#endregion
 	}
 }

@@ -6,20 +6,22 @@ namespace AudioSync.Client
 {
 	public class MainWindowViewModel : ReactiveObject
 	{
+		private readonly Backing _backing = new();
+
 		public SourceList<Song> Songs
 		{
 			get => _backing.Songs;
 			set => this.RaiseAndSetIfChanged(ref _backing.Songs, value);
 		}
-		
-		
+
+
 		public SourceCache<User, string> Users
 		{
 			get => _backing.Users;
 			set => this.RaiseAndSetIfChanged(ref _backing.Users, value);
 		}
-		
-		
+
+
 		public string SongName
 		{
 			get => _backing.SongName;
@@ -44,20 +46,16 @@ namespace AudioSync.Client
 			set => this.RaiseAndSetIfChanged(ref _backing.Format, value);
 		}
 
-		
-		
-		private Backing _backing = new();
-
 		private class Backing
 		{
-			internal SourceList<Song> Songs = new();
+			internal string AlbumName  = string.Empty;
+			internal string ArtistName = string.Empty;
+			internal string Format     = string.Empty;
+
+			internal string           SongName = string.Empty;
+			internal SourceList<Song> Songs    = new();
 
 			internal SourceCache<User, string> Users = new(user => user.Name);
-
-			internal string SongName   = string.Empty;
-			internal string ArtistName = string.Empty;
-			internal string AlbumName  = string.Empty;
-			internal string Format     = string.Empty;
 		}
 	}
 }

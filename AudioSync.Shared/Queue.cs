@@ -5,15 +5,16 @@ namespace AudioSync.Shared
 {
 	public class Queue
 	{
-		private List<Song> _songs = new();
-		public  Song[]     Songs        => _songs.ToArray();
-		public  int        CurrentIndex { get; private set; }
+		private readonly List<Song> _songs = new();
 
 		public Queue(Song[] songs = null, int index = 0)
 		{
-			_songs       = songs?.ToList() ?? new();
+			_songs       = songs?.ToList() ?? new List<Song>();
 			CurrentIndex = index;
 		}
+
+		public Song[] Songs        => _songs.ToArray();
+		public int    CurrentIndex { get; private set; }
 
 		public void Add(Song   song)    => _songs.Add(song);
 		public void Remove(int index)   => _songs.RemoveAt(index);

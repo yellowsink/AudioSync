@@ -7,23 +7,22 @@ namespace AudioSync.Client.Backend
 	public static class OSDefaults
 	{
 		public static readonly bool IsOnWindows
-			= Environment.OSVersion.Platform
-				  is PlatformID.Win32S
-				  or PlatformID.Win32Windows
-				  or PlatformID.Win32NT 
-				  or PlatformID.WinCE;
-		
-		#region CacheLocation
-		
+			= Environment.OSVersion.Platform is PlatformID.Win32S or PlatformID.Win32Windows or PlatformID.Win32NT or
+				  PlatformID.WinCE;
+
+#region CacheLocation
+
 		private static string DefaultWindowsCacheLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AudioSyncCache");
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+							@"AudioSyncCache");
 
 		private static string DefaultUnixCacheLocation
 			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache/AudioSync");
 
 		private static string DefaultMacCacheLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library/Caches/AudioSync");
-		
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+							"Library/Caches/AudioSync");
+
 		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
 		public static string DefaultCacheLocation => Environment.OSVersion.Platform switch
 		{
@@ -35,13 +34,14 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacCacheLocation,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
-		
-		#endregion
-		
-		#region DownloadLocation
-		
+
+#endregion
+
+#region DownloadLocation
+
 		private static string DefaultWindowsDownloadLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Temp\AudioSyncDownloads");
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+							@"Temp\AudioSyncDownloads");
 
 		private const string DefaultUnixDownloadLocation = "/tmp/audiosync_downloads";
 
@@ -58,19 +58,20 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacDownloadLocation,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
-		
-		#endregion
-		
-		#region ToolLocation
-		
+
+#endregion
+
+#region ToolLocation
+
 		private static string DefaultWindowsToolLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"AudioSyncTools");
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+							@"AudioSyncTools");
 
 		private static string DefaultUnixToolLocation
 			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".audiosync_tools");
 
 		private static string DefaultMacToolLocation => DefaultUnixToolLocation;
-		
+
 		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
 		public static string DefaultToolLocation => Environment.OSVersion.Platform switch
 		{
@@ -82,10 +83,10 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacToolLocation,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
-		
-		#endregion
-		
-		#region ToolFileNames
+
+#endregion
+
+#region ToolFileNames
 
 		private const string DefaultWindowsYtdlFileName = "ytdl.exe";
 
@@ -104,20 +105,23 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacYtdlFileName,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
-		
-		#endregion
-		
-		#region ConfigLocation
-		
+
+#endregion
+
+#region ConfigLocation
+
 		private static string DefaultWindowsConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"AudioSync\config.json");
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+							@"AudioSync\config.json");
 
 		private static string DefaultUnixConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config/audiosync_config.json");
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+							".config/audiosync_config.json");
 
 		private static string DefaultMacConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library/AudioSync/config.json");
-		
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+							"Library/AudioSync/config.json");
+
 		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
 		public static string DefaultConfigLocation => Environment.OSVersion.Platform switch
 		{
@@ -129,7 +133,7 @@ namespace AudioSync.Client.Backend
 			PlatformID.MacOSX       => DefaultMacConfigLocation,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
-		
-		#endregion
+
+#endregion
 	}
 }

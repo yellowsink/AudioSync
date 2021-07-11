@@ -23,22 +23,16 @@ namespace AudioSync.Client.Backend
 		// Add an event with just a string, for the name of the user who performed the action
 		private void AddOneParamEvent<T>(string signalREvent, EventHandler<T> eventHandler)
 		{
-			_connection.On<T>(signalREvent, param =>
-											{
-												eventHandler.Invoke(this, param);
-											});
+			_connection.On<T>(signalREvent, param => { eventHandler.Invoke(this, param); });
 		}
 
 		private void AddTwoParamEvent<T1, T2>(string signalREvent, EventHandler<(T1, T2)> eventHandler)
 		{
-			_connection.On<T1, T2>(signalREvent, (param1, param2) =>
-												 {
-													 eventHandler.Invoke(this, (param1, param2));
-												 });
+			_connection.On<T1, T2>(signalREvent, (param1, param2) => { eventHandler.Invoke(this, (param1, param2)); });
 		}
 
 		public event EventHandler<User>            UpdateUserEvent;
-		public event EventHandler<string>          RemoveUserEvent;                 
+		public event EventHandler<string>          RemoveUserEvent;
 		public event EventHandler<string>          TransportPlayEvent;
 		public event EventHandler<string>          TransportPauseEvent;
 		public event EventHandler<string>          TransportStopEvent;

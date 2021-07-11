@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj" />
+        <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj"/>
     </ItemGroup>
 
 </Project>

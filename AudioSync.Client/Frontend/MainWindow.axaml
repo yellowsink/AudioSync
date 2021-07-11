@@ -5,33 +5,35 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AudioSync.Client.Frontend.MainWindow"
         Title="AudioSync">
-	
+
 	<Window.Styles>
 		<StyleInclude Source="/Frontend/StyleSheet.xaml" />
 	</Window.Styles>
-	
+
 	<Grid RowDefinitions="Auto, Auto, *" Margin="5">
-		
+
 		<!-- The header design takes inspiration from Cantata and Rhythmbox -->
-		
+
 		<!-- Header - Player controls etc -->
 		<Grid Grid.Row="0" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto, Auto, *" Margin="5">
-			
+
 			<!-- Metadata -->
-			<TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Name="TextBlockSong"   Text="{Binding SongName}" />
+			<TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Name="TextBlockSong" Text="{Binding SongName}" />
 			<TextBlock Grid.Row="0" Grid.Column="1" Margin="5" Name="TextBlockArtist" Text="{Binding ArtistName}" />
-			<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Name="TextBlockAlbum"  Text="{Binding AlbumName}" />
+			<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Name="TextBlockAlbum" Text="{Binding AlbumName}" />
 			<TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Name="TextBlockFormat" Text="{Binding Format}" />
-			
+
 			<!-- Media controls -->
-			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls" Orientation="Horizontal" />
-			
+			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls"
+			            Orientation="Horizontal" />
+
 			<!-- Song progress -->
-			<Slider Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Margin="5" Name="SliderProgress" Maximum="100" IsEnabled="False" />
+			<Slider Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Margin="5" Name="SliderProgress" Maximum="100"
+			        IsEnabled="False" />
 		</Grid>
-		
+
 		<Border Grid.Row="1" Classes="Horizontal Separator" />
-		
+
 		<!-- Main UI -->
 		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*, Auto, *" VerticalAlignment="Stretch">
 			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
@@ -54,16 +56,16 @@
 
 			<Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Classes="Vertical Separator" />
 			<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
-			
+
 			<!-- Add panel -->
 			<StackPanel Grid.Row="2" Grid.Column="0" Margin="5" />
-			
+
 			<!-- Settings button -->
 			<Button Grid.Row="2" Grid.Column="2" Margin="5"
 			        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-			        Content="Settings" Name="ButtonSettings" Click="ButtonSettings_OnClick"/>
+			        Content="Settings" Name="ButtonSettings" Click="ButtonSettings_OnClick" />
 		</Grid>
-		
+
 	</Grid>
-	
+
 </Window>

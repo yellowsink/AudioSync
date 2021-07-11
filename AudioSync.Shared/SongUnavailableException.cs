@@ -1,1 +1,8 @@
-namespace AudioSync.Shared { public class SongUnavailableException : System.Exception { } }
+using System;
+
+namespace AudioSync.Shared
+{
+	public class SongUnavailableException : Exception
+	{
+	}
+}

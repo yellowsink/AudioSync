@@ -6,7 +6,7 @@ namespace AudioSync.Client.Backend
 	public partial class SyncClient
 	{
 		public void SetStatus(UserStatus status) => _connection.InvokeAsync("SetStatus", status).Wait();
-		
+
 		public bool TrySetName(string name)
 		{
 			var success       = _connection.InvokeAsync<bool>("SetName", name).GetAwaiter().GetResult();

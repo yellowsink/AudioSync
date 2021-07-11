@@ -6,27 +6,28 @@
         x:Class="AudioSync.Client.Frontend.ConnectDialog"
         Title="Connect To Server"
         Width="700" Height="300">
-	
+
 	<Window.Styles>
 		<StyleInclude Source="/Frontend/StyleSheet.xaml" />
 	</Window.Styles>
-	
+
 	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
-		
+
 		<TextBlock Grid.Column="0" Grid.Row="0" FontSize="25" Text="Connect to a server" />
-		
+
 		<Label Grid.Row="1" Grid.Column="0" Content="Server URL (you will be given this)" VerticalAlignment="Center" />
 		<TextBox Grid.Row="1" Grid.Column="1" Name="TextBoxServerUrl" />
-		
+
 		<CheckBox Grid.Row="2" Grid.Column="1" Content="Attempt to become room master" Name="CheckBoxMaster" />
-		
+
 		<Label Grid.Row="3" Grid.Column="0" Content="Name" VerticalAlignment="Center" />
 		<TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxName" />
-		
-		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Name="ButtonConnect" Margin="5" VerticalAlignment="Stretch" Click="ButtonConnect_OnClick" />
-		
+
+		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Name="ButtonConnect" Margin="5" VerticalAlignment="Stretch"
+		        Click="ButtonConnect_OnClick" />
+
 		<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
-		<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Name="StatusBar" Text="Idle" Margin="5"  />
-		
+		<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Name="StatusBar" Text="Idle" Margin="5" />
+
 	</Grid>
 </Window>

@@ -32,5 +32,4 @@ namespace AudioSync.Server
 			app.UseEndpoints(endpoints => { endpoints.MapHub<SyncHub>("/synchub"); });
 		}
 	}
-
 }
