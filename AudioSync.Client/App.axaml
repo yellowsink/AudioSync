@@ -1,6 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AudioSync.Client.Frontend.App">
+             xmlns:client="clr-namespace:AudioSync.Client"
+             x:Class="AudioSync.Client.App">
+	<Application.DataTemplates>
+		<client:ViewLocator />
+	</Application.DataTemplates>
+
 	<Application.Styles>
 		<FluentTheme Mode="Dark" />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />

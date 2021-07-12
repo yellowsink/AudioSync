@@ -1,14 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
+using AudioSync.Client.ViewModels;
 using AudioSync.Shared;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using ReactiveUI;
+using DynamicData;
 
-namespace AudioSync.Client.Frontend
+namespace AudioSync.Client.Views
 {
 	public class MainWindow : Window
 	{
@@ -33,15 +34,20 @@ namespace AudioSync.Client.Frontend
 
 
 			// don't leave hanging connections to the server
-			Closing += (_, _) => Task.Factory.StartNew(() => _syncClient?.Disconnect().Wait()).Wait();
+			Closing += async (_, _) =>
+			{
+				if (_syncClient != null) await _syncClient.Disconnect();
+			};
 
 
 			// TODO: REMOVE TEST DATA!!!!
 
 #region Test Data - REMOVE ME!!!!
 
-			AddSong(new Song("Start Again", "ONE OK ROCK", "Ambitions", "https://soundcloud.com/oneokrock/start-again"));
-			AddSong(new Song("SPARKS", "Takanashi Kiara", "SPARKS - Single", "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
+			AddSong(new Song("Start Again", "ONE OK ROCK", "Ambitions",
+							 "https://soundcloud.com/oneokrock/start-again"));
+			AddSong(new Song("SPARKS", "Takanashi Kiara", "SPARKS - Single",
+							 "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
 			UpdateUser(new User("Test user 1"));
 			UpdateUser(new User("Test user 2"));
 			((MainWindowViewModel) DataContext).SongName   = "Start Again";
@@ -71,6 +77,21 @@ namespace AudioSync.Client.Frontend
 
 		// TODO: This is the crash button™️
 		private void ButtonSettings_OnClick(object? sender, RoutedEventArgs e) { throw new NotImplementedException(); }
+
+		private void ButtonAddSong_OnClick(object? sender, RoutedEventArgs e)
+		{
+			var vm     = (MainWindowViewModel) DataContext!;
+			var song   = vm.InputAddSong;
+			var artist = vm.InputAddArtist;
+			var album  = vm.InputAddAlbum;
+			var url    = vm.InputAddUrl;
+
+			if (string.IsNullOrWhiteSpace(song)  || string.IsNullOrWhiteSpace(artist) ||
+				string.IsNullOrWhiteSpace(album) || string.IsNullOrWhiteSpace(url))
+				return;
+
+			AddSong(new Song(song, artist, album, url));
+		}
 
 #region Media Controls
 
@@ -108,50 +129,14 @@ namespace AudioSync.Client.Frontend
 
 #region Lists Management
 
-		private void AddSong(Song song)
-		{
-			var vm = (MainWindowViewModel) DataContext!;
-			vm.Songs.Add(song);
-			vm.RaisePropertyChanged(nameof(vm.Songs));
-		}
+		private void AddSong(Song song) => ((MainWindowViewModel) DataContext!).Songs.Add(song);
 
-		private void RemoveSong(int index)
-		{
-			var vm = (MainWindowViewModel) DataContext!;
-			vm.Songs.RemoveAt(index);
-			vm.RaisePropertyChanged(nameof(vm.Songs));
-		}
+		private void RemoveSong(int index) => ((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
 
-		private void UpdateUser(User user)
-		{
-			var vm = (MainWindowViewModel) DataContext!;
-			vm.Users[user.Name] = user;
-			vm.RaisePropertyChanged(nameof(vm.Users));
-		}
+		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
-		private void RemoveUser(string name)
-		{
-			var vm = (MainWindowViewModel) DataContext!;
-			vm.Users.Remove(name);
-			vm.RaisePropertyChanged(nameof(vm.Users));
-		}
+		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
 
 #endregion
-
-		private void ButtonAddSong_OnClick(object? sender, RoutedEventArgs e)
-		{
-			var song   = this.FindControl<TextBox>("TextBoxAddSong").Text;
-			var artist = this.FindControl<TextBox>("TextBoxAddArtist").Text;
-			var album  = this.FindControl<TextBox>("TextBoxAddAlbum").Text;
-			var url    = this.FindControl<TextBox>("TextBoxAddUrl").Text;
-
-			if (string.IsNullOrWhiteSpace(song)
-			 || string.IsNullOrWhiteSpace(artist)
-			 || string.IsNullOrWhiteSpace(album)
-			 || string.IsNullOrWhiteSpace(url))
-				return;
-			
-			AddSong(new Song(song, artist, album, url));
-		}
 	}
 }

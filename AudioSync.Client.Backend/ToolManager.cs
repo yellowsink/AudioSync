@@ -14,9 +14,8 @@ namespace AudioSync.Client.Backend
 	/// </summary>
 	public class ToolManager
 	{
-		public readonly string ToolDirectory;
-
 		private readonly ILogger<ToolManager> _logger = HelperUtils.CreateLogger<ToolManager>();
+		public readonly  string               ToolDirectory;
 
 		public ToolVersions Versions = new();
 

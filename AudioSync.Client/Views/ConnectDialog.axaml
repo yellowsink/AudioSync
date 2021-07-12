@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:AudioSync.Client.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
+        x:Class="AudioSync.Client.Views.ConnectDialog"
+        Title="Connect To Server"
+        Width="700" Height="300">
+
+	<Design.DataContext>
+		<viewModels:ConnectDialogViewModel />
+	</Design.DataContext>
+
+	<Window.Styles>
+		<StyleInclude Source="/Assets/StyleSheet.xaml" />
+	</Window.Styles>
+
+	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+
+		<TextBlock Grid.Column="0" Grid.Row="0" FontSize="25" Text="Connect to a server" />
+
+		<Label Grid.Row="1" Grid.Column="0" Content="Server URL (you will be given this)" VerticalAlignment="Center" />
+		<TextBox Grid.Row="1" Grid.Column="1" Name="TextBoxServerUrl"
+		         Text="{Binding InputServerUrl, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+
+		<CheckBox Grid.Row="2" Grid.Column="1" Content="Attempt to become room master" Name="CheckBoxMaster"
+		          IsChecked="{Binding InputTryBeMaster, Mode=OneWayToSource}"
+		          IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+
+		<Label Grid.Row="3" Grid.Column="0" Content="Name" VerticalAlignment="Center" />
+		<TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxName"
+		         Text="{Binding InputUserName, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+
+		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Name="ButtonConnect" Margin="5" VerticalAlignment="Stretch"
+		        Click="ButtonConnect_OnClick" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+
+		<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
+		<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Name="StatusBar" Margin="5"
+		           Text="{Binding Status, Mode=OneWay}" />
+
+	</Grid>
+</Window>

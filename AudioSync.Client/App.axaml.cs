@@ -1,8 +1,10 @@
+using AudioSync.Client.ViewModels;
+using AudioSync.Client.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace AudioSync.Client.Frontend
+namespace AudioSync.Client
 {
 	public class App : Application
 	{
@@ -11,7 +13,10 @@ namespace AudioSync.Client.Frontend
 		public override void OnFrameworkInitializationCompleted()
 		{
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-				desktop.MainWindow = new MainWindow();
+				desktop.MainWindow = new MainWindow
+				{
+					DataContext = new MainWindowViewModel()
+				};
 
 			base.OnFrameworkInitializationCompleted();
 		}

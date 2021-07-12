@@ -37,9 +37,9 @@ namespace AudioSync.Shared
 		///     The artist of the song
 		/// </summary>
 		public string Artist { get; set; }
-		
+
 		/// <summary>
-		///		The album the song was on
+		///     The album the song was on
 		/// </summary>
 		public string Album { get; set; }
 

@@ -8,7 +8,8 @@ namespace AudioSync.Client.Backend
 	{
 		private void SetupEvents()
 		{
-			AddOneParamEvent("UpdateUser", UpdateUserEvent);
+			// TODO: Uncomment these once we actually add handlers for them - else they crash
+			/*AddOneParamEvent("UpdateUser", UpdateUserEvent);
 			AddOneParamEvent("RemoveUser", RemoveUserEvent);
 			AddOneParamEvent("Play",       TransportPlayEvent);
 			AddOneParamEvent("Pause",      TransportPauseEvent);
@@ -17,7 +18,7 @@ namespace AudioSync.Client.Backend
 			AddOneParamEvent("Previous",   QueuePreviousEvent);
 			AddOneParamEvent("ClearQueue", QueueClearEvent);
 			AddTwoParamEvent("SetQueue", QueueSetEvent);
-			AddTwoParamEvent("Enqueue",  QueueAddEvent);
+			AddTwoParamEvent("Enqueue",  QueueAddEvent);*/
 		}
 
 		// Add an event with just a string, for the name of the user who performed the action

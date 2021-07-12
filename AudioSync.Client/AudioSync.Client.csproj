@@ -1,39 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.6" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.7" />
-        <PackageReference Include="NetCoreAudio" Version="1.6.3" />
-        <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
-        <PackageReference Include="Octokit" Version="0.50.0" />
-        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+        <Folder Include="Models\"/>
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj" />
+        <PackageReference Include="Avalonia" Version="0.10.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.3"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3"/>
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Update="Frontend\App.axaml.cs">
-            <DependentUpon>App.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Frontend\ConnectDialog.axaml.cs">
+        <ProjectReference Include="..\AudioSync.Client.Backend\AudioSync.Client.Backend.csproj"/>
+        <ProjectReference Include="..\AudioSync.Shared\AudioSync.Shared.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Views\ConnectDialog.axaml.cs">
             <DependentUpon>ConnectDialog.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Frontend\MainWindow.axaml.cs">
-            <DependentUpon>MainWindow.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <None Remove="Frontend\StyleSheet.xaml" />
-        <AvaloniaResource Include="Frontend\StyleSheet.xaml" />
     </ItemGroup>
 </Project>

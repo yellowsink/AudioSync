@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace AudioSync.Client
+namespace AudioSync.Client.Backend
 {
 	public static class HelperUtils
 	{
