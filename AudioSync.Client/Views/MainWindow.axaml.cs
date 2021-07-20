@@ -37,6 +37,7 @@ namespace AudioSync.Client.Views
 
 
 			// don't leave hanging connections to the server
+			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
 			{
 				if (_syncClient != null) await _syncClient.Disconnect();
@@ -44,24 +45,6 @@ namespace AudioSync.Client.Views
 				_cacheManager.Dispose(_config.CacheDaysThreshold);
 				_config.Save();
 			};
-
-
-			// TODO: REMOVE TEST DATA!!!!
-
-#region Test Data - REMOVE ME!!!!
-
-			AddSong(new Song("Start Again", "ONE OK ROCK", "Ambitions",
-							 "https://soundcloud.com/oneokrock/start-again"));
-			AddSong(new Song("SPARKS", "Takanashi Kiara", "SPARKS - Single",
-							 "https://open.spotify.com/track/46scODShYFATHbLfLE0dr1"));
-			UpdateUser(new User("Test user 1"));
-			UpdateUser(new User("Test user 2"));
-			((MainWindowViewModel) DataContext).SongName   = "Start Again";
-			((MainWindowViewModel) DataContext).ArtistName = "ONE OK ROCK";
-			((MainWindowViewModel) DataContext).AlbumName  = "Ambitions";
-			((MainWindowViewModel) DataContext).Format     = "MP3";
-
-#endregion
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -135,9 +118,17 @@ namespace AudioSync.Client.Views
 
 #region Lists Management
 
-		private void AddSong(Song song) => ((MainWindowViewModel) DataContext!).Songs.Add(song);
+		private void AddSong(Song song)
+		{
+			_queue.Add(song);
+			((MainWindowViewModel) DataContext!).Songs.Add(song);
+		}
 
-		private void RemoveSong(int index) => ((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
+		private void RemoveSong(int index)
+		{
+			_queue.Remove(index);
+			((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
+		}
 
 		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 

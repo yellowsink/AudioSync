@@ -59,10 +59,10 @@ namespace AudioSync.Client.ViewModels
 		}
 
 
-		public string InputAddSong   { get; set; }
-		public string InputAddArtist { get; set; }
-		public string InputAddAlbum  { get; set; }
-		public string InputAddUrl    { get; set; }
+		public string InputAddSong   { get; set; } = string.Empty;
+		public string InputAddArtist { get; set; } = string.Empty;
+		public string InputAddAlbum  { get; set; } = string.Empty;
+		public string InputAddUrl    { get; set; } = string.Empty;
 
 		private class Backing
 		{
