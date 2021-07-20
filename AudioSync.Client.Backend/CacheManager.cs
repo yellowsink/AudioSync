@@ -46,9 +46,11 @@ namespace AudioSync.Client.Backend
 			set => _cacheItems = value.ToList();
 		}
 
-		public void Dispose()
+		public void Dispose() => Dispose(null);
+		
+		public void Dispose(int? daysThreshold)
 		{
-			CleanCache();
+			CleanCache(daysThreshold);
 			SaveCache();
 			_disposed = true;
 		}

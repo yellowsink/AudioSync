@@ -16,6 +16,7 @@ namespace AudioSync.Client.Views
 		private readonly AudioManager _audioManager = new();
 		private readonly CacheManager _cacheManager = new();
 		private readonly Queue        _queue        = new();
+		private readonly Config       _config;
 
 		private SyncClient? _syncClient;
 
@@ -32,11 +33,16 @@ namespace AudioSync.Client.Views
 			RunConnectDialog();
 #pragma warning restore 4014
 
+			_config = Config.Load();
+
 
 			// don't leave hanging connections to the server
 			Closing += async (_, _) =>
 			{
 				if (_syncClient != null) await _syncClient.Disconnect();
+				Stop();
+				_cacheManager.Dispose(_config.CacheDaysThreshold);
+				_config.Save();
 			};
 
 

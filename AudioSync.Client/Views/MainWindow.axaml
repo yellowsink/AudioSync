@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AudioSync.Client.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AudioSync.Client">
+        Title="AudioSync">
 
 	<Design.DataContext>
 		<viewModels:MainWindowViewModel />
@@ -47,7 +47,7 @@
 		<!-- Main UI -->
 		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*, Auto, *" VerticalAlignment="Stretch">
 			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
-				<DataGrid Name="DataGridSongList" Items="{Binding Songs.Items, Mode=OneWay}" AutoGenerateColumns="False">
+				<DataGrid Name="DataGridSongList" Items="{Binding SongsBindable^}" AutoGenerateColumns="False">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
 						<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
@@ -57,7 +57,7 @@
 			</ScrollViewer>
 
 			<ScrollViewer Grid.Row="0" Grid.Column="2" Margin="5">
-				<DataGrid Name="DataGridUserList" Items="{Binding Users.Items, Mode=OneWay}" AutoGenerateColumns="False">
+				<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
 						<DataGridTextColumn Header="Status" Binding="{Binding Status}" />

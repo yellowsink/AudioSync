@@ -1,4 +1,6 @@
-﻿using AudioSync.Shared;
+﻿using System;
+using System.Collections.Generic;
+using AudioSync.Shared;
 using DynamicData;
 using ReactiveUI;
 
@@ -14,12 +16,16 @@ namespace AudioSync.Client.ViewModels
 			set => this.RaiseAndSetIfChanged(ref _backing.Songs, value);
 		}
 
+		public IObservable<IReadOnlyCollection<Song>> SongsBindable => Songs.Connect().ToCollection();
+
 
 		public SourceCache<User, string> Users
 		{
 			get => _backing.Users;
 			set => this.RaiseAndSetIfChanged(ref _backing.Users, value);
 		}
+		
+		public IObservable<IReadOnlyCollection<User>> UsersBindable => Users.Connect().ToCollection();
 
 
 		public string SongName

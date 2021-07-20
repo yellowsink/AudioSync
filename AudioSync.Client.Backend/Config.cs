@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace AudioSync.Client.Backend
 {
@@ -19,7 +20,14 @@ namespace AudioSync.Client.Backend
 		{
 			configPath ??= OSDefaults.DefaultConfigLocation;
 
-			return JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? new Config();
+			if (File.Exists(configPath))
+				return JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? new Config();
+			return new Config();
 		}
+
+		/// <summary>
+		///		How many days to keep items in cache. Set null to keep forever.
+		/// </summary>
+		public int? CacheDaysThreshold { get; set; } = 30;
 	}
 }
