@@ -23,5 +23,9 @@
             <DependentUpon>ConnectDialog.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\ToolDialog.axaml.cs">
+          <DependentUpon>ToolDialog.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 </Project>

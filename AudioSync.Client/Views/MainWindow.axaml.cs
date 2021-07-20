@@ -13,45 +13,45 @@ namespace AudioSync.Client.Views
 {
 	public class MainWindow : Window
 	{
-		private readonly AudioManager _audioManager = new();
-		private readonly CacheManager _cacheManager = new();
-		private readonly Queue        _queue        = new();
-		private readonly Config       _config;
+		private readonly Queue           _queue        = new();
+		private readonly AudioManager    _audioManager = new();
+		private readonly CacheManager    _cacheManager = new();
+		private          DownloadManager _downloadManager;
+		private readonly Config          _config;
 
-		private SyncClient? _syncClient;
+		private ToolManager? _toolManager;
+		private SyncClient?  _syncClient;
 
 		public MainWindow()
 		{
+			// Avalonia stuff
 			DataContext = new MainWindowViewModel();
-
 			InitializeComponent();
 #if DEBUG
 			this.AttachDevTools();
 #endif
 
-#pragma warning disable 4014
-			RunConnectDialog();
-#pragma warning restore 4014
-
+			// Init
 			_config = Config.Load();
-
-
+			
 			// don't leave hanging connections to the server
 			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
 			{
 				if (_syncClient != null) await _syncClient.Disconnect();
 				Stop();
-				_cacheManager.Dispose(_config.CacheDaysThreshold);
-				_config.Save();
+				_cacheManager.Dispose(_config?.CacheDaysThreshold);
+				_config?.Save();
 			};
+			
+			
+#pragma warning disable 4014
+			StartupTasks();
+#pragma warning restore 4014
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-		/// <summary>
-		///     Shows the connect to server dialog and performs actions based on result
-		/// </summary>
+		
 		private async Task RunConnectDialog()
 		{
 			var dialog = new ConnectDialog();
@@ -62,6 +62,22 @@ namespace AudioSync.Client.Views
 			_syncClient = dialog.SyncClient;
 
 			if (_syncClient is { IsMaster: true }) ShowMediaControls(true);
+		}
+
+		private async Task RunToolDialog()
+		{
+			var dialog = new ToolDialog();
+			await dialog.ShowDialog(this);
+
+			_toolManager = dialog.ToolManager;
+			if (_toolManager.Versions.Ytdl == null) Close(); // no ytdl
+			_downloadManager = new(_cacheManager);
+		}
+
+		private async Task StartupTasks()
+		{
+			await RunToolDialog();
+			await RunConnectDialog();
 		}
 
 		// TODO: This is the crash button™️
