@@ -70,7 +70,7 @@ namespace AudioSync.Server.Hubs
 			await Clients.Group("clients").SendAsync("RemoveUser", name);
 		}
 
-		public User[] GetUsers() => _state.Users.Values.ToArray();
+		public async Task<User[]> GetUsers() => _state.Users.Values.ToArray();
 
 		public async Task SetStatus(UserStatus status)
 		{

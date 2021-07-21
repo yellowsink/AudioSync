@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AudioSync.Shared;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -14,56 +15,56 @@ namespace AudioSync.Client.Backend
 			return success;
 		}
 
-		public User[] GetUsers() => _connection.InvokeAsync<User[]>("GetUsers").GetAwaiter().GetResult();
+		public async Task<User[]> GetUsers() => await _connection.InvokeAsync<User[]>("GetUsers");
 
-		public void Play()
+		public async Task Play()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Play").Wait();
+			await _connection.InvokeAsync("Play");
 		}
 
-		public void Pause()
+		public async Task Pause()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Pause").Wait();
+			await _connection.InvokeAsync("Pause");
 		}
 
-		public void Stop()
+		public async Task Stop()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Stop").Wait();
+			await _connection.InvokeAsync("Stop");
 		}
 
-		public void Next()
+		public async Task Next()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Next").Wait();
+			await _connection.InvokeAsync("Next");
 		}
 
-		public void Previous()
+		public async Task Previous()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Previous").Wait();
+			await _connection.InvokeAsync("Previous");
 		}
 
-		public void SetQueue(Song[] songs)
+		public async Task SetQueue(Song[] songs)
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("SetQueue", songs).Wait();
+			await _connection.InvokeAsync("SetQueue", songs);
 		}
 
-		public Queue GetQueue() => _connection.InvokeAsync<Queue>("GetQueue").GetAwaiter().GetResult();
+		public async Task<Queue> GetQueue() => await _connection.InvokeAsync<Queue>("GetQueue");
 
-		public void Enqueue(Song song)
+		public async Task Enqueue(Song song)
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("Enqueue", song).Wait();
+			await _connection.InvokeAsync("Enqueue", song);
 		}
 
-		public void ClearQueue()
+		public async Task ClearQueue()
 		{
 			if (!IsMaster) return;
-			_connection.InvokeAsync("ClearQueue").Wait();
+			await _connection.InvokeAsync("ClearQueue");
 		}
 	}
 }

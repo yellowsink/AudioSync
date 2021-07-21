@@ -79,6 +79,10 @@ namespace AudioSync.Client.Views
 			await RunConnectDialog();
 			// register event handlers from server
 			RegisterHandlers();
+
+			((MainWindowViewModel) DataContext!).Users.Clear();
+			foreach (var user in await _syncClient!.GetUsers())
+				((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 		}
 
 		// TODO: This is the crash button™️
