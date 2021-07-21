@@ -16,7 +16,7 @@ namespace AudioSync.Client.Views
 		private readonly AudioManager     _audioManager = new();
 		private readonly CacheManager     _cacheManager = new();
 		private readonly Config           _config;
-		private          DownloadManager? _downloadManager;
+		private          DownloadThread? _downloadThread;
 		private          Queue            _queue = new();
 		private          SyncClient?      _syncClient;
 
@@ -51,6 +51,23 @@ namespace AudioSync.Client.Views
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
+		private void RegisterSyncEventHandlers()
+		{
+			_syncClient!.TransportPlayEvent  += (_, _) => Play();
+			_syncClient!.TransportPauseEvent += (_, _) => Pause();
+			_syncClient!.TransportStopEvent  += (_, _) => Stop();
+
+			_syncClient!.QueueNextEvent     += (_, _) => Next();
+			_syncClient!.QueuePreviousEvent += (_, _) => Previous();
+
+			_syncClient!.UpdateUserEvent += (_, u) => UpdateUser(u);
+			_syncClient!.RemoveUserEvent += (_, u) => RemoveUser(u);
+
+			_syncClient!.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
+			_syncClient!.QueueAddEvent   += (_, p) => AddSong(p.Item2);
+			_syncClient!.QueueClearEvent += (_, _) => SetQueue(new Queue());
+		}
+
 		private async Task RunConnectDialog()
 		{
 			var dialog = new ConnectDialog();
@@ -70,7 +87,7 @@ namespace AudioSync.Client.Views
 
 			_toolManager = dialog.ToolManager;
 			if (_toolManager.Versions.Ytdl == null) Close(); // no ytdl
-			_downloadManager = new DownloadManager(_cacheManager);
+			_downloadThread = new DownloadThread(new DownloadManager(_cacheManager));
 		}
 
 		private async Task StartupTasks()
@@ -78,11 +95,15 @@ namespace AudioSync.Client.Views
 			await RunToolDialog();
 			await RunConnectDialog();
 			// register event handlers from server
-			RegisterHandlers();
+			RegisterSyncEventHandlers();
 
 			((MainWindowViewModel) DataContext!).Users.Clear();
 			foreach (var user in await _syncClient!.GetUsers())
 				((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
+
+#pragma warning disable 4014
+			Task.Factory.StartNew(_downloadThread!.Run().Wait);
+#pragma warning restore 4014
 		}
 
 		// TODO: This is the crash button™️
@@ -101,23 +122,6 @@ namespace AudioSync.Client.Views
 				return;
 
 			AddSong(new Song(song, artist, album, url));
-		}
-
-		private void RegisterHandlers()
-		{
-			_syncClient!.TransportPlayEvent  += (_, _) => Play();
-			_syncClient!.TransportPauseEvent += (_, _) => Pause();
-			_syncClient!.TransportStopEvent  += (_, _) => Stop();
-
-			_syncClient!.QueueNextEvent     += (_, _) => Next();
-			_syncClient!.QueuePreviousEvent += (_, _) => Previous();
-
-			_syncClient!.UpdateUserEvent += (_, u) => UpdateUser(u);
-			_syncClient!.RemoveUserEvent += (_, u) => RemoveUser(u);
-
-			_syncClient!.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
-			_syncClient!.QueueAddEvent   += (_, p) => AddSong(p.Item2);
-			_syncClient!.QueueClearEvent += (_, _) => SetQueue(new Queue());
 		}
 
 #region Media Controls
@@ -179,6 +183,8 @@ namespace AudioSync.Client.Views
 		{
 			_queue.Add(song);
 			((MainWindowViewModel) DataContext!).Songs.Add(song);
+			
+			DownloadSongIfNeeded(song);
 		}
 
 		private void RemoveSong(int index)
@@ -190,14 +196,21 @@ namespace AudioSync.Client.Views
 		private void SetQueue(Queue queue)
 		{
 			_queue = queue;
-
 			((MainWindowViewModel) DataContext!).Songs.Clear();
 			((MainWindowViewModel) DataContext!).Songs.AddRange(_queue.Songs);
+
+			foreach (var song in queue.Songs)
+				DownloadSongIfNeeded(song);
 		}
 
 		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
 		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
+		
+		private void DownloadSongIfNeeded(Song song)
+		{
+			if (_cacheManager.GetFromCache(song) == null) _downloadThread!.Enqueue(song);
+		}
 
 #endregion
 	}
