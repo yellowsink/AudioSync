@@ -32,9 +32,9 @@
 			<!-- Media controls -->
 			<StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="5" Name="StackPanelMediaControls"
 			            Orientation="Horizontal" IsVisible="{Binding ShowMediaControls, Mode=OneWay}">
-				<Button Classes="MediaControl" Content="⯈" />
-				<Button Classes="MediaControl" Content="┃┃" />
-				<Button Classes="MediaControl" Content="⯀" />
+				<Button Classes="MediaControl" Content="⯈" Click="ButtonPlay" />
+				<Button Classes="MediaControl" Content="┃┃" Click="ButtonPause" />
+				<Button Classes="MediaControl" Content="⯀" Click="ButtonStop" />
 			</StackPanel>
 
 			<!-- Song progress -->

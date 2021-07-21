@@ -149,6 +149,10 @@ namespace AudioSync.Client.Views
 			_queue.Previous();
 			Play();
 		}
+		
+		private async void ButtonPlay(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Play();
+		private async void ButtonPause(object? sender = null, RoutedEventArgs e = null!) => await _syncClient!.Pause();
+		private async void ButtonStop(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Stop();
 
 #endregion
 
