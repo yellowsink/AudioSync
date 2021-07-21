@@ -44,7 +44,7 @@ namespace AudioSync.Client.Views
 																  : $"New version available ({ToolManager.Versions.Ytdl})"
 															: "Not installed";
 
-			((ToolDialogViewModel) DataContext!).Status        = string.Empty;
+			((ToolDialogViewModel) DataContext!).Status        = "Idle";
 			((ToolDialogViewModel) DataContext!).EnableCheck   = true;
 			((ToolDialogViewModel) DataContext!).EnableInstall = true;
 		}
@@ -57,7 +57,7 @@ namespace AudioSync.Client.Views
 
 			await ToolManager.UpdateYtdl();
 
-			((ToolDialogViewModel) DataContext!).Status        = string.Empty;
+			((ToolDialogViewModel) DataContext!).Status        = "Idle";
 			((ToolDialogViewModel) DataContext!).EnableCheck   = true;
 			((ToolDialogViewModel) DataContext!).EnableInstall = true;
 			((ToolDialogViewModel) DataContext!).EnableDone    = ToolManager.Versions.Ytdl != null;

@@ -8,38 +8,32 @@ namespace AudioSync.Client.Backend
 	{
 		private void SetupEvents()
 		{
-			AddOneParamEvent("UpdateUser", UpdateUserEvent);
-			AddOneParamEvent("RemoveUser", RemoveUserEvent);
-			AddOneParamEvent("Play",       TransportPlayEvent);
-			AddOneParamEvent("Pause",      TransportPauseEvent);
-			AddOneParamEvent("Stop",       TransportStopEvent);
-			AddOneParamEvent("Next",       QueueNextEvent);
-			AddOneParamEvent("Previous",   QueuePreviousEvent);
-			AddOneParamEvent("ClearQueue", QueueClearEvent);
-			AddTwoParamEvent("SetQueue", QueueSetEvent);
-			AddTwoParamEvent("Enqueue",  QueueAddEvent);
+			// yuck repetitive code
+
+			_connection.On<User>("UpdateUser", param => { UpdateUserEvent.Invoke(this, param); });
+			_connection.On<string>("RemoveUser", param => { RemoveUserEvent.Invoke(this, param); });
+
+			_connection.On<string>("Play",  param => { TransportPlayEvent.Invoke(this, param); });
+			_connection.On<string>("Pause", param => { TransportPauseEvent.Invoke(this, param); });
+			_connection.On<string>("Stop",  param => { TransportStopEvent.Invoke(this, param); });
+
+			_connection.On<string>("Next",     param => { QueueNextEvent.Invoke(this, param); });
+			_connection.On<string>("Previous", param => { QueuePreviousEvent.Invoke(this, param); });
+
+			_connection.On<string>("ClearQueue", param => { QueueClearEvent.Invoke(this, param); });
+			_connection.On<(string, Queue)>("SetQueue", param => { QueueSetEvent.Invoke(this, param); });
+			_connection.On<(string, Song)>("Enqueue", param => { QueueAddEvent.Invoke(this, param); });
 		}
 
-		// Add an event with just a string, for the name of the user who performed the action
-		private void AddOneParamEvent<T>(string signalREvent, EventHandler<T> eventHandler)
-		{
-			_connection.On<T>(signalREvent, param => { eventHandler.Invoke(this, param); });
-		}
-
-		private void AddTwoParamEvent<T1, T2>(string signalREvent, EventHandler<(T1, T2)> eventHandler)
-		{
-			_connection.On<T1, T2>(signalREvent, (param1, param2) => { eventHandler.Invoke(this, (param1, param2)); });
-		}
-
-		public event EventHandler<User>            UpdateUserEvent;
-		public event EventHandler<string>          RemoveUserEvent;
-		public event EventHandler<string>          TransportPlayEvent;
-		public event EventHandler<string>          TransportPauseEvent;
-		public event EventHandler<string>          TransportStopEvent;
-		public event EventHandler<string>          QueueNextEvent;
-		public event EventHandler<string>          QueuePreviousEvent;
-		public event EventHandler<(string, Queue)> QueueSetEvent;
-		public event EventHandler<(string, Song)>  QueueAddEvent;
-		public event EventHandler<string>          QueueClearEvent;
+		public event EventHandler<User>            UpdateUserEvent     = (_, _) => { };
+		public event EventHandler<string>          RemoveUserEvent     = (_, _) => { };
+		public event EventHandler<string>          TransportPlayEvent  = (_, _) => { };
+		public event EventHandler<string>          TransportPauseEvent = (_, _) => { };
+		public event EventHandler<string>          TransportStopEvent  = (_, _) => { };
+		public event EventHandler<string>          QueueNextEvent      = (_, _) => { };
+		public event EventHandler<string>          QueuePreviousEvent  = (_, _) => { };
+		public event EventHandler<(string, Queue)> QueueSetEvent       = (_, _) => { };
+		public event EventHandler<(string, Song)>  QueueAddEvent       = (_, _) => { };
+		public event EventHandler<string>          QueueClearEvent     = (_, _) => { };
 	}
 }

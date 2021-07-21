@@ -7,7 +7,7 @@ namespace AudioSync.Client.ViewModels
 		private bool   _enableCheck = true;
 		private bool   _enableDone;
 		private bool   _enableInstall = true;
-		private string _status        = string.Empty;
+		private string _status        = "Idle";
 
 		private string _ytdl = string.Empty;
 

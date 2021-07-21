@@ -16,8 +16,8 @@ namespace AudioSync.Client.Views
 		private readonly AudioManager     _audioManager = new();
 		private readonly CacheManager     _cacheManager = new();
 		private readonly Config           _config;
-		private          Queue            _queue = new();
 		private          DownloadManager? _downloadManager;
+		private          Queue            _queue = new();
 		private          SyncClient?      _syncClient;
 
 		private ToolManager? _toolManager;
@@ -103,6 +103,23 @@ namespace AudioSync.Client.Views
 			AddSong(new Song(song, artist, album, url));
 		}
 
+		private void RegisterHandlers()
+		{
+			_syncClient!.TransportPlayEvent  += (_, _) => Play();
+			_syncClient!.TransportPauseEvent += (_, _) => Pause();
+			_syncClient!.TransportStopEvent  += (_, _) => Stop();
+
+			_syncClient!.QueueNextEvent     += (_, _) => Next();
+			_syncClient!.QueuePreviousEvent += (_, _) => Previous();
+
+			_syncClient!.UpdateUserEvent += (_, u) => UpdateUser(u);
+			_syncClient!.RemoveUserEvent += (_, u) => RemoveUser(u);
+
+			_syncClient!.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
+			_syncClient!.QueueAddEvent   += (_, p) => AddSong(p.Item2);
+			_syncClient!.QueueClearEvent += (_, _) => SetQueue(new Queue());
+		}
+
 #region Media Controls
 
 		private void ShowMediaControls(bool show) => ((MainWindowViewModel) DataContext!).ShowMediaControls = show;
@@ -142,14 +159,14 @@ namespace AudioSync.Client.Views
 			_queue.Next();
 			Play();
 		}
-		
+
 		private void Previous()
 		{
 			Stop();
 			_queue.Previous();
 			Play();
 		}
-		
+
 		private async void ButtonPlay(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Play();
 		private async void ButtonPause(object? sender = null, RoutedEventArgs e = null!) => await _syncClient!.Pause();
 		private async void ButtonStop(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Stop();
@@ -173,7 +190,7 @@ namespace AudioSync.Client.Views
 		private void SetQueue(Queue queue)
 		{
 			_queue = queue;
-			
+
 			((MainWindowViewModel) DataContext!).Songs.Clear();
 			((MainWindowViewModel) DataContext!).Songs.AddRange(_queue.Songs);
 		}
@@ -183,22 +200,5 @@ namespace AudioSync.Client.Views
 		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
 
 #endregion
-
-		private void RegisterHandlers()
-		{
-			_syncClient!.TransportPlayEvent  += (_, _) => Play();
-			_syncClient!.TransportPauseEvent += (_, _) => Pause();
-			_syncClient!.TransportStopEvent  += (_, _) => Stop();
-
-			_syncClient!.QueueNextEvent     += (_, _) => Next();
-			_syncClient!.QueuePreviousEvent += (_, _) => Previous();
-			
-			_syncClient!.UpdateUserEvent += (_, u) => UpdateUser(u);
-			_syncClient!.RemoveUserEvent += (_, u) => RemoveUser(u);
-
-			_syncClient!.QueueSetEvent += (_, p) => SetQueue(p.Item2);
-			_syncClient!.QueueAddEvent += (_, p) => AddSong(p.Item2);
-			_syncClient!.QueueClearEvent += (_, _) => SetQueue(new Queue());
-		}
 	}
 }

@@ -21,6 +21,7 @@ namespace AudioSync.Server.Hubs
 			Console.WriteLine($"{name} is the new master");
 
 			_state.MasterId = Context.ConnectionId;
+			await Groups.AddToGroupAsync(Context.ConnectionId, "clients");
 			SetOrAddUser(new User(name)
 			{
 				IsMaster = true
@@ -37,6 +38,7 @@ namespace AudioSync.Server.Hubs
 			Console.WriteLine($"Master ({name}) left");
 
 			_state.MasterId = null;
+			await Groups.RemoveFromGroupAsync(Context.ConnectionId, "clients");
 			RemoveNameIfRegistered(name);
 			RemoveUser();
 
