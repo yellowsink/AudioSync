@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -53,13 +52,14 @@ namespace AudioSync.Client.Backend
 			latestTagVersion ??= await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
 			// oh boy that's messy
-			if (Versions.Ytdl == latestTagVersion ||
+			if (Versions.Ytdl                                       == latestTagVersion ||
 				Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) == false) return;
 
 			_logger.LogInformation($"Updating YTDL from {Versions.Ytdl} to {latestTagVersion}");
-			var client   = new HttpClient();
-			var response = await Task.Factory.StartNew(client.GetStreamAsync(ToolDownloadLocations.Ytdl).GetAwaiter().GetResult);
-			var stream   = new FileStream(YtdlExecutableLocation, FileMode.Create);
+			var client = new HttpClient();
+			var response
+				= await Task.Factory.StartNew(client.GetStreamAsync(ToolDownloadLocations.Ytdl).GetAwaiter().GetResult);
+			var stream = new FileStream(YtdlExecutableLocation, FileMode.Create);
 			await response.CopyToAsync(stream);
 
 			Versions.Ytdl = latestTagVersion;
@@ -72,7 +72,8 @@ namespace AudioSync.Client.Backend
 			{
 				var latestTagVersion = await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
-				return Versions.Ytdl == latestTagVersion || (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
+				return Versions.Ytdl == latestTagVersion ||
+					   (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
 			}
 			catch (Exception)
 			{

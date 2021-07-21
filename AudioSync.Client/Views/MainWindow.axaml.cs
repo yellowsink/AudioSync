@@ -13,14 +13,14 @@ namespace AudioSync.Client.Views
 {
 	public class MainWindow : Window
 	{
-		private readonly Queue           _queue        = new();
 		private readonly AudioManager    _audioManager = new();
 		private readonly CacheManager    _cacheManager = new();
-		private          DownloadManager _downloadManager;
 		private readonly Config          _config;
+		private readonly Queue           _queue = new();
+		private          DownloadManager _downloadManager;
+		private          SyncClient?     _syncClient;
 
 		private ToolManager? _toolManager;
-		private SyncClient?  _syncClient;
 
 		public MainWindow()
 		{
@@ -33,7 +33,7 @@ namespace AudioSync.Client.Views
 
 			// Init
 			_config = Config.Load();
-			
+
 			// don't leave hanging connections to the server
 			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
@@ -43,15 +43,15 @@ namespace AudioSync.Client.Views
 				_cacheManager.Dispose(_config?.CacheDaysThreshold);
 				_config?.Save();
 			};
-			
-			
+
+
 #pragma warning disable 4014
 			StartupTasks();
 #pragma warning restore 4014
 		}
 
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-		
+
 		private async Task RunConnectDialog()
 		{
 			var dialog = new ConnectDialog();
@@ -71,7 +71,7 @@ namespace AudioSync.Client.Views
 
 			_toolManager = dialog.ToolManager;
 			if (_toolManager.Versions.Ytdl == null) Close(); // no ytdl
-			_downloadManager = new(_cacheManager);
+			_downloadManager = new DownloadManager(_cacheManager);
 		}
 
 		private async Task StartupTasks()

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Client.ViewModels;
 using Avalonia;
@@ -34,10 +33,10 @@ namespace AudioSync.Client.Views
 
 		private async void CheckForUpdates(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
-			((ToolDialogViewModel) DataContext!).Status      = "Checking for updates...";
-			((ToolDialogViewModel) DataContext!).EnableCheck = false;
+			((ToolDialogViewModel) DataContext!).Status        = "Checking for updates...";
+			((ToolDialogViewModel) DataContext!).EnableCheck   = false;
 			((ToolDialogViewModel) DataContext!).EnableInstall = false;
-			
+
 			var ytdlInstalled = ToolManager.Versions.Ytdl != null;
 			((ToolDialogViewModel) DataContext!).Ytdl = ytdlInstalled
 															? await ToolManager.YtdlUpToDate()
@@ -63,7 +62,7 @@ namespace AudioSync.Client.Views
 			((ToolDialogViewModel) DataContext!).EnableInstall = true;
 			((ToolDialogViewModel) DataContext!).EnableDone    = ToolManager.Versions.Ytdl != null;
 		}
-		
+
 		private void CloseButton(object? sender, RoutedEventArgs e) => Close();
 	}
 }

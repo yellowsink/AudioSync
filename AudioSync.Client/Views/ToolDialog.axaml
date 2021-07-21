@@ -19,21 +19,25 @@
 	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, *, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *">
 
 		<TextBlock Grid.Column="0" Grid.Row="0" FontSize="25" Text="Tool Manager" />
-		
+
 		<TextBlock Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Margin="5" TextWrapping="WrapWithOverflow"
 		           Text="Audiosync makes use of some other software to run smoothly. The tool manager will keep all required software installed and up-to-date for you." />
-		
+
 		<TextBlock Grid.Column="0" Grid.Row="2" Text="YTDL version" Margin="5" />
 		<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Ytdl, Mode=OneWay}" Margin="5" />
-		
-		<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" RowDefinitions="Auto, Auto" ColumnDefinitions="*, *" Margin="5">
+
+		<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" RowDefinitions="Auto, Auto" ColumnDefinitions="*, *"
+		      Margin="5">
 			<!-- Buttons -->
-			<Button Grid.Column="0" Grid.Row="0" Content="Check for updates" IsEnabled="{Binding EnableCheck}" Click="CheckForUpdates" />
-			<Button Grid.Column="1" Grid.Row="0" Content="Update or install tools" IsEnabled="{Binding EnableInstall}" Click="UpdateTools" />
-			
-			<Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Content="Done" IsEnabled="{Binding EnableDone}" Click="CloseButton" />
+			<Button Grid.Column="0" Grid.Row="0" Content="Check for updates" IsEnabled="{Binding EnableCheck}"
+			        Click="CheckForUpdates" />
+			<Button Grid.Column="1" Grid.Row="0" Content="Update or install tools" IsEnabled="{Binding EnableInstall}"
+			        Click="UpdateTools" />
+
+			<Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Content="Done" IsEnabled="{Binding EnableDone}"
+			        Click="CloseButton" />
 		</Grid>
-		
+
 		<Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Classes="Horizontal Separator" />
 		<TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Name="StatusBar" Margin="5"
 		           Text="{Binding Status, Mode=OneWay}" />

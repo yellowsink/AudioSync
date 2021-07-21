@@ -47,7 +47,7 @@ namespace AudioSync.Client.Backend
 		}
 
 		public void Dispose() => Dispose(null);
-		
+
 		public void Dispose(int? daysThreshold)
 		{
 			CleanCache(daysThreshold);

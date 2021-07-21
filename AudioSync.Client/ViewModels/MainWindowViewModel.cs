@@ -24,7 +24,7 @@ namespace AudioSync.Client.ViewModels
 			get => _backing.Users;
 			set => this.RaiseAndSetIfChanged(ref _backing.Users, value);
 		}
-		
+
 		public IObservable<IReadOnlyCollection<User>> UsersBindable => Users.Connect().ToCollection();
 
 

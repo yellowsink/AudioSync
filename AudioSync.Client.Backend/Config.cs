@@ -8,6 +8,11 @@ namespace AudioSync.Client.Backend
 	/// </summary>
 	public class Config
 	{
+		/// <summary>
+		///     How many days to keep items in cache. Set null to keep forever.
+		/// </summary>
+		public int? CacheDaysThreshold { get; set; } = 30;
+
 		public void Save(string? configPath = null)
 		{
 			configPath ??= OSDefaults.DefaultConfigLocation;
@@ -23,10 +28,5 @@ namespace AudioSync.Client.Backend
 				return JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? new Config();
 			return new Config();
 		}
-
-		/// <summary>
-		///		How many days to keep items in cache. Set null to keep forever.
-		/// </summary>
-		public int? CacheDaysThreshold { get; set; } = 30;
 	}
 }
