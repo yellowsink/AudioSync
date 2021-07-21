@@ -3,6 +3,7 @@ using AudioSync.Client.Backend;
 using AudioSync.Client.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace AudioSync.Client.Views
@@ -13,7 +14,10 @@ namespace AudioSync.Client.Views
 
 		public ToolDialog()
 		{
-			DataContext = new ToolDialogViewModel();
+			DataContext = new ToolDialogViewModel
+			{
+				EnableDone = ToolManager.Versions.Ytdl != null
+			};
 
 			InitializeComponent();
 #if DEBUG
@@ -28,24 +32,38 @@ namespace AudioSync.Client.Views
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
-		private async Task CheckForUpdates()
+		private async void CheckForUpdates(object? sender = null, RoutedEventArgs routedEventArgs = null!)
 		{
-			((ToolDialogViewModel) DataContext!).Status = "Checking for updates...";	
+			((ToolDialogViewModel) DataContext!).Status      = "Checking for updates...";
+			((ToolDialogViewModel) DataContext!).EnableCheck = false;
+			((ToolDialogViewModel) DataContext!).EnableInstall = false;
 			
 			var ytdlInstalled = ToolManager.Versions.Ytdl != null;
-			if (ytdlInstalled)
-			{
-				var ytdlUpToDate = await ToolManager.YtdlUpToDate();
-				((ToolDialogViewModel) DataContext!).Ytdl = ytdlUpToDate
-																? $"Up to date ({ToolManager.Versions.Ytdl})"
-																: $"New version available ({ToolManager.Versions.Ytdl})";
-			}
-			else
-			{
-				((ToolDialogViewModel) DataContext!).Ytdl = "Not installed";
-			}
-			
-			((ToolDialogViewModel) DataContext!).Status = string.Empty;
+			((ToolDialogViewModel) DataContext!).Ytdl = ytdlInstalled
+															? await ToolManager.YtdlUpToDate()
+																  ? $"Up to date ({ToolManager.Versions.Ytdl})"
+																  : $"New version available ({ToolManager.Versions.Ytdl})"
+															: "Not installed";
+
+			((ToolDialogViewModel) DataContext!).Status        = string.Empty;
+			((ToolDialogViewModel) DataContext!).EnableCheck   = true;
+			((ToolDialogViewModel) DataContext!).EnableInstall = true;
 		}
+
+		private async void UpdateTools(object? sender = null, RoutedEventArgs routedEventArgs = null!)
+		{
+			((ToolDialogViewModel) DataContext!).Status        = "Installing YTDL...";
+			((ToolDialogViewModel) DataContext!).EnableCheck   = false;
+			((ToolDialogViewModel) DataContext!).EnableInstall = false;
+
+			await ToolManager.UpdateYtdl();
+
+			((ToolDialogViewModel) DataContext!).Status        = string.Empty;
+			((ToolDialogViewModel) DataContext!).EnableCheck   = true;
+			((ToolDialogViewModel) DataContext!).EnableInstall = true;
+			((ToolDialogViewModel) DataContext!).EnableDone    = ToolManager.Versions.Ytdl != null;
+		}
+		
+		private void CloseButton(object? sender, RoutedEventArgs e) => Close();
 	}
 }

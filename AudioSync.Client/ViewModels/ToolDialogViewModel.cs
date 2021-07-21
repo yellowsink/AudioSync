@@ -1,4 +1,3 @@
-using System;
 using ReactiveUI;
 
 namespace AudioSync.Client.ViewModels
@@ -19,6 +18,26 @@ namespace AudioSync.Client.ViewModels
 		{
 			get => _ytdl;
 			set => this.RaiseAndSetIfChanged(ref _ytdl, value);
+		}
+
+		private bool _enableCheck = true;
+		private bool _enableInstall = true;
+		private bool _enableDone;
+
+		public bool EnableCheck
+		{
+			get => _enableCheck;
+			set => this.RaiseAndSetIfChanged(ref _enableCheck, value);
+		}
+		public bool EnableInstall
+		{
+			get => _enableInstall;
+			set => this.RaiseAndSetIfChanged(ref _enableInstall, value);
+		}
+		public bool EnableDone
+		{
+			get => _enableDone;
+			set => this.RaiseAndSetIfChanged(ref _enableDone, value);
 		}
 	}
 }

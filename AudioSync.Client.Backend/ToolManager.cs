@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -34,16 +35,13 @@ namespace AudioSync.Client.Backend
 			=> YtdlCustomLocation ?? Path.Combine(ToolDirectory, OSDefaults.DefaultYtdlFileName);
 
 
-		public async Task<RepositoryTag> GetLatestTagVersion(string user, string name)
+		public async Task<string> GetLatestTagVersion(string user, string name)
 		{
 			_logger.LogDebug($"Fetching latest tag for {user}/{name}");
 
 			var gh = new GitHubClient(new ProductHeaderValue("AudioSync"));
 
-			var tags = await gh.Repository.GetAllTags(user, name);
-
-			return tags.Aggregate(tags[0],
-								  (current, next) => next.Name.VersionIsNewerThan(current.Name) ? next : current);
+			return (await gh.Repository.Release.GetLatest(user, name)).TagName;
 		}
 
 		public async Task UpdateYtdl(string? latestTagVersion = null)
@@ -52,7 +50,7 @@ namespace AudioSync.Client.Backend
 			if (YtdlCustomLocation != null) return;
 
 			_logger.LogInformation("Checking for YTDL updates");
-			latestTagVersion ??= (await GetLatestTagVersion("ytdl-org", "youtube-dl")).Name;
+			latestTagVersion ??= await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
 			// oh boy that's messy
 			if (Versions.Ytdl == latestTagVersion ||
@@ -60,17 +58,26 @@ namespace AudioSync.Client.Backend
 
 			_logger.LogInformation($"Updating YTDL from {Versions.Ytdl} to {latestTagVersion}");
 			var client   = new HttpClient();
-			var response = await client.GetAsync(ToolDownloadLocations.Ytdl);
+			var response = await Task.Factory.StartNew(client.GetStreamAsync(ToolDownloadLocations.Ytdl).GetAwaiter().GetResult);
 			var stream   = new FileStream(YtdlExecutableLocation, FileMode.Create);
-			await response.Content.CopyToAsync(stream);
+			await response.CopyToAsync(stream);
+
+			Versions.Ytdl = latestTagVersion;
 			SaveToolVersions();
 		}
 
 		public async Task<bool> YtdlUpToDate()
 		{
-			var latestTagVersion = (await GetLatestTagVersion("ytdl-org", "youtube-dl")).Name;
+			try
+			{
+				var latestTagVersion = await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
-			return Versions.Ytdl == latestTagVersion || (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
+				return Versions.Ytdl == latestTagVersion || (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
+			}
+			catch (Exception)
+			{
+				return true;
+			}
 		}
 
 		public void DestroyTools()
