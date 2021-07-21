@@ -40,8 +40,8 @@ namespace AudioSync.Client.Views
 			{
 				if (_syncClient != null) await _syncClient.Disconnect();
 				Stop();
-				_cacheManager.Dispose(_config?.CacheDaysThreshold);
-				_config?.Save();
+				_cacheManager.Dispose(_config.CacheDaysThreshold);
+				_config.Save();
 			};
 
 #pragma warning disable 4014
