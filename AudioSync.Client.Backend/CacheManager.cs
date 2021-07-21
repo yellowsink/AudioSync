@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using AudioSync.Client.Backend.Cache;
 using AudioSync.Shared;
 using Microsoft.Extensions.Logging;
 using NodaTime;
@@ -20,7 +19,7 @@ namespace AudioSync.Client.Backend
 
 		public readonly string CacheRoot;
 
-		private List<ICacheItem> _cacheItems;
+		private List<CacheItem> _cacheItems;
 		private bool             _disposed;
 
 #pragma warning disable 8618
@@ -36,11 +35,11 @@ namespace AudioSync.Client.Backend
 			}
 			catch (FileNotFoundException)
 			{
-				_cacheItems = new List<ICacheItem>();
+				_cacheItems = new List<CacheItem>();
 			}
 		}
 
-		public ICacheItem[] CacheItems
+		public CacheItem[] CacheItems
 		{
 			get => _cacheItems.ToArray();
 			set => _cacheItems = value.ToList();
@@ -61,8 +60,8 @@ namespace AudioSync.Client.Backend
 
 			_logger.LogInformation("Loading cache index from disk");
 			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
-			CacheItems = JsonSerializer.Deserialize<ICacheItem[]>(File.ReadAllText(cacheIndexPath)) ??
-						 Array.Empty<ICacheItem>();
+			CacheItems = JsonSerializer.Deserialize<CacheItem[]>(File.ReadAllText(cacheIndexPath)) ??
+						 Array.Empty<CacheItem>();
 		}
 
 		public void SaveCache()
@@ -89,7 +88,7 @@ namespace AudioSync.Client.Backend
 			// Not in index
 			foreach (var song in songs)
 				if (_cacheItems.All(cacheItem => !song.Equals(cacheItem)))
-					song.File.Delete();
+					song.File(CacheRoot).Delete();
 
 			// Old files
 			if (daysThreshold != null)
@@ -118,7 +117,7 @@ namespace AudioSync.Client.Backend
 			}
 		}
 
-		public void MoveIntoCache(ICacheItem item, FileInfo oldFileLocation)
+		public void MoveIntoCache(CacheItem item, FileInfo oldFileLocation)
 		{
 			CheckDisposed();
 
@@ -138,7 +137,7 @@ namespace AudioSync.Client.Backend
 			CheckDisposed();
 
 			_logger.LogInformation("Rebuilding cache index from disk");
-			_cacheItems = GetItemsFromDisk().Cast<ICacheItem>().ToList();
+			_cacheItems = GetItemsFromDisk().Cast<CacheItem>().ToList();
 			SaveCache();
 		}
 
@@ -161,7 +160,7 @@ namespace AudioSync.Client.Backend
 			Dispose();
 		}
 
-		public (ICacheItem, FileInfo)? GetFromCache(Song song)
+		public (CacheItem, FileInfo)? GetFromCache(Song song)
 		{
 			CheckDisposed();
 
@@ -176,18 +175,18 @@ namespace AudioSync.Client.Backend
 			return (cacheItem, file);
 		}
 
-		private DiskCacheItem[] GetItemsFromDisk()
+		private CacheItem[] GetItemsFromDisk()
 		{
 			var prefixes = new DirectoryInfo(CacheRoot).GetDirectories();
 
 			return prefixes.SelectMany(prefix => SongsInPrefix(prefix.GetDirectories(), prefix.Name)).ToArray();
 
 
-			static IEnumerable<DiskCacheItem> SongsInPrefix(IEnumerable<DirectoryInfo> artists, string prefixName)
-				=> artists.SelectMany(artist => SongsInArtist(artist.GetFiles(), prefixName));
+			static IEnumerable<CacheItem> SongsInPrefix(IEnumerable<DirectoryInfo> artists, string prefixName)
+				=> artists.SelectMany(artist => SongsInArtist(artist.GetFiles(), prefixName, artist.Name));
 
-			static IEnumerable<DiskCacheItem> SongsInArtist(IEnumerable<FileInfo> songs, string prefixName)
-				=> songs.Select(song => new DiskCacheItem(song, prefixName));
+			static IEnumerable<CacheItem> SongsInArtist(IEnumerable<FileInfo> songs, string prefixName, string artist)
+				=> songs.Select(song => new CacheItem(song.Name, artist, song.Extension, prefixName));
 		}
 
 		/// <summary>

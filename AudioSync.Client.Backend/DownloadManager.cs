@@ -4,19 +4,18 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AudioSync.Client.Backend.Cache;
 using AudioSync.Shared;
 
 namespace AudioSync.Client.Backend
 {
 	public class DownloadManager
 	{
-		private readonly Action<ICacheItem, FileInfo> _moveToCacheAction;
+		private readonly Action<CacheItem, FileInfo> _moveToCacheAction;
 		private readonly string                       _ytdlPath;
 
 		/// <param name="moveToCacheAction">An action that moves a file into the cache</param>
 		/// <param name="ytdlPath">Where YTDL is: leave blank for OS default</param>
-		public DownloadManager(Action<ICacheItem, FileInfo> moveToCacheAction, string? ytdlPath = null)
+		public DownloadManager(Action<CacheItem, FileInfo> moveToCacheAction, string? ytdlPath = null)
 		{
 			_ytdlPath = ytdlPath ?? Path.Combine(OSDefaults.DefaultToolLocation, OSDefaults.DefaultYtdlFileName);
 			if (!File.Exists(_ytdlPath))
@@ -38,6 +37,7 @@ namespace AudioSync.Client.Backend
 		public async Task DownloadSong(Song song, string? downloadFolder = null)
 		{
 			downloadFolder ??= OSDefaults.DefaultDownloadLocation;
+			Directory.CreateDirectory(downloadFolder);
 			var (file, ext) = await RunYtdl(await song.DownloadableUrlAsync(), $"{song.Artist} - {song.Name}",
 											downloadFolder);
 
@@ -50,9 +50,10 @@ namespace AudioSync.Client.Backend
 		private async Task<(FileInfo, string)> RunYtdl(string url, string filename, string downloadFolder)
 		{
 			// %(ext)s is a pattern that tells YTDL to insert the correct file extension
-			var startOptions = new ProcessStartInfo(_ytdlPath, $"{url} --print-json -o {filename}.%(ext)s")
+			var startOptions = new ProcessStartInfo(_ytdlPath, $"{url} --print-json -o \"{filename}.%(ext)s\"")
 			{
-				WorkingDirectory = downloadFolder
+				WorkingDirectory = downloadFolder,
+				RedirectStandardOutput = true
 			};
 			var process = Process.Start(startOptions);
 			await process!.WaitForExitAsync();
@@ -60,16 +61,14 @@ namespace AudioSync.Client.Backend
 
 			var ytdlOutputObject = JsonSerializer.Deserialize<YtdlOutputObject>(result)!;
 
-			return (new FileInfo(ytdlOutputObject.Filename), ytdlOutputObject.Extension);
+			return (new FileInfo(Path.Combine(downloadFolder, ytdlOutputObject.Filename)), ytdlOutputObject.Extension);
 		}
 
 		/// <summary>
 		///     Creates a cache item for the given song with today's date
 		/// </summary>
-		private static ICacheItem CreateCacheItem(Song song, string fileExtension)
-			=> song.UseYoutube
-				   ? new YoutubeItem(song.Name, song.Artist, fileExtension)
-				   : new SoundCloudItem(song.Name, song.Artist, fileExtension);
+		private static CacheItem CreateCacheItem(Song song, string fileExtension)
+			=> new(song.Name, song.Artist, fileExtension, song.UseYoutube ? "youtube" : "soundcloud");
 	}
 
 	/// <summary>

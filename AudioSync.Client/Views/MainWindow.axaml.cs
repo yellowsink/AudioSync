@@ -143,7 +143,7 @@ namespace AudioSync.Client.Views
 				_audioManager.File = cachedSong.Value.Item2;
 			}
 
-			_audioManager.Play();
+			Task.Factory.StartNew(_audioManager.Play);
 		}
 
 		private void Pause()

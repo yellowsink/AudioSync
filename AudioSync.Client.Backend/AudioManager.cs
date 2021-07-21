@@ -14,7 +14,7 @@ namespace AudioSync.Client.Backend
 
 		public FileInfo? File;
 
-		public bool IsPlaying => _player.Playing;
+		public bool IsPlaying => _player.Playing && !IsPaused;
 		public bool IsPaused  => _player.Paused;
 
 		public AudioManagerStatus Status
@@ -29,7 +29,9 @@ namespace AudioSync.Client.Backend
 			if (File == null) throw new InvalidOperationException("You must set a file before playing audio");
 			if (IsPlaying) throw new InvalidOperationException("Cannot play audio when audio is already playing");
 
-			return (IsPaused ? _player.Resume() : _player.Play(File.FullName)).RunOnNewThread();
+			return IsPaused
+					   ? _player.Resume()
+					   : _player.Play(File.FullName);
 		}
 
 		public Task Pause()

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -60,6 +61,9 @@ namespace AudioSync.Client.Backend
 			var response
 				= await Task.Factory.StartNew(client.GetByteArrayAsync(ToolDownloadLocations.Ytdl).GetAwaiter().GetResult);
 			File.WriteAllBytes(YtdlExecutableLocation, response);
+
+			if (!OSDefaults.IsOnWindows)
+				await Process.Start("chmod", new[] { "+x", YtdlExecutableLocation }).WaitForExitAsync();
 
 			Versions.Ytdl = latestTagVersion;
 			SaveToolVersions();
