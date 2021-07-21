@@ -72,7 +72,9 @@ namespace AudioSync.Server.Hubs
 			await Clients.Group("clients").SendAsync("RemoveUser", name);
 		}
 
+#pragma warning disable 1998
 		public async Task<User[]> GetUsers() => _state.Users.Values.ToArray();
+#pragma warning restore 1998
 
 		public async Task SetStatus(UserStatus status)
 		{
