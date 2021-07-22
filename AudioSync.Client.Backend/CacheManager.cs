@@ -137,7 +137,7 @@ namespace AudioSync.Client.Backend
 			CheckDisposed();
 
 			_logger.LogInformation("Rebuilding cache index from disk");
-			_cacheItems = GetItemsFromDisk().Cast<CacheItem>().ToList();
+			_cacheItems = GetItemsFromDisk().ToList();
 			SaveCache();
 		}
 
@@ -186,7 +186,7 @@ namespace AudioSync.Client.Backend
 				=> artists.SelectMany(artist => SongsInArtist(artist.GetFiles(), prefixName, artist.Name));
 
 			static IEnumerable<CacheItem> SongsInArtist(IEnumerable<FileInfo> songs, string prefixName, string artist)
-				=> songs.Select(song => new CacheItem(song.Name, artist, song.Extension, prefixName));
+				=> songs.Select(song => new CacheItem(song.Name, artist, "", song.Extension, prefixName));
 		}
 
 		/// <summary>

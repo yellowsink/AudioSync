@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using AudioSync.Shared;
 using NodaTime;
@@ -12,12 +13,13 @@ namespace AudioSync.Client.Backend
 		public CacheItem(){}
 #pragma warning restore 8618
 		
-		public CacheItem(string song, string artist, string extension, string cachePrefix)
+		public CacheItem(string song, string artist, string album, string extension, string cachePrefix)
 		{
 			FileExtension = extension;
 			CachePrefix   = cachePrefix;
 			SongName      = song;
 			ArtistName    = artist;
+			AlbumName     = album;
 		}
 
 		public CacheItem(Song song, string extension, string cachePrefix)
@@ -26,6 +28,7 @@ namespace AudioSync.Client.Backend
 			CachePrefix   = cachePrefix;
 			SongName      = song.Name;
 			ArtistName    = song.Album;
+			AlbumName     = song.Album;
 		}
 
 		public FileInfo File(string cacheroot)
@@ -34,7 +37,22 @@ namespace AudioSync.Client.Backend
 		public string    FileExtension          { get; set; }
 		public string    SongName               { get; set; }
 		public string    ArtistName             { get; set; }
+		public string?   AlbumName              { get; set; }
 		public string    CachePrefix            { get; set; }
 		public LocalDate ObjectCreationDateTime { get; set; } = SystemClock.Instance.InUtc().GetCurrentDate();
+
+
+		public override bool Equals(object? obj) => obj is CacheItem c && Equals(c);
+
+		// ReSharper disable once MemberCanBePrivate.Global
+		protected bool Equals(CacheItem other)
+			=> FileExtension == other.FileExtension
+			&& SongName == other.SongName
+			&& ArtistName == other.ArtistName
+			&& CachePrefix == other.CachePrefix;
+
+		// ReSharper disable NonReadonlyMemberInGetHashCode
+		public override int GetHashCode() => HashCode.Combine(FileExtension, SongName, ArtistName, CachePrefix);
+		// ReSharper restore NonReadonlyMemberInGetHashCode
 	}
 }

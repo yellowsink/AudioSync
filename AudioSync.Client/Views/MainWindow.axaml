@@ -46,22 +46,40 @@
 
 		<!-- Main UI -->
 		<Grid Grid.Row="2" RowDefinitions="*, Auto, Auto" ColumnDefinitions="*, Auto, *" VerticalAlignment="Stretch">
-			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
-				<DataGrid Name="DataGridSongList" Items="{Binding SongsBindable^}" AutoGenerateColumns="False">
-					<DataGrid.Columns>
-						<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-						<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
-						<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
-						<DataGridTextColumn Header="Album" Binding="{Binding Album}" />
-						<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
-					</DataGrid.Columns>
-				</DataGrid>
-			</ScrollViewer>
+			<TabControl Grid.Row="0" Grid.Column="0" Margin="5">
+				<TabItem Header="Queue">
+					<ScrollViewer>
+						<DataGrid Items="{Binding SongsBindable^}" AutoGenerateColumns="False">
+							<DataGrid.Columns>
+								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+								<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
+								<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
+								<DataGridTextColumn Header="Album" Binding="{Binding Album}" />
+								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+							</DataGrid.Columns>
+						</DataGrid>
+					</ScrollViewer>
+				</TabItem>
+				
+				<TabItem Header="Downloaded Tracks">
+					<ScrollViewer>
+						<DataGrid Items="{Binding CacheBindable^}" AutoGenerateColumns="False">
+							<DataGrid.Columns>
+								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+								<DataGridTextColumn Header="Song" Binding="{Binding SongName}" />
+								<DataGridTextColumn Header="Artist" Binding="{Binding ArtistName}" />
+								<DataGridTextColumn Header="Album" Binding="{Binding AlbumName}" />
+								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+							</DataGrid.Columns>
+						</DataGrid>
+					</ScrollViewer>
+				</TabItem>
+			</TabControl>
 
 			<TabControl Grid.Row="0" Grid.Column="2" Margin="5">
 				<TabItem Header="Server Users" VerticalContentAlignment="Center">
 					<ScrollViewer>
-						<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
+						<DataGrid Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Username" Binding="{Binding Name}" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AudioSync.Client.Backend;
 using AudioSync.Shared;
 using DynamicData;
 using ReactiveUI;
@@ -34,6 +35,14 @@ namespace AudioSync.Client.ViewModels
 		}
 		
 		public IObservable<IReadOnlyCollection<Song>> DownloadsBindable => Downloads.Connect().ToCollection();
+
+		public SourceList<CacheItem> Cache
+		{
+			get => _backing.Cache;
+			set => this.RaiseAndSetIfChanged(ref _backing.Cache, value);
+		}
+		
+		public IObservable<IReadOnlyCollection<CacheItem>> CacheBindable => Cache.Connect().ToCollection();
 
 
 	public string SongName
@@ -86,6 +95,8 @@ namespace AudioSync.Client.ViewModels
 			internal SourceCache<User, string> Users = new(u => u.Name);
 
 			internal SourceList<Song> Downloads = new();
+
+			internal SourceList<CacheItem> Cache = new();
 		}
 	}
 }
