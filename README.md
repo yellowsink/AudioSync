@@ -2,6 +2,8 @@
 
 AudioSync is a cross-platform music player that syncs. Yep it's really that simple.
 
+[boring demo](https://youtu.be/gTOYC8AN3ug)
+
 ## Why?
 
 This probably needs some explaining, as there isn't an obvious use for this, except for setting up a listening part with some friends if you don't all have Spotify premium and/or Discord, I guess.
