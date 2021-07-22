@@ -45,15 +45,6 @@ namespace AudioSync.Client.Backend
 			set => _cacheItems = value.ToList();
 		}
 
-		public void Dispose() => Dispose(null);
-
-		public void Dispose(int? daysThreshold)
-		{
-			CleanCache(daysThreshold);
-			SaveCache();
-			_disposed = true;
-		}
-
 		public void LoadCache()
 		{
 			CheckDisposed();
@@ -189,6 +180,15 @@ namespace AudioSync.Client.Backend
 				=> songs.Select(song => new CacheItem(song.Name, artist, "", song.Extension, prefixName));
 		}
 
+		public void Dispose() => Dispose(null);
+
+		public void Dispose(int? daysThreshold)
+		{
+			CleanCache(daysThreshold);
+			SaveCache();
+			_disposed = true;
+		}
+		
 		/// <summary>
 		///     It's messy but oh well.
 		/// </summary>
