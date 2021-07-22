@@ -6,11 +6,11 @@ namespace AudioSync.Client.Backend
 {
 	public partial class SyncClient
 	{
-		public void SetStatus(UserStatus status) => _connection.InvokeAsync("SetStatus", status).Wait();
+		public async Task SetStatus(UserStatus status) => await _connection.InvokeAsync("SetStatus", status);
 
-		public bool TrySetName(string name)
+		public async Task<bool> TrySetName(string name)
 		{
-			var success       = _connection.InvokeAsync<bool>("SetName", name).GetAwaiter().GetResult();
+			var success       = await _connection.InvokeAsync<bool>("SetName", name);
 			if (success) Name = name;
 			return success;
 		}

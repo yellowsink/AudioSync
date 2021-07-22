@@ -56,15 +56,31 @@
 				</DataGrid>
 			</ScrollViewer>
 
-			<ScrollViewer Grid.Row="0" Grid.Column="2" Margin="5">
-				<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
-					<DataGrid.Columns>
-						<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
-						<DataGridTextColumn Header="Status" Binding="{Binding Status}" />
-						<DataGridTextColumn Header="Is Master" Binding="{Binding IsMaster}" />
-					</DataGrid.Columns>
-				</DataGrid>
-			</ScrollViewer>
+			<TabControl Grid.Row="0" Grid.Column="2" Margin="5">
+				<TabItem Header="Server Users" VerticalContentAlignment="Center">
+					<ScrollViewer>
+						<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
+								<DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+								<DataGridTextColumn Header="Is Master" Binding="{Binding IsMaster}" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</ScrollViewer>
+				</TabItem>
+				
+				<TabItem Header="Download Queue" VerticalContentAlignment="Center">
+					<ScrollViewer>
+						<DataGrid Items="{Binding DownloadsBindable^}" AutoGenerateColumns="False">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
+								<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
+								<DataGridTextColumn Header="Album" Binding="{Binding Album}" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</ScrollViewer>
+				</TabItem>
+			</TabControl>
 
 			<Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Classes="Vertical Separator" />
 			<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />

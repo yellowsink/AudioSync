@@ -32,6 +32,8 @@ namespace AudioSync.Client.ViewModels
 			get => _backing.Downloads;
 			set => this.RaiseAndSetIfChanged(ref _backing.Downloads, value);
 		}
+		
+		public IObservable<IReadOnlyCollection<Song>> DownloadsBindable => Downloads.Connect().ToCollection();
 
 
 	public string SongName

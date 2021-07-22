@@ -34,7 +34,7 @@ namespace AudioSync.Client
 			{
 				if (Queue.Count == 0)
 				{
-					if (sentAllFinishEvent)
+					if (!sentAllFinishEvent)
 						FinishAllDownloadsEvent.Invoke(this, EventArgs.Empty);
 					sentAllFinishEvent = true;
 					await Task.Delay(100);
@@ -48,8 +48,8 @@ namespace AudioSync.Client
 				
 				await _manager.DownloadSong(nextSong);
 				
-				FinishDownloadEvent.Invoke(this, nextSong);
 				Queue.RemoveAt(0);
+				FinishDownloadEvent.Invoke(this, nextSong);
 			}
 
 			_running = false;

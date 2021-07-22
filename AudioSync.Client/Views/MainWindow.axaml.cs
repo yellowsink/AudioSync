@@ -140,11 +140,11 @@ namespace AudioSync.Client.Views
 		private void UpdateUserStatus(Song? currentlyDownloading)
 		{
 			if (currentlyDownloading == null)
-				_syncClient!.SetStatus(UserStatus.Ready);
+				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.Ready).Wait);
 			else if (currentlyDownloading == _queue.Songs[_queue.CurrentIndex])
-				_syncClient!.SetStatus(UserStatus.DownloadingCurrentSong);
+				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.DownloadingCurrentSong).Wait);
 			else
-				_syncClient!.SetStatus(UserStatus.DownloadingSongs);
+				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.DownloadingSongs).Wait);
 		}
 
 #region Media Controls
