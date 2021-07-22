@@ -62,7 +62,7 @@
 						<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
-								<DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+								<DataGridTextColumn Header="Status" Binding="{Binding DisplayStatus}" />
 								<DataGridTextColumn Header="Is Master" Binding="{Binding IsMaster}" />
 							</DataGrid.Columns>
 						</DataGrid>

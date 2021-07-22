@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Octokit;
-using FileMode = System.IO.FileMode;
 
 namespace AudioSync.Client.Backend
 {

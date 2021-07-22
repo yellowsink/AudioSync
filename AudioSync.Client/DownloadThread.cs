@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Shared;
@@ -12,6 +11,7 @@ namespace AudioSync.Client
 		private bool            _stopQueued;
 		private bool            _running;
 		private DownloadManager _manager;
+		public  Song?           CurrentlyDownloading { get; private set; }
 
 		public event EventHandler<Song> StartDownloadEvent      = (_, _) => { };
 		public event EventHandler<Song> FinishDownloadEvent     = (_, _) => { };
@@ -43,11 +43,12 @@ namespace AudioSync.Client
 
 				sentAllFinishEvent = false;
 				
-				var nextSong = Queue[0];
+				var nextSong = CurrentlyDownloading = Queue[0];
 				StartDownloadEvent.Invoke(this, nextSong);
 				
 				await _manager.DownloadSong(nextSong);
 				
+				CurrentlyDownloading = null;
 				Queue.RemoveAt(0);
 				FinishDownloadEvent.Invoke(this, nextSong);
 			}

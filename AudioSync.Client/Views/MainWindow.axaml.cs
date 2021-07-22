@@ -185,6 +185,7 @@ namespace AudioSync.Client.Views
 			Stop();
 			_queue.Next();
 			Play();
+			UpdateUserStatus(_downloadThread?.CurrentlyDownloading);
 		}
 
 		private void Previous()
@@ -192,6 +193,7 @@ namespace AudioSync.Client.Views
 			Stop();
 			_queue.Previous();
 			Play();
+			UpdateUserStatus(_downloadThread?.CurrentlyDownloading);
 		}
 
 		private async void ButtonPlay(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Play();
