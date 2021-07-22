@@ -49,9 +49,11 @@
 			<ScrollViewer Grid.Row="0" Grid.Column="0" Margin="5">
 				<DataGrid Name="DataGridSongList" Items="{Binding SongsBindable^}" AutoGenerateColumns="False">
 					<DataGrid.Columns>
+						<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 						<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
 						<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
 						<DataGridTextColumn Header="Album" Binding="{Binding Album}" />
+						<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 					</DataGrid.Columns>
 				</DataGrid>
 			</ScrollViewer>
@@ -61,9 +63,11 @@
 					<ScrollViewer>
 						<DataGrid Name="DataGridUserList" Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
 							<DataGrid.Columns>
+								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
 								<DataGridTextColumn Header="Status" Binding="{Binding DisplayStatus}" />
 								<DataGridTextColumn Header="Is Master" Binding="{Binding IsMaster}" />
+								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 							</DataGrid.Columns>
 						</DataGrid>
 					</ScrollViewer>
@@ -73,9 +77,11 @@
 					<ScrollViewer>
 						<DataGrid Items="{Binding DownloadsBindable^}" AutoGenerateColumns="False">
 							<DataGrid.Columns>
+								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
 								<DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
 								<DataGridTextColumn Header="Album" Binding="{Binding Album}" />
+								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 							</DataGrid.Columns>
 						</DataGrid>
 					</ScrollViewer>
