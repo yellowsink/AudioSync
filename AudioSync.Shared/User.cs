@@ -16,7 +16,6 @@ namespace AudioSync.Shared
 	{
 		Ready,
 		DownloadingCurrentSong,
-		DownloadingSongs,
-		UpdatingTools
+		DownloadingSongs
 	}
 }

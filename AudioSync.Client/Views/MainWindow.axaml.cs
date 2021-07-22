@@ -54,18 +54,29 @@ namespace AudioSync.Client.Views
 		private void RegisterSyncEventHandlers()
 		{
 			_syncClient!.TransportPlayEvent  += (_, _) => Play();
-			_syncClient!.TransportPauseEvent += (_, _) => Pause();
-			_syncClient!.TransportStopEvent  += (_, _) => Stop();
+			_syncClient.TransportPauseEvent += (_, _) => Pause();
+			_syncClient.TransportStopEvent  += (_, _) => Stop();
 
-			_syncClient!.QueueNextEvent     += (_, _) => Next();
-			_syncClient!.QueuePreviousEvent += (_, _) => Previous();
+			_syncClient.QueueNextEvent     += (_, _) => Next();
+			_syncClient.QueuePreviousEvent += (_, _) => Previous();
 
-			_syncClient!.UpdateUserEvent += (_, u) => UpdateUser(u);
-			_syncClient!.RemoveUserEvent += (_, u) => RemoveUser(u);
+			_syncClient.UpdateUserEvent += (_, u) => UpdateUser(u);
+			_syncClient.RemoveUserEvent += (_, u) => RemoveUser(u);
 
-			_syncClient!.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
-			_syncClient!.QueueAddEvent   += (_, p) => AddSong(p.Item2);
-			_syncClient!.QueueClearEvent += (_, _) => SetQueue(new Queue());
+			_syncClient.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
+			_syncClient.QueueAddEvent   += (_, p) => AddSong(p.Item2);
+			_syncClient.QueueClearEvent += (_, _) => SetQueue(new Queue());
+		}
+		
+		private void RegisterDownloadEventHandlers()
+		{
+			_downloadThread!.StartDownloadEvent += (_, s) =>
+			{
+				UpdateUserStatus(s);
+				UpdateDownloadQueue();
+			};
+			_downloadThread.FinishDownloadEvent     += (_, _) => UpdateDownloadQueue();
+			_downloadThread.FinishAllDownloadsEvent += (_, _) => UpdateUserStatus(null);
 		}
 
 		private async Task RunConnectDialog()
@@ -101,6 +112,8 @@ namespace AudioSync.Client.Views
 			foreach (var user in await _syncClient!.GetUsers())
 				((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
+			RegisterDownloadEventHandlers();
+
 #pragma warning disable 4014
 			Task.Factory.StartNew(_downloadThread!.Run().Wait);
 #pragma warning restore 4014
@@ -122,6 +135,16 @@ namespace AudioSync.Client.Views
 				return;
 
 			AddSong(new Song(song, artist, album, url));
+		}
+
+		private void UpdateUserStatus(Song? currentlyDownloading)
+		{
+			if (currentlyDownloading == null)
+				_syncClient!.SetStatus(UserStatus.Ready);
+			else if (currentlyDownloading == _queue.Songs[_queue.CurrentIndex])
+				_syncClient!.SetStatus(UserStatus.DownloadingCurrentSong);
+			else
+				_syncClient!.SetStatus(UserStatus.DownloadingSongs);
 		}
 
 #region Media Controls
@@ -187,12 +210,6 @@ namespace AudioSync.Client.Views
 			DownloadSongIfNeeded(song);
 		}
 
-		private void RemoveSong(int index)
-		{
-			_queue.Remove(index);
-			((MainWindowViewModel) DataContext!).Songs.RemoveAt(index);
-		}
-
 		private void SetQueue(Queue queue)
 		{
 			_queue = queue;
@@ -210,6 +227,12 @@ namespace AudioSync.Client.Views
 		private void DownloadSongIfNeeded(Song song)
 		{
 			if (_cacheManager.GetFromCache(song) == null) _downloadThread!.Enqueue(song);
+		}
+
+		private void UpdateDownloadQueue()
+		{
+			((MainWindowViewModel) DataContext!).Downloads.Clear();
+			((MainWindowViewModel) DataContext!).Downloads.AddRange(_downloadThread!.Queue);
 		}
 
 #endregion

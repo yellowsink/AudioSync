@@ -27,8 +27,14 @@ namespace AudioSync.Client.ViewModels
 
 		public IObservable<IReadOnlyCollection<User>> UsersBindable => Users.Connect().ToCollection();
 
+		public SourceList<Song> Downloads
+		{
+			get => _backing.Downloads;
+			set => this.RaiseAndSetIfChanged(ref _backing.Downloads, value);
+		}
 
-		public string SongName
+
+	public string SongName
 		{
 			get => _backing.SongName;
 			set => this.RaiseAndSetIfChanged(ref _backing.SongName, value);
@@ -76,6 +82,8 @@ namespace AudioSync.Client.ViewModels
 			internal SourceList<Song> Songs    = new();
 
 			internal SourceCache<User, string> Users = new(u => u.Name);
+
+			internal SourceList<Song> Downloads = new();
 		}
 	}
 }
