@@ -49,7 +49,7 @@
 			<TabControl Grid.Row="0" Grid.Column="0" Margin="5">
 				<TabItem Header="Queue">
 					<ScrollViewer>
-						<DataGrid Items="{Binding SongsBindable^}" AutoGenerateColumns="False">
+						<DataGrid Items="{Binding SongsBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
@@ -63,7 +63,7 @@
 				
 				<TabItem Header="Downloaded Tracks">
 					<ScrollViewer>
-						<DataGrid Items="{Binding CacheBindable^}" AutoGenerateColumns="False">
+						<DataGrid Items="{Binding CacheBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Song" Binding="{Binding SongName}" />
@@ -79,7 +79,7 @@
 			<TabControl Grid.Row="0" Grid.Column="2" Margin="5">
 				<TabItem Header="Server Users" VerticalContentAlignment="Center">
 					<ScrollViewer>
-						<DataGrid Items="{Binding UsersBindable^}" AutoGenerateColumns="False">
+						<DataGrid Items="{Binding UsersBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Username" Binding="{Binding Name}" />
@@ -93,7 +93,7 @@
 				
 				<TabItem Header="Download Queue" VerticalContentAlignment="Center">
 					<ScrollViewer>
-						<DataGrid Items="{Binding DownloadsBindable^}" AutoGenerateColumns="False">
+						<DataGrid Items="{Binding DownloadsBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 								<DataGridTextColumn Header="Song" Binding="{Binding Name}" />
@@ -112,13 +112,13 @@
 			<!-- Add panel -->
 			<Grid Grid.Row="2" Grid.Column="0" Margin="5" ColumnDefinitions="*, *, *, *, Auto">
 				<TextBox Grid.Column="0" Name="TextBoxAddSong" Watermark="Song"
-				         Text="{Binding InputAddSong, Mode=OneWayToSource}" />
+				         Text="{Binding InputAddSong, Mode=TwoWay}" KeyUp="TextBoxAddSong_OnKeyUp" />
 				<TextBox Grid.Column="1" Name="TextBoxAddArtist" Watermark="Artist"
-				         Text="{Binding InputAddArtist, Mode=OneWayToSource}" />
+				         Text="{Binding InputAddArtist, Mode=TwoWay}" />
 				<TextBox Grid.Column="2" Name="TextBoxAddAlbum" Watermark="Album"
-				         Text="{Binding InputAddAlbum, Mode=OneWayToSource}" />
+				         Text="{Binding InputAddAlbum, Mode=TwoWay}" />
 				<TextBox Grid.Column="3" Name="TextBoxAddUrl" Watermark="Stream URL"
-				         Text="{Binding InputAddUrl, Mode=OneWayToSource}" />
+				         Text="{Binding InputAddUrl, Mode=TwoWay}" />
 
 				<Button Grid.Column="4" Content="Add" Name="ButtonAddSong" Click="ButtonAddSong_OnClick" />
 			</Grid>

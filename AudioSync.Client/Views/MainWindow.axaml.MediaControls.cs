@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Client.ViewModels;
 using Avalonia.Interactivity;
+using JetBrains.Annotations;
 
 namespace AudioSync.Client.Views
 {
@@ -54,8 +55,11 @@ namespace AudioSync.Client.Views
 			UpdateUserStatus(_downloadThread?.CurrentlyDownloading);
 		}
 
+		[UsedImplicitly]
 		private async void ButtonPlay(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Play();
+		[UsedImplicitly]
 		private async void ButtonPause(object? sender = null, RoutedEventArgs e = null!) => await _syncClient!.Pause();
+		[UsedImplicitly]
 		private async void ButtonStop(object?  sender = null, RoutedEventArgs e = null!) => await _syncClient!.Stop();
 	}
 }

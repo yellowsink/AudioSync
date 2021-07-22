@@ -1,7 +1,10 @@
+using System;
 using System.Linq;
 using AudioSync.Client.ViewModels;
 using AudioSync.Shared;
+using Avalonia.Input;
 using DynamicData;
+using JetBrains.Annotations;
 
 namespace AudioSync.Client.Views
 {
@@ -50,6 +53,37 @@ namespace AudioSync.Client.Views
 			
 			((MainWindowViewModel) DataContext!).Cache.Clear();
 			((MainWindowViewModel) DataContext!).Cache.AddRange(cacheItems);
+		}
+
+		[UsedImplicitly]
+		private void TextBoxAddSong_OnKeyUp(object? sender, KeyEventArgs keyEventArgs)
+		{
+			if (!((MainWindowViewModel) DataContext!).InputAddSong.Contains("\t")) return;
+			
+			var songParts = ((MainWindowViewModel) DataContext!).InputAddSong.Split("\t");
+			switch (songParts.Length)
+			{
+				case 1:
+					break;
+				case 2:
+					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
+					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
+					break;
+				case 3:
+					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
+					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
+					((MainWindowViewModel) DataContext!).InputAddAlbum  = songParts[2].Trim();
+					break;
+					
+				default:
+					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
+					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
+
+					var remainder = songParts[new Range(2, Index.End)]
+					   .Aggregate(string.Empty, (current, next) => current + next);
+					((MainWindowViewModel) DataContext!).InputAddAlbum = remainder.Trim();
+					break;
+			}
 		}
 	}
 }

@@ -76,10 +76,26 @@ namespace AudioSync.Client.ViewModels
 		}
 
 
-		public string InputAddSong   { get; set; } = string.Empty;
-		public string InputAddArtist { get; set; } = string.Empty;
-		public string InputAddAlbum  { get; set; } = string.Empty;
-		public string InputAddUrl    { get; set; } = string.Empty;
+		public string InputAddSong  
+		{
+			get => _backing.InputAddSong;
+			set => this.RaiseAndSetIfChanged(ref _backing.InputAddSong, value);
+		}
+		public string InputAddArtist
+		{
+			get => _backing.InputAddArtist;
+			set => this.RaiseAndSetIfChanged(ref _backing.InputAddArtist, value);
+		}
+		public string InputAddAlbum 
+		{
+			get => _backing.InputAddAlbum;
+			set => this.RaiseAndSetIfChanged(ref _backing.InputAddAlbum, value);
+		}
+		public string InputAddUrl   
+		{
+			get => _backing.InputAddUrl;
+			set => this.RaiseAndSetIfChanged(ref _backing.InputAddUrl, value);
+		}
 
 		private class Backing
 		{
@@ -89,6 +105,11 @@ namespace AudioSync.Client.ViewModels
 
 			internal bool ShowMediaControls;
 
+			internal string InputAddSong   = string.Empty;
+			internal string InputAddArtist = string.Empty;
+			internal string InputAddAlbum  = string.Empty;
+			internal string InputAddUrl    = string.Empty;
+			
 			internal string           SongName = string.Empty;
 			internal SourceList<Song> Songs    = new();
 
