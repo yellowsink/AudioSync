@@ -26,6 +26,8 @@ namespace AudioSync.Client.Views
 			}
 
 			Task.Factory.StartNew(_audioManager.Play);
+			
+			UpdateNowPlayingMetadata();
 		}
 
 		private void Pause()
@@ -37,6 +39,7 @@ namespace AudioSync.Client.Views
 		{
 			if (_audioManager.Status != AudioManagerStatus.Idle) _audioManager.Stop();
 			_audioManager.File = null;
+			UpdateNowPlayingMetadata();
 		}
 
 		private void Next()

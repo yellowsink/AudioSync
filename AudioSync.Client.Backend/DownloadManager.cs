@@ -77,7 +77,7 @@ namespace AudioSync.Client.Backend
 		///     Creates a cache item for the given song with today's date
 		/// </summary>
 		private static CacheItem CreateCacheItem(Song song, string fileExtension)
-			=> new(song.Name, song.Artist, song.Album, fileExtension, song.UseYoutube ? "youtube" : "soundcloud");
+			=> new(song, fileExtension, song.UseYoutube ? "youtube" : "soundcloud");
 	}
 
 	/// <summary>

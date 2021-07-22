@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AudioSync.Client.Backend;
 using AudioSync.Client.ViewModels;
 using AudioSync.Shared;
 using Avalonia.Input;
@@ -55,6 +56,30 @@ namespace AudioSync.Client.Views
 			((MainWindowViewModel) DataContext!).Cache.AddRange(cacheItems);
 		}
 
+		private void UpdateNowPlayingMetadata()
+		{
+			if (_audioManager.Status == AudioManagerStatus.Idle)
+			{
+				((MainWindowViewModel) DataContext!).SongName   = string.Empty;
+				((MainWindowViewModel) DataContext!).ArtistName = string.Empty;
+				((MainWindowViewModel) DataContext!).AlbumName  = string.Empty;
+				((MainWindowViewModel) DataContext!).Format     = string.Empty;
+			}
+			else
+			{
+				var song = _queue.Songs[_queue.CurrentIndex];
+				((MainWindowViewModel) DataContext!).SongName   = song.Name;
+				((MainWindowViewModel) DataContext!).ArtistName = song.Artist;
+				((MainWindowViewModel) DataContext!).AlbumName  = song.Album;
+				((MainWindowViewModel) DataContext!).Format     = _cacheManager
+																 .GetFromCache(song)
+																?.Item1
+																 .FileExtension.
+																  ToUpper()
+															   ?? string.Empty;
+			}
+		}
+		
 		[UsedImplicitly]
 		private void TextBoxAddSong_OnKeyUp(object? sender, KeyEventArgs keyEventArgs)
 		{
