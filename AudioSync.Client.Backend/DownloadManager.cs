@@ -49,19 +49,28 @@ namespace AudioSync.Client.Backend
 		/// </summary>
 		private async Task<(FileInfo, string)> RunYtdl(string url, string filename, string downloadFolder)
 		{
+			var isYtUrl = url.Contains("youtube.com");
+			
 			// %(ext)s is a pattern that tells YTDL to insert the correct file extension
-			var startOptions = new ProcessStartInfo(_ytdlPath, $"{url} --print-json -o \"{filename}.%(ext)s\"")
+			var args = $"{url} --print-json -o \"{filename}.{(isYtUrl ? "mp3" : "%(ext)s")}\"";
+
+			if (isYtUrl) args += " -x --audio-format mp3";
+
+			var startOptions = new ProcessStartInfo(_ytdlPath, args)
 			{
 				WorkingDirectory = downloadFolder,
 				RedirectStandardOutput = true
 			};
+			
 			var process = Process.Start(startOptions);
 			await process!.WaitForExitAsync();
-			var result = await process.StandardOutput.ReadToEndAsync();
+			var stdOut = await process.StandardOutput.ReadToEndAsync();
 
-			var ytdlOutputObject = JsonSerializer.Deserialize<YtdlOutputObject>(result)!;
+			var ytdlOutput = JsonSerializer.Deserialize<YtdlOutputObject>(stdOut)!;
 
-			return (new FileInfo(Path.Combine(downloadFolder, ytdlOutputObject.Filename)), ytdlOutputObject.Extension);
+			if (isYtUrl) ytdlOutput.Extension = "mp3";
+
+			return (new FileInfo(Path.Combine(downloadFolder, ytdlOutput.Filename)), ytdlOutput.Extension);
 		}
 
 		/// <summary>
