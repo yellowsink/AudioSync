@@ -16,7 +16,7 @@ namespace AudioSync.Client.Views
 		private readonly Config           _config;
 		private          DownloadThread? _downloadThread;
 		private          Queue            _queue = new();
-		private          ISyncAgent?      _syncClient;
+		private          ISyncAgent?      _syncAgent;
 
 		private ToolManager? _toolManager;
 
@@ -36,7 +36,7 @@ namespace AudioSync.Client.Views
 			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
 			{
-				if (_syncClient != null) await _syncClient.Disconnect();
+				if (_syncAgent != null) await _syncAgent.Disconnect();
 				Stop();
 				_cacheManager.Dispose(_config.CacheDaysThreshold);
 				_config.Save();
@@ -68,11 +68,11 @@ namespace AudioSync.Client.Views
 		private void UpdateUserStatus(Song? currentlyDownloading)
 		{
 			if (currentlyDownloading == null)
-				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.Ready).Wait);
+				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.Ready).Wait);
 			else if (currentlyDownloading == _queue.Songs[_queue.CurrentIndex])
-				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.DownloadingCurrentSong).Wait);
+				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.DownloadingCurrentSong).Wait);
 			else
-				Task.Factory.StartNew(_syncClient!.SetStatus(UserStatus.DownloadingSongs).Wait);
+				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.DownloadingSongs).Wait);
 		}
 	}
 }

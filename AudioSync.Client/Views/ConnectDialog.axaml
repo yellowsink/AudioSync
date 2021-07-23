@@ -16,28 +16,27 @@
 		<StyleInclude Source="/Assets/StyleSheet.xaml" />
 	</Window.Styles>
 
-	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+	<Grid Margin="5" RowDefinitions="Auto, Auto, Auto, Auto, Auto, *, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
 
 		<TextBlock Grid.Column="0" Grid.Row="0" FontSize="25" Text="Connect to a server" />
 
 		<Label Grid.Row="1" Grid.Column="0" Content="Server URL (you will be given this)" VerticalAlignment="Center" />
-		<TextBox Grid.Row="1" Grid.Column="1" Name="TextBoxServerUrl"
-		         Text="{Binding InputServerUrl, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+		<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding InputServerUrl, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
 
-		<CheckBox Grid.Row="2" Grid.Column="1" Content="Attempt to become room master" Name="CheckBoxMaster"
+		<CheckBox Grid.Row="2" Grid.Column="1" Content="Attempt to become room master"
 		          IsChecked="{Binding InputTryBeMaster, Mode=OneWayToSource}"
 		          IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
 
 		<Label Grid.Row="3" Grid.Column="0" Content="Name" VerticalAlignment="Center" />
-		<TextBox Grid.Row="3" Grid.Column="1" Name="TextBoxName"
-		         Text="{Binding InputUserName, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+		<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding InputUserName, Mode=OneWayToSource}" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
 
-		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Name="ButtonConnect" Margin="5" VerticalAlignment="Stretch"
+		<Button Grid.Row="3" Grid.Column="2" Content="Connect" Margin="5" VerticalAlignment="Stretch"
 		        Click="ButtonConnect_OnClick" IsEnabled="{Binding ControlsEnabled, Mode=OneWay}" />
+		
+		<Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Content="Offline Mode" Click="ButtonOffline_OnClick" />
 
-		<Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
-		<TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Name="StatusBar" Margin="5"
-		           Text="{Binding Status, Mode=OneWay}" />
+		<Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Classes="Horizontal Separator" />
+		<TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="5" Text="{Binding Status, Mode=OneWay}" />
 
 	</Grid>
 </Window>

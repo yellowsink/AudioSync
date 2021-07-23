@@ -13,19 +13,19 @@ namespace AudioSync.Client.Views
 
 		private void RegisterSyncEventHandlers()
 		{
-			_syncClient!.TransportPlayEvent  += (_, _) => Play();
-			_syncClient.TransportPauseEvent += (_, _) => Pause();
-			_syncClient.TransportStopEvent  += (_, _) => Stop();
+			_syncAgent!.TransportPlayEvent  += (_, _) => Play();
+			_syncAgent.TransportPauseEvent += (_, _) => Pause();
+			_syncAgent.TransportStopEvent  += (_, _) => Stop();
 
-			_syncClient.QueueNextEvent     += (_, _) => Next();
-			_syncClient.QueuePreviousEvent += (_, _) => Previous();
+			_syncAgent.QueueNextEvent     += (_, _) => Next();
+			_syncAgent.QueuePreviousEvent += (_, _) => Previous();
 
-			_syncClient.UpdateUserEvent += (_, u) => UpdateUser(u);
-			_syncClient.RemoveUserEvent += (_, u) => RemoveUser(u);
+			_syncAgent.UpdateUserEvent += (_, u) => UpdateUser(u);
+			_syncAgent.RemoveUserEvent += (_, u) => RemoveUser(u);
 
-			_syncClient.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
-			_syncClient.QueueAddEvent   += (_, p) => AddSong(p.Item2);
-			_syncClient.QueueClearEvent += (_, _) => SetQueue(new Queue());
+			_syncAgent.QueueSetEvent   += (_, p) => SetQueue(p.Item2);
+			_syncAgent.QueueAddEvent   += (_, p) => AddSong(p.Item2);
+			_syncAgent.QueueClearEvent += (_, _) => SetQueue(new Queue());
 		}
 		
 		private void RegisterDownloadEventHandlers()
@@ -44,11 +44,11 @@ namespace AudioSync.Client.Views
 			var dialog = new ConnectDialog();
 			await dialog.ShowDialog(this);
 
-			if (dialog.SyncClient == null) Close(); // dialog was closed early
+			if (dialog.SyncAgent == null) Close(); // dialog was closed early
 
-			_syncClient = dialog.SyncClient;
+			_syncAgent = dialog.SyncAgent;
 
-			if (_syncClient is { IsMaster: true }) ShowMediaControls(true);
+			if (_syncAgent is { IsMaster: true }) ShowMediaControls(true);
 		}
 
 		private async Task RunToolDialog()
@@ -69,7 +69,7 @@ namespace AudioSync.Client.Views
 			RegisterSyncEventHandlers();
 
 			((MainWindowViewModel) DataContext!).Users.Clear();
-			foreach (var user in await _syncClient!.GetUsers())
+			foreach (var user in await _syncAgent!.GetUsers())
 				((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
 			RegisterDownloadEventHandlers();

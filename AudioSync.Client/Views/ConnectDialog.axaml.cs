@@ -11,7 +11,7 @@ namespace AudioSync.Client.Views
 {
 	public class ConnectDialog : Window
 	{
-		public ISyncAgent? SyncClient;
+		public ISyncAgent? SyncAgent;
 
 		public ConnectDialog()
 		{
@@ -37,9 +37,9 @@ namespace AudioSync.Client.Views
 
 			try
 			{
-				SyncClient = new ServerSyncAgent(vm.InputServerUrl, vm.InputUserName, vm.InputTryBeMaster);
+				SyncAgent = new ServerSyncAgent(vm.InputServerUrl, vm.InputUserName, vm.InputTryBeMaster);
 
-				await SyncClient.Connect();
+				await SyncAgent.Connect();
 				Close();
 			}
 			catch (HttpRequestException)
@@ -57,7 +57,13 @@ namespace AudioSync.Client.Views
 
 			// if we're here, something went wrong
 			vm.ControlsEnabled = true;
-			SyncClient         = null;
+			SyncAgent         = null;
+		}
+
+		private void ButtonOffline_OnClick(object? sender, RoutedEventArgs e)
+		{
+			SyncAgent = new OfflineSyncAgent();
+			Close();
 		}
 	}
 }
