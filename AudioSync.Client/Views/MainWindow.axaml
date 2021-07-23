@@ -66,9 +66,9 @@
 						<DataGrid Items="{Binding CacheBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-								<DataGridTextColumn Header="Song" Binding="{Binding SongName}" />
-								<DataGridTextColumn Header="Artist" Binding="{Binding ArtistName}" />
-								<DataGridTextColumn Header="Album" Binding="{Binding AlbumName}" />
+								<DataGridTextColumn Header="Song" Binding="{Binding SongName, Mode=OneWay}" />
+								<DataGridTextColumn Header="Artist" Binding="{Binding ArtistName, Mode=OneWay}" />
+								<DataGridTextColumn Header="Album" Binding="{Binding AlbumName, Mode=OneWay}" />
 								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 							</DataGrid.Columns>
 						</DataGrid>

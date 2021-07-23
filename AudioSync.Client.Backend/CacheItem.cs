@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using AudioSync.Shared;
 using NodaTime;
@@ -6,6 +7,7 @@ using NodaTime.Extensions;
 
 namespace AudioSync.Client.Backend
 {
+	[DebuggerDisplay("{SongName} by {ArtistName} ({AlbumName}) [{CachePrefix}]")]
 	public class CacheItem
 	{
 #pragma warning disable 8618
@@ -27,7 +29,7 @@ namespace AudioSync.Client.Backend
 			FileExtension = extension;
 			CachePrefix   = cachePrefix;
 			SongName      = song.Name;
-			ArtistName    = song.Album;
+			ArtistName    = song.Artist;
 			AlbumName     = song.Album;
 		}
 
