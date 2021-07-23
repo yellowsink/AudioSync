@@ -4,13 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace AudioSync.Client.Backend
 {
-	public partial class ServerSyncClient : ISyncClient
+	/// <summary>
+	///		Syncs multiple instances via an AudioSync.Server connection
+	/// </summary>
+	public partial class ServerSyncAgent : ISyncAgent
 	{
 		private readonly HubConnection       _connection;
-		private readonly ILogger<ServerSyncClient> _logger = HelperUtils.CreateLogger<ServerSyncClient>();
+		private readonly ILogger<ServerSyncAgent> _logger = HelperUtils.CreateLogger<ServerSyncAgent>();
 
 #pragma warning disable 8618
-		public ServerSyncClient(string url, string name, bool isMaster = false)
+		public ServerSyncAgent(string url, string name, bool isMaster = false)
 #pragma warning restore 8618
 		{
 			url =  url.TrimEnd('/');

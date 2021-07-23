@@ -11,7 +11,7 @@ namespace AudioSync.Client.Views
 {
 	public class ConnectDialog : Window
 	{
-		public ServerSyncClient? SyncClient;
+		public ISyncAgent? SyncClient;
 
 		public ConnectDialog()
 		{
@@ -37,7 +37,7 @@ namespace AudioSync.Client.Views
 
 			try
 			{
-				SyncClient = new ServerSyncClient(vm.InputServerUrl, vm.InputUserName, vm.InputTryBeMaster);
+				SyncClient = new ServerSyncAgent(vm.InputServerUrl, vm.InputUserName, vm.InputTryBeMaster);
 
 				await SyncClient.Connect();
 				Close();

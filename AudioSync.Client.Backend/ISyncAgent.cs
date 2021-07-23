@@ -4,7 +4,10 @@ using AudioSync.Shared;
 
 namespace AudioSync.Client.Backend
 {
-	public interface ISyncClient : IDisposable
+	/// <summary>
+	///		Defines an interface to be used to sync up instances of AudioSync
+	/// </summary>
+	public interface ISyncAgent : IDisposable
 	{
 		bool                                IsMaster { get; }
 		string                              Name     { get; }
