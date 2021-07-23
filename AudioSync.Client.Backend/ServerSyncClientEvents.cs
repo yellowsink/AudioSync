@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace AudioSync.Client.Backend
 {
-	public partial class SyncClient
+	public partial class ServerSyncClient
 	{
 		private void SetupEvents()
 		{

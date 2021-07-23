@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace AudioSync.Client.Backend
 {
-	public partial class SyncClient
+	public partial class ServerSyncClient
 	{
 		public async Task SetStatus(UserStatus status) => await _connection.InvokeAsync("SetStatus", status);
 

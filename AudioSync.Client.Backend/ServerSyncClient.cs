@@ -1,17 +1,16 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 
 namespace AudioSync.Client.Backend
 {
-	public partial class SyncClient : IDisposable
+	public partial class ServerSyncClient : ISyncClient
 	{
 		private readonly HubConnection       _connection;
-		private readonly ILogger<SyncClient> _logger = HelperUtils.CreateLogger<SyncClient>();
+		private readonly ILogger<ServerSyncClient> _logger = HelperUtils.CreateLogger<ServerSyncClient>();
 
 #pragma warning disable 8618
-		public SyncClient(string url, string name, bool isMaster = false)
+		public ServerSyncClient(string url, string name, bool isMaster = false)
 #pragma warning restore 8618
 		{
 			url =  url.TrimEnd('/');

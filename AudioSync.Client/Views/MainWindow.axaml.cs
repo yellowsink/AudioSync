@@ -16,7 +16,7 @@ namespace AudioSync.Client.Views
 		private readonly Config           _config;
 		private          DownloadThread? _downloadThread;
 		private          Queue            _queue = new();
-		private          SyncClient?      _syncClient;
+		private          ServerSyncClient?      _syncClient;
 
 		private ToolManager? _toolManager;
 
