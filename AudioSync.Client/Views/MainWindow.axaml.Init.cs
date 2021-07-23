@@ -13,7 +13,7 @@ namespace AudioSync.Client.Views
 
 		private void RegisterSyncEventHandlers()
 		{
-			_syncAgent!.TransportPlayEvent  += (_, _) => Play();
+			_syncAgent!.TransportPlayEvent += (_, _) => Play();
 			_syncAgent.TransportPauseEvent += (_, _) => Pause();
 			_syncAgent.TransportStopEvent  += (_, _) => Stop();
 
@@ -27,7 +27,7 @@ namespace AudioSync.Client.Views
 			_syncAgent.QueueAddEvent   += (_, p) => AddSong(p.Item2);
 			_syncAgent.QueueClearEvent += (_, _) => SetQueue(new Queue());
 		}
-		
+
 		private void RegisterDownloadEventHandlers()
 		{
 			_downloadThread!.StartDownloadEvent += (_, s) =>
@@ -77,7 +77,7 @@ namespace AudioSync.Client.Views
 #pragma warning disable 4014
 			Task.Factory.StartNew(_downloadThread!.Run().Wait);
 #pragma warning restore 4014
-			
+
 			UpdateCacheView();
 		}
 	}

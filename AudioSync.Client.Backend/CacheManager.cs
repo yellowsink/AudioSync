@@ -20,7 +20,7 @@ namespace AudioSync.Client.Backend
 		public readonly string CacheRoot;
 
 		private List<CacheItem> _cacheItems;
-		private bool             _disposed;
+		private bool            _disposed;
 
 #pragma warning disable 8618
 		public CacheManager(string? cacheLocation = null)
@@ -44,6 +44,8 @@ namespace AudioSync.Client.Backend
 			get => _cacheItems.ToArray();
 			set => _cacheItems = value.ToList();
 		}
+
+		public void Dispose() => Dispose(null);
 
 		public void LoadCache()
 		{
@@ -180,15 +182,13 @@ namespace AudioSync.Client.Backend
 				=> songs.Select(song => new CacheItem(song.Name, artist, "", song.Extension, prefixName));
 		}
 
-		public void Dispose() => Dispose(null);
-
 		public void Dispose(int? daysThreshold)
 		{
 			CleanCache(daysThreshold);
 			SaveCache();
 			_disposed = true;
 		}
-		
+
 		/// <summary>
 		///     It's messy but oh well.
 		/// </summary>

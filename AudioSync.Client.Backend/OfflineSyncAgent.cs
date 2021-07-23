@@ -1,21 +1,22 @@
 using System;
 using System.Threading.Tasks;
 using AudioSync.Shared;
+
 #pragma warning disable 1998
 
 namespace AudioSync.Client.Backend
 {
 	/// <summary>
-	///		Pretends to be a server to facilitate offline use
+	///     Pretends to be a server to facilitate offline use
 	/// </summary>
 	public class OfflineSyncAgent : ISyncAgent
 	{
-		public bool   IsMaster => true;
-		public string Name     => "Offline User";
-
-		private          User? _user;
 		private readonly Queue _queue = new();
-		
+
+		private User?  _user;
+		public  bool   IsMaster => true;
+		public  string Name     => "Offline User";
+
 		public async Task Connect() => _user = new User(Name) { IsMaster = true };
 
 		public async Task Disconnect() => _user = null;

@@ -57,7 +57,7 @@ namespace AudioSync.Client.Views
 
 			// if we're here, something went wrong
 			vm.ControlsEnabled = true;
-			SyncAgent         = null;
+			SyncAgent          = null;
 		}
 
 		private void ButtonOffline_OnClick(object? sender, RoutedEventArgs e)

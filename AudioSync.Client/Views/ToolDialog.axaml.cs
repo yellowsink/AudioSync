@@ -61,7 +61,7 @@ namespace AudioSync.Client.Views
 			((ToolDialogViewModel) DataContext!).EnableCheck   = true;
 			((ToolDialogViewModel) DataContext!).EnableInstall = true;
 			((ToolDialogViewModel) DataContext!).EnableDone    = ToolManager.Versions.Ytdl != null;
-			
+
 			CheckForUpdates();
 		}
 

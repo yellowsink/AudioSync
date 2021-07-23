@@ -26,7 +26,7 @@ namespace AudioSync.Client.Views
 			}
 
 			Task.Factory.StartNew(_audioManager.Play);
-			
+
 			UpdateNowPlayingMetadata();
 		}
 
@@ -59,10 +59,12 @@ namespace AudioSync.Client.Views
 		}
 
 		[UsedImplicitly]
-		private async void ButtonPlay(object?  sender = null, RoutedEventArgs e = null!) => await _syncAgent!.Play();
+		private async void ButtonPlay(object? sender = null, RoutedEventArgs e = null!) => await _syncAgent!.Play();
+
 		[UsedImplicitly]
 		private async void ButtonPause(object? sender = null, RoutedEventArgs e = null!) => await _syncAgent!.Pause();
+
 		[UsedImplicitly]
-		private async void ButtonStop(object?  sender = null, RoutedEventArgs e = null!) => await _syncAgent!.Stop();
+		private async void ButtonStop(object? sender = null, RoutedEventArgs e = null!) => await _syncAgent!.Stop();
 	}
 }

@@ -11,12 +11,12 @@ namespace AudioSync.Client.Views
 {
 	public partial class MainWindow : Window
 	{
-		private readonly AudioManager     _audioManager = new();
-		private readonly CacheManager     _cacheManager = new();
-		private readonly Config           _config;
+		private readonly AudioManager    _audioManager = new();
+		private readonly CacheManager    _cacheManager = new();
+		private readonly Config          _config;
 		private          DownloadThread? _downloadThread;
-		private          Queue            _queue = new();
-		private          ISyncAgent?      _syncAgent;
+		private          Queue           _queue = new();
+		private          ISyncAgent?     _syncAgent;
 
 		private ToolManager? _toolManager;
 

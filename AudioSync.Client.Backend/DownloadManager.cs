@@ -11,7 +11,7 @@ namespace AudioSync.Client.Backend
 	public class DownloadManager
 	{
 		private readonly Action<CacheItem, FileInfo> _moveToCacheAction;
-		private readonly string                       _ytdlPath;
+		private readonly string                      _ytdlPath;
 
 		/// <param name="moveToCacheAction">An action that moves a file into the cache</param>
 		/// <param name="ytdlPath">Where YTDL is: leave blank for OS default</param>
@@ -50,7 +50,7 @@ namespace AudioSync.Client.Backend
 		private async Task<(FileInfo, string)> RunYtdl(string url, string filename, string downloadFolder)
 		{
 			var isYtUrl = url.Contains("youtube.com");
-			
+
 			// %(ext)s is a pattern that tells YTDL to insert the correct file extension
 			var args = $"{url} --print-json -o \"{filename}.{(isYtUrl ? "mp3" : "%(ext)s")}\"";
 
@@ -58,10 +58,10 @@ namespace AudioSync.Client.Backend
 
 			var startOptions = new ProcessStartInfo(_ytdlPath, args)
 			{
-				WorkingDirectory = downloadFolder,
+				WorkingDirectory       = downloadFolder,
 				RedirectStandardOutput = true
 			};
-			
+
 			var process = Process.Start(startOptions);
 			await process!.WaitForExitAsync();
 			var stdOut = await process.StandardOutput.ReadToEndAsync();

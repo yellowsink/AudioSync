@@ -60,7 +60,7 @@
 						</DataGrid>
 					</ScrollViewer>
 				</TabItem>
-				
+
 				<TabItem Header="Downloaded Tracks">
 					<ScrollViewer>
 						<DataGrid Items="{Binding CacheBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
@@ -90,7 +90,7 @@
 						</DataGrid>
 					</ScrollViewer>
 				</TabItem>
-				
+
 				<TabItem Header="Download Queue" VerticalContentAlignment="Center">
 					<ScrollViewer>
 						<DataGrid Items="{Binding DownloadsBindable^}" AutoGenerateColumns="False" IsReadOnly="True">

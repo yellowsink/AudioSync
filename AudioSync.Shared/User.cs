@@ -18,8 +18,10 @@ namespace AudioSync.Shared
 	{
 		[Description("Ready")]
 		Ready,
+
 		[Description("Downloading Current Song")]
 		DownloadingCurrentSong,
+
 		[Description("Downloading Songs")]
 		DownloadingSongs
 	}

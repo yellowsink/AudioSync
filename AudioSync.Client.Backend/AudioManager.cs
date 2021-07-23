@@ -29,9 +29,7 @@ namespace AudioSync.Client.Backend
 			if (File == null) throw new InvalidOperationException("You must set a file before playing audio");
 			if (IsPlaying) throw new InvalidOperationException("Cannot play audio when audio is already playing");
 
-			return IsPaused
-					   ? _player.Resume()
-					   : _player.Play(File.FullName);
+			return IsPaused ? _player.Resume() : _player.Play(File.FullName);
 		}
 
 		public Task Pause()

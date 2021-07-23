@@ -58,7 +58,8 @@ namespace AudioSync.Client.Backend
 			_logger.LogInformation($"Updating YTDL from {Versions.Ytdl} to {latestTagVersion}");
 			var client = new HttpClient();
 			var response
-				= await Task.Factory.StartNew(client.GetByteArrayAsync(ToolDownloadLocations.Ytdl).GetAwaiter().GetResult);
+				= await Task.Factory.StartNew(client.GetByteArrayAsync(ToolDownloadLocations.Ytdl).GetAwaiter()
+													.GetResult);
 			File.WriteAllBytes(YtdlExecutableLocation, response);
 
 			if (!OSDefaults.IsOnWindows)

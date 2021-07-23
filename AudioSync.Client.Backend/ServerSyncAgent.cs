@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging;
 namespace AudioSync.Client.Backend
 {
 	/// <summary>
-	///		Syncs multiple instances via an AudioSync.Server connection
+	///     Syncs multiple instances via an AudioSync.Server connection
 	/// </summary>
 	public partial class ServerSyncAgent : ISyncAgent
 	{
-		private readonly HubConnection       _connection;
+		private readonly HubConnection            _connection;
 		private readonly ILogger<ServerSyncAgent> _logger = HelperUtils.CreateLogger<ServerSyncAgent>();
 
 #pragma warning disable 8618

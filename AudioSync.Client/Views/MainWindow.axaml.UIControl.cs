@@ -15,7 +15,7 @@ namespace AudioSync.Client.Views
 		{
 			_queue.Add(song);
 			((MainWindowViewModel) DataContext!).Songs.Add(song);
-			
+
 			DownloadSongIfNeeded(song);
 		}
 
@@ -32,7 +32,7 @@ namespace AudioSync.Client.Views
 		private void UpdateUser(User user) => ((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
 		private void RemoveUser(string name) => ((MainWindowViewModel) DataContext!).Users.RemoveKey(name);
-		
+
 		private void DownloadSongIfNeeded(Song song)
 		{
 			if (_cacheManager.GetFromCache(song) == null) _downloadThread!.Enqueue(song);
@@ -47,11 +47,9 @@ namespace AudioSync.Client.Views
 
 		private void UpdateCacheView()
 		{
-			var cacheItems = _cacheManager.CacheItems
-										  .OrderBy(c => c.ArtistName)
-										  .ThenBy(c => c.AlbumName)
+			var cacheItems = _cacheManager.CacheItems.OrderBy(c => c.ArtistName).ThenBy(c => c.AlbumName)
 										  .ThenBy(c => c.SongName);
-			
+
 			((MainWindowViewModel) DataContext!).Cache.Clear();
 			((MainWindowViewModel) DataContext!).Cache.AddRange(cacheItems);
 		}
@@ -71,20 +69,16 @@ namespace AudioSync.Client.Views
 				((MainWindowViewModel) DataContext!).SongName   = song.Name;
 				((MainWindowViewModel) DataContext!).ArtistName = song.Artist;
 				((MainWindowViewModel) DataContext!).AlbumName  = song.Album;
-				((MainWindowViewModel) DataContext!).Format     = _cacheManager
-																 .GetFromCache(song)
-																?.Item1
-																 .FileExtension.
-																  ToUpper()
-															   ?? string.Empty;
+				((MainWindowViewModel) DataContext!).Format
+					= _cacheManager.GetFromCache(song)?.Item1.FileExtension.ToUpper() ?? string.Empty;
 			}
 		}
-		
+
 		[UsedImplicitly]
 		private void TextBoxAddSong_OnKeyUp(object? sender, KeyEventArgs keyEventArgs)
 		{
 			if (!((MainWindowViewModel) DataContext!).InputAddSong.Contains("\t")) return;
-			
+
 			var songParts = ((MainWindowViewModel) DataContext!).InputAddSong.Split("\t");
 			switch (songParts.Length)
 			{
@@ -99,7 +93,7 @@ namespace AudioSync.Client.Views
 					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
 					((MainWindowViewModel) DataContext!).InputAddAlbum  = songParts[2].Trim();
 					break;
-					
+
 				default:
 					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
 					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();

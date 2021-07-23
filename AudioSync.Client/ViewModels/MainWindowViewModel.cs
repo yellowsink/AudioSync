@@ -33,7 +33,7 @@ namespace AudioSync.Client.ViewModels
 			get => _backing.Downloads;
 			set => this.RaiseAndSetIfChanged(ref _backing.Downloads, value);
 		}
-		
+
 		public IObservable<IReadOnlyCollection<Song>> DownloadsBindable => Downloads.Connect().ToCollection();
 
 		public SourceList<CacheItem> Cache
@@ -41,11 +41,11 @@ namespace AudioSync.Client.ViewModels
 			get => _backing.Cache;
 			set => this.RaiseAndSetIfChanged(ref _backing.Cache, value);
 		}
-		
+
 		public IObservable<IReadOnlyCollection<CacheItem>> CacheBindable => Cache.Connect().ToCollection();
 
 
-	public string SongName
+		public string SongName
 		{
 			get => _backing.SongName;
 			set => this.RaiseAndSetIfChanged(ref _backing.SongName, value);
@@ -76,22 +76,25 @@ namespace AudioSync.Client.ViewModels
 		}
 
 
-		public string InputAddSong  
+		public string InputAddSong
 		{
 			get => _backing.InputAddSong;
 			set => this.RaiseAndSetIfChanged(ref _backing.InputAddSong, value);
 		}
+
 		public string InputAddArtist
 		{
 			get => _backing.InputAddArtist;
 			set => this.RaiseAndSetIfChanged(ref _backing.InputAddArtist, value);
 		}
-		public string InputAddAlbum 
+
+		public string InputAddAlbum
 		{
 			get => _backing.InputAddAlbum;
 			set => this.RaiseAndSetIfChanged(ref _backing.InputAddAlbum, value);
 		}
-		public string InputAddUrl   
+
+		public string InputAddUrl
 		{
 			get => _backing.InputAddUrl;
 			set => this.RaiseAndSetIfChanged(ref _backing.InputAddUrl, value);
@@ -101,23 +104,23 @@ namespace AudioSync.Client.ViewModels
 		{
 			internal string AlbumName  = string.Empty;
 			internal string ArtistName = string.Empty;
-			internal string Format     = string.Empty;
+
+			internal SourceList<CacheItem> Cache = new();
+
+			internal SourceList<Song> Downloads      = new();
+			internal string           Format         = string.Empty;
+			internal string           InputAddAlbum  = string.Empty;
+			internal string           InputAddArtist = string.Empty;
+
+			internal string InputAddSong = string.Empty;
+			internal string InputAddUrl  = string.Empty;
 
 			internal bool ShowMediaControls;
 
-			internal string InputAddSong   = string.Empty;
-			internal string InputAddArtist = string.Empty;
-			internal string InputAddAlbum  = string.Empty;
-			internal string InputAddUrl    = string.Empty;
-			
 			internal string           SongName = string.Empty;
 			internal SourceList<Song> Songs    = new();
 
 			internal SourceCache<User, string> Users = new(u => u.Name);
-
-			internal SourceList<Song> Downloads = new();
-
-			internal SourceList<CacheItem> Cache = new();
 		}
 	}
 }
