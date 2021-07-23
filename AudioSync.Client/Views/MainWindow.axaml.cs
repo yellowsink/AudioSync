@@ -58,9 +58,11 @@ namespace AudioSync.Client.Views
 			var album  = vm.InputAddAlbum;
 			var url    = vm.InputAddUrl;
 
-			if (string.IsNullOrWhiteSpace(song)  || string.IsNullOrWhiteSpace(artist) ||
-				string.IsNullOrWhiteSpace(album) || string.IsNullOrWhiteSpace(url))
+			if (string.IsNullOrWhiteSpace(song)  || string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(url))
 				return;
+
+			if (string.IsNullOrWhiteSpace(album))
+				album = null;
 
 			AddSong(new Song(song, artist, album, url));
 		}
