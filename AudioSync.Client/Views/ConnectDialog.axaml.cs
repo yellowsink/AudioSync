@@ -63,6 +63,7 @@ namespace AudioSync.Client.Views
 		private void ButtonOffline_OnClick(object? sender, RoutedEventArgs e)
 		{
 			SyncAgent = new OfflineSyncAgent();
+			SyncAgent.Connect().Wait();
 			Close();
 		}
 	}
