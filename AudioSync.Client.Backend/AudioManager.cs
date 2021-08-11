@@ -10,6 +10,11 @@ namespace AudioSync.Client.Backend
 	/// </summary>
 	public class AudioManager
 	{
+		public AudioManager()
+		{
+			_player.PlaybackFinished += (s, a) => FinishedPlaying.Invoke(s, a);
+		}
+		
 		private readonly Player _player = new();
 
 		public FileInfo? File;
@@ -46,8 +51,7 @@ namespace AudioSync.Client.Backend
 			return _player.Stop().RunOnNewThread();
 		}
 
-		public void OnFinishedPlaying(Action<object, EventArgs> action)
-			=> _player.PlaybackFinished += (_, args) => action(this, args);
+		public EventHandler FinishedPlaying = (_, _) => { };
 	}
 
 	public enum AudioManagerStatus
