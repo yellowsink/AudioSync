@@ -11,12 +11,13 @@ namespace AudioSync.Client.Views
 {
 	public partial class MainWindow : Window
 	{
-		private readonly AudioManager    _audioManager = new();
-		private readonly CacheManager    _cacheManager = new();
-		private readonly Config          _config;
-		private          DownloadThread? _downloadThread;
-		private          Queue           _queue = new();
-		private          ISyncAgent?     _syncAgent;
+		private readonly AudioManager           _audioManager = new();
+		private readonly CacheManager           _cacheManager = new();
+		private readonly Config                 _config;
+		private          DownloadThread?        _downloadThread;
+		private          Queue                  _queue = new();
+		private          ISyncAgent?            _syncAgent;
+		private readonly DiscordPresenceManager _presenceManager;
 
 		private ToolManager? _toolManager;
 
@@ -30,8 +31,9 @@ namespace AudioSync.Client.Views
 #endif
 
 			// Init
-			_config = Config.Load();
-
+			_config          = Config.Load();
+			_presenceManager = new DiscordPresenceManager(_config.DiscordPresenceAppId);
+			
 			// don't leave hanging connections to the server
 			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
@@ -41,7 +43,7 @@ namespace AudioSync.Client.Views
 				_cacheManager.Dispose(_config.CacheDaysThreshold);
 				_config.Save();
 			};
-
+			
 #pragma warning disable 4014
 			StartupTasks();
 #pragma warning restore 4014

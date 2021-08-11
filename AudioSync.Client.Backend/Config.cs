@@ -13,6 +13,11 @@ namespace AudioSync.Client.Backend
 		/// </summary>
 		public int? CacheDaysThreshold { get; set; } = 30;
 
+		/// <summary>
+		///		What app ID to use for Discord Rich Presence
+		/// </summary>
+		public string DiscordPresenceAppId { get; set; } = "874956856760598608";
+
 		public void Save(string? configPath = null)
 		{
 			configPath ??= OSDefaults.DefaultConfigLocation;

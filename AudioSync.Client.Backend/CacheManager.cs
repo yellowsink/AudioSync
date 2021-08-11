@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using AudioSync.Shared;
+using JsonLines;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 using NodaTime.Extensions;
@@ -53,7 +53,7 @@ namespace AudioSync.Client.Backend
 
 			_logger.LogInformation("Loading cache index from disk");
 			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
-			CacheItems = JsonSerializer.Deserialize<CacheItem[]>(File.ReadAllText(cacheIndexPath)) ??
+			CacheItems = JsonLinesSerializer.Deserialize<CacheItem>(File.ReadAllText(cacheIndexPath)) ??
 						 Array.Empty<CacheItem>();
 		}
 
@@ -63,7 +63,7 @@ namespace AudioSync.Client.Backend
 
 			_logger.LogInformation("Saving cache index to disk");
 			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
-			File.WriteAllText(cacheIndexPath, JsonSerializer.Serialize(CacheItems));
+			File.WriteAllText(cacheIndexPath, JsonLinesSerializer.Serialize(CacheItems));
 		}
 
 		/// <summary>

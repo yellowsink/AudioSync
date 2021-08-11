@@ -12,14 +12,16 @@ namespace AudioSync.Client.Backend
 		private readonly HubConnection            _connection;
 		private readonly ILogger<ServerSyncAgent> _logger = HelperUtils.CreateLogger<ServerSyncAgent>();
 
+		public string Url;
+
 #pragma warning disable 8618
 		public ServerSyncAgent(string url, string name, bool isMaster = false)
 #pragma warning restore 8618
 		{
-			url =  url.TrimEnd('/');
-			url += "/synchub";
+			Url =  url.TrimEnd('/');
+			Url += "/synchub";
 
-			_connection = new HubConnectionBuilder().WithUrl(url).WithAutomaticReconnect().Build();
+			_connection = new HubConnectionBuilder().WithUrl(Url).WithAutomaticReconnect().Build();
 
 			IsMaster = isMaster;
 			Name     = name;
