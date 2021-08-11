@@ -14,10 +14,10 @@ namespace AudioSync.Client.Views
 		private readonly AudioManager           _audioManager = new();
 		private readonly CacheManager           _cacheManager = new();
 		private readonly Config                 _config;
+		private readonly DiscordPresenceManager _presenceManager;
 		private          DownloadThread?        _downloadThread;
 		private          Queue                  _queue = new();
 		private          ISyncAgent?            _syncAgent;
-		private readonly DiscordPresenceManager _presenceManager;
 
 		private ToolManager? _toolManager;
 
@@ -33,7 +33,7 @@ namespace AudioSync.Client.Views
 			// Init
 			_config          = Config.Load();
 			_presenceManager = new DiscordPresenceManager(_config.DiscordPresenceAppId);
-			
+
 			// don't leave hanging connections to the server
 			// ReSharper disable once AsyncVoidLambda
 			Closing += async (_, _) =>
@@ -43,7 +43,7 @@ namespace AudioSync.Client.Views
 				_cacheManager.Dispose(_config.CacheDaysThreshold);
 				_config.Save();
 			};
-			
+
 #pragma warning disable 4014
 			StartupTasks();
 #pragma warning restore 4014
@@ -60,7 +60,7 @@ namespace AudioSync.Client.Views
 			var album  = vm.InputAddAlbum;
 			var url    = vm.InputAddUrl;
 
-			if (string.IsNullOrWhiteSpace(song)  || string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(url))
+			if (string.IsNullOrWhiteSpace(song) || string.IsNullOrWhiteSpace(artist) || string.IsNullOrWhiteSpace(url))
 				return;
 
 			if (string.IsNullOrWhiteSpace(album))

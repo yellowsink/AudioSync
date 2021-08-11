@@ -29,14 +29,8 @@ namespace AudioSync.Client.Backend
 			CacheRoot = cacheLocation ?? OSDefaults.DefaultCacheLocation;
 			Directory.CreateDirectory(CacheRoot);
 
-			try
-			{
-				LoadCache();
-			}
-			catch (FileNotFoundException)
-			{
-				_cacheItems = new List<CacheItem>();
-			}
+			try { LoadCache(); }
+			catch (FileNotFoundException) { _cacheItems = new List<CacheItem>(); }
 		}
 
 		public CacheItem[] CacheItems
@@ -53,8 +47,8 @@ namespace AudioSync.Client.Backend
 
 			_logger.LogInformation("Loading cache index from disk");
 			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
-			CacheItems = JsonLinesSerializer.Deserialize<CacheItem>(File.ReadAllText(cacheIndexPath)) ??
-						 Array.Empty<CacheItem>();
+			CacheItems = JsonLinesSerializer.Deserialize<CacheItem>(File.ReadAllText(cacheIndexPath))
+					  ?? Array.Empty<CacheItem>();
 		}
 
 		public void SaveCache()
@@ -93,7 +87,9 @@ namespace AudioSync.Client.Backend
 				{
 					var comparison = thresholdDateTime.CompareTo(cacheItem.ObjectCreationDateTime);
 					if (comparison <= 0) // on the threshold date or before it
-						File.Delete(Path.Combine(CacheRoot, cacheItem.CachePrefix, cacheItem.ArtistName,
+						File.Delete(Path.Combine(CacheRoot,
+												 cacheItem.CachePrefix,
+												 cacheItem.ArtistName,
 												 cacheItem.FileExtension + cacheItem.FileExtension));
 				}
 			}
@@ -162,7 +158,9 @@ namespace AudioSync.Client.Backend
 
 			if (cacheItem == null) return null;
 
-			var file = new FileInfo(Path.Combine(CacheRoot, cacheItem.CachePrefix, cacheItem.ArtistName,
+			var file = new FileInfo(Path.Combine(CacheRoot,
+												 cacheItem.CachePrefix,
+												 cacheItem.ArtistName,
 												 cacheItem.SongName + cacheItem.FileExtension));
 
 			return (cacheItem, file);

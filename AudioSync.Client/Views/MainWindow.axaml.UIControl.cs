@@ -47,7 +47,8 @@ namespace AudioSync.Client.Views
 
 		private void UpdateCacheView()
 		{
-			var cacheItems = _cacheManager.CacheItems.OrderBy(c => c.ArtistName).ThenBy(c => c.AlbumName)
+			var cacheItems = _cacheManager.CacheItems.OrderBy(c => c.ArtistName)
+										  .ThenBy(c => c.AlbumName)
 										  .ThenBy(c => c.SongName);
 
 			((MainWindowViewModel) DataContext!).Cache.Clear();

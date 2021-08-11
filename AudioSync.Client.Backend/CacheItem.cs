@@ -48,8 +48,8 @@ namespace AudioSync.Client.Backend
 
 		// ReSharper disable once MemberCanBePrivate.Global
 		protected bool Equals(CacheItem other)
-			=> FileExtension == other.FileExtension && SongName == other.SongName && ArtistName == other.ArtistName &&
-			   CachePrefix   == other.CachePrefix;
+			=> FileExtension == other.FileExtension && SongName == other.SongName && ArtistName == other.ArtistName
+			&& CachePrefix   == other.CachePrefix;
 
 		// ReSharper disable NonReadonlyMemberInGetHashCode
 		public override int GetHashCode() => HashCode.Combine(FileExtension, SongName, ArtistName, CachePrefix);

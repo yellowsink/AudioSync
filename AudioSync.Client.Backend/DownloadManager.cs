@@ -38,7 +38,8 @@ namespace AudioSync.Client.Backend
 		{
 			downloadFolder ??= OSDefaults.DefaultDownloadLocation;
 			Directory.CreateDirectory(downloadFolder);
-			var (file, ext) = await RunYtdl(await song.DownloadableUrlAsync(), $"{song.Artist} - {song.Name}",
+			var (file, ext) = await RunYtdl(await song.DownloadableUrlAsync(),
+											$"{song.Artist} - {song.Name}",
 											downloadFolder);
 
 			_moveToCacheAction(CreateCacheItem(song, ext), file);

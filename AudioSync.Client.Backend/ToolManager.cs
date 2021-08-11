@@ -52,13 +52,14 @@ namespace AudioSync.Client.Backend
 			latestTagVersion ??= await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
 			// oh boy that's messy
-			if (Versions.Ytdl                                       == latestTagVersion ||
-				Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) == false) return;
+			if (Versions.Ytdl                                       == latestTagVersion
+			 || Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) == false) return;
 
 			_logger.LogInformation($"Updating YTDL from {Versions.Ytdl} to {latestTagVersion}");
 			var client = new HttpClient();
 			var response
-				= await Task.Factory.StartNew(client.GetByteArrayAsync(ToolDownloadLocations.Ytdl).GetAwaiter()
+				= await Task.Factory.StartNew(client.GetByteArrayAsync(ToolDownloadLocations.Ytdl)
+													.GetAwaiter()
 													.GetResult);
 			File.WriteAllBytes(YtdlExecutableLocation, response);
 
@@ -75,13 +76,10 @@ namespace AudioSync.Client.Backend
 			{
 				var latestTagVersion = await GetLatestTagVersion("ytdl-org", "youtube-dl");
 
-				return Versions.Ytdl == latestTagVersion ||
-					   (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
+				return Versions.Ytdl == latestTagVersion
+					|| (Versions.Ytdl?.VersionIsNewerThan(latestTagVersion) ?? false);
 			}
-			catch (Exception)
-			{
-				return true;
-			}
+			catch (Exception) { return true; }
 		}
 
 		public void DestroyTools()
@@ -104,8 +102,8 @@ namespace AudioSync.Client.Backend
 			_logger.LogDebug("Loading tool versions");
 			var toolVersionsPath = Path.Combine(ToolDirectory, "versions.json");
 			if (File.Exists(toolVersionsPath))
-				Versions = JsonSerializer.Deserialize<ToolVersions>(File.ReadAllText(toolVersionsPath)) ??
-						   new ToolVersions();
+				Versions = JsonSerializer.Deserialize<ToolVersions>(File.ReadAllText(toolVersionsPath))
+						?? new ToolVersions();
 		}
 	}
 
