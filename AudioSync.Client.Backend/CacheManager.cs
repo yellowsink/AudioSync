@@ -46,7 +46,8 @@ namespace AudioSync.Client.Backend
 			CheckDisposed();
 
 			_logger.LogInformation("Loading cache index from disk");
-			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
+			var cacheIndexPath = Path.Combine(CacheRoot, "index.jsonl");
+			
 			CacheItems = JsonLinesSerializer.Deserialize<CacheItem>(File.ReadAllText(cacheIndexPath))
 					  ?? Array.Empty<CacheItem>();
 		}
@@ -56,7 +57,7 @@ namespace AudioSync.Client.Backend
 			CheckDisposed();
 
 			_logger.LogInformation("Saving cache index to disk");
-			var cacheIndexPath = Path.Combine(CacheRoot, "index.json");
+			var cacheIndexPath = Path.Combine(CacheRoot, "index.jsonl");
 			File.WriteAllText(cacheIndexPath, JsonLinesSerializer.Serialize(CacheItems));
 		}
 
@@ -85,7 +86,7 @@ namespace AudioSync.Client.Backend
 				var thresholdDateTime = currentDateTime.PlusDays(-daysThreshold.Value);
 				foreach (var cacheItem in _cacheItems)
 				{
-					var comparison = thresholdDateTime.CompareTo(cacheItem.ObjectCreationDateTime);
+					var comparison = thresholdDateTime.CompareTo(cacheItem.ObjectCreationDate);
 					if (comparison <= 0) // on the threshold date or before it
 						File.Delete(Path.Combine(CacheRoot,
 												 cacheItem.CachePrefix,

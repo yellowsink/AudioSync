@@ -79,6 +79,7 @@ namespace AudioSync.Client.Views
 #pragma warning restore 4014
 
 			UpdateCacheView();
+			UpdateHistoryView();
 
 			// show rich presence
 			var serverAgent = _syncAgent as ServerSyncAgent ?? null;

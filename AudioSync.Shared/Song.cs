@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace AudioSync.Shared
 		/// <summary>
 		///     The raw URL given for the song
 		/// </summary>
-		public string RawUrl;
+		public string RawUrl { get; }
 
 		/// <summary>
 		///     If using youtube is preferred over soundcloud. Set automatically if a song is not on soundcloud
@@ -75,5 +76,12 @@ namespace AudioSync.Shared
 			if (ytUrl == null) throw new SongUnavailableException();
 			return ytUrl;
 		}
+
+
+		public override bool Equals(object? obj) => obj is Song s && Equals(s);
+
+		protected bool Equals(Song other) => RawUrl == other.RawUrl && Name == other.Name && Artist == other.Artist;
+
+		public override int GetHashCode() => HashCode.Combine(RawUrl, Name, Artist);
 	}
 }

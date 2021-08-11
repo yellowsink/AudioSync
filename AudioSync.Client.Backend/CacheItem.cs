@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization;
 using AudioSync.Shared;
 using NodaTime;
 using NodaTime.Extensions;
@@ -38,7 +40,19 @@ namespace AudioSync.Client.Backend
 		public string    ArtistName             { get; set; }
 		public string?   AlbumName              { get; set; }
 		public string    CachePrefix            { get; set; }
-		public LocalDate ObjectCreationDateTime { get; set; } = SystemClock.Instance.InUtc().GetCurrentDate();
+		
+		/// <summary>
+		///		Only intended for use by Utf8Json please ignore
+		/// </summary>
+		[DataMember(Name = "ObjectCreationDate")]
+		public string ObjectCreationDateStr
+		{
+			get => ObjectCreationDate.ToString("R", CultureInfo.InvariantCulture);
+			set => ObjectCreationDate = LocalDate.FromDateTime(DateTime.Parse(value));
+		}
+		
+		[IgnoreDataMember]
+		public LocalDate ObjectCreationDate { get; set; } = SystemClock.Instance.InUtc().GetCurrentDate();
 
 		public FileInfo File(string cacheroot)
 			=> new(Path.Combine(cacheroot, CachePrefix, ArtistName, SongName + FileExtension));

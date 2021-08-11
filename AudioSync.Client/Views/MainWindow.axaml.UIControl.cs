@@ -15,6 +15,8 @@ namespace AudioSync.Client.Views
 		{
 			_queue.Add(song);
 			((MainWindowViewModel) DataContext!).Songs.Add(song);
+			_historyManager.Add(song);
+			UpdateHistoryView();
 
 			DownloadSongIfNeeded(song);
 		}
@@ -53,6 +55,12 @@ namespace AudioSync.Client.Views
 
 			((MainWindowViewModel) DataContext!).Cache.Clear();
 			((MainWindowViewModel) DataContext!).Cache.AddRange(cacheItems);
+		}
+		
+		private void UpdateHistoryView()
+		{
+			((MainWindowViewModel) DataContext!).History.Clear();
+			((MainWindowViewModel) DataContext!).History.AddRange(_historyManager.History);
 		}
 
 		private void UpdateNowPlayingMetadata()
@@ -95,6 +103,12 @@ namespace AudioSync.Client.Views
 					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
 					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
 					((MainWindowViewModel) DataContext!).InputAddAlbum  = songParts[2].Trim();
+					break;
+				case 4:
+					((MainWindowViewModel) DataContext!).InputAddSong   = songParts[0].Trim();
+					((MainWindowViewModel) DataContext!).InputAddArtist = songParts[1].Trim();
+					((MainWindowViewModel) DataContext!).InputAddAlbum  = songParts[2].Trim();
+					((MainWindowViewModel) DataContext!).InputAddUrl    = songParts[3].Trim();
 					break;
 
 				default:

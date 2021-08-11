@@ -100,6 +100,14 @@ namespace AudioSync.Client.ViewModels
 			set => this.RaiseAndSetIfChanged(ref _backing.InputAddUrl, value);
 		}
 
+		public SourceList<Song> History
+		{
+			get => _backing.History;
+			set => this.RaiseAndSetIfChanged(ref _backing.History, value);
+		}
+
+		public IObservable<IReadOnlyCollection<Song>> HistoryBindable => History.Connect().ToCollection();
+
 		private class Backing
 		{
 			internal string AlbumName  = string.Empty;
@@ -121,6 +129,8 @@ namespace AudioSync.Client.ViewModels
 			internal SourceList<Song> Songs    = new();
 
 			internal SourceCache<User, string> Users = new(u => u.Name);
+
+			internal SourceList<Song> History = new();
 		}
 	}
 }

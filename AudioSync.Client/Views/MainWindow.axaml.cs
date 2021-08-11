@@ -11,8 +11,9 @@ namespace AudioSync.Client.Views
 {
 	public partial class MainWindow : Window
 	{
-		private readonly AudioManager           _audioManager = new();
-		private readonly CacheManager           _cacheManager = new();
+		private readonly AudioManager           _audioManager   = new();
+		private readonly CacheManager           _cacheManager   = new();
+		private readonly HistoryManager         _historyManager = new();
 		private readonly Config                 _config;
 		private readonly DiscordPresenceManager _presenceManager;
 		private          DownloadThread?        _downloadThread;

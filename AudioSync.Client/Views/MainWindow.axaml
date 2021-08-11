@@ -74,6 +74,21 @@
 						</DataGrid>
 					</ScrollViewer>
 				</TabItem>
+				
+				<TabItem Header="History">
+					<ScrollViewer>
+						<DataGrid Items="{Binding HistoryBindable^}" AutoGenerateColumns="False" IsReadOnly="True">
+							<DataGrid.Columns>
+								<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+								<DataGridTextColumn Header="Song" Binding="{Binding Name, Mode=OneWay}" />
+								<DataGridTextColumn Header="Artist" Binding="{Binding Artist, Mode=OneWay}" />
+								<DataGridTextColumn Header="Album" Binding="{Binding Album, Mode=OneWay}" />
+								<DataGridTextColumn Header="Url" Binding="{Binding RawUrl, Mode=OneWay}" />
+								<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+							</DataGrid.Columns>
+						</DataGrid>
+					</ScrollViewer>
+				</TabItem>
 			</TabControl>
 
 			<TabControl Grid.Row="0" Grid.Column="2" Margin="5">

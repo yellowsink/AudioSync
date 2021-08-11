@@ -110,29 +110,30 @@ namespace AudioSync.Client.Backend
 
 #region ConfigLocation
 
-		private static string DefaultWindowsConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-							@"AudioSync\config.json");
+		private static string DefaultWindowsConfigDir
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"AudioSync");
 
-		private static string DefaultUnixConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-							".config/audiosync_config.json");
+		private static string DefaultUnixConfigDir
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config/audiosync");
 
-		private static string DefaultMacConfigLocation
-			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-							"Library/AudioSync/config.json");
+		private static string DefaultMacConfigDir
+			=> Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library/AudioSync");
 
 		// ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
-		public static string DefaultConfigLocation => Environment.OSVersion.Platform switch
+		public static string DefaultConfigDir => Environment.OSVersion.Platform switch
 		{
-			PlatformID.Win32S       => DefaultWindowsConfigLocation,
-			PlatformID.Win32Windows => DefaultWindowsConfigLocation,
-			PlatformID.Win32NT      => DefaultWindowsConfigLocation,
-			PlatformID.WinCE        => DefaultWindowsConfigLocation,
-			PlatformID.Unix         => DefaultUnixConfigLocation,
-			PlatformID.MacOSX       => DefaultMacConfigLocation,
+			PlatformID.Win32S       => DefaultWindowsConfigDir,
+			PlatformID.Win32Windows => DefaultWindowsConfigDir,
+			PlatformID.Win32NT      => DefaultWindowsConfigDir,
+			PlatformID.WinCE        => DefaultWindowsConfigDir,
+			PlatformID.Unix         => DefaultUnixConfigDir,
+			PlatformID.MacOSX       => DefaultMacConfigDir,
 			_                       => throw new ArgumentOutOfRangeException()
 		};
+
+		public static string DefaultConfigLocation => Path.Combine(DefaultConfigDir, "config.json");
+
+		public static string DefaultHistoryLocation => Path.Combine(DefaultConfigDir, "history.jsonl");
 
 #endregion
 	}
