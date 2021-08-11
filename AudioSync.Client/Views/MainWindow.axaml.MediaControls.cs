@@ -25,7 +25,7 @@ namespace AudioSync.Client.Views
 				_audioManager.File = cachedSong.Value.Item2;
 			}
 
-			Task.Factory.StartNew(_audioManager.Play);
+			Task.Factory.StartNew(_audioManager.Play).Wait();
 
 			UpdateNowPlayingMetadata();
 		}
