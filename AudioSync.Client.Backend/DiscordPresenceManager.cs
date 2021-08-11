@@ -39,7 +39,12 @@ namespace AudioSync.Client.Backend
 		public void UpdateStatus(bool isOnline, string? ip, string? username)
 		{
 			_presence.State = !isOnline ? "Listening offline" : $"listening on {ip} as {username}";
+			_client.SetPresence(_presence);
+		}
 
+		public void NotPlaying()
+		{
+			_presence.Details = "Not playing";
 			_client.SetPresence(_presence);
 		}
 	}

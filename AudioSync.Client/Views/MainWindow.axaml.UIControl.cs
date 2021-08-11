@@ -59,6 +59,7 @@ namespace AudioSync.Client.Views
 		{
 			if (_audioManager.Status == AudioManagerStatus.Idle)
 			{
+				_presenceManager.NotPlaying();
 				((MainWindowViewModel) DataContext!).SongName   = string.Empty;
 				((MainWindowViewModel) DataContext!).ArtistName = string.Empty;
 				((MainWindowViewModel) DataContext!).AlbumName  = string.Empty;
@@ -67,6 +68,7 @@ namespace AudioSync.Client.Views
 			else
 			{
 				var song = _queue.Songs[_queue.CurrentIndex];
+				_presenceManager.UpdateCurrentSong(song);
 				((MainWindowViewModel) DataContext!).SongName   = song.Name;
 				((MainWindowViewModel) DataContext!).ArtistName = song.Artist;
 				((MainWindowViewModel) DataContext!).AlbumName  = song.Album;
