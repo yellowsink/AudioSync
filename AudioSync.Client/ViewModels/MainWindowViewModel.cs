@@ -108,6 +108,18 @@ namespace AudioSync.Client.ViewModels
 
 		public IObservable<IReadOnlyCollection<Song>> HistoryBindable => History.Connect().ToCollection();
 
+		public int SongProgressMax
+		{
+			get => _backing.SongProgressMax;
+			set => this.RaiseAndSetIfChanged(ref _backing.SongProgressMax, value);
+		}
+		
+		public int SongProgressCurrent
+		{
+			get => _backing.SongProgressCurrent;
+			set => this.RaiseAndSetIfChanged(ref _backing.SongProgressCurrent, value);
+		}
+
 		private class Backing
 		{
 			internal string AlbumName  = string.Empty;
@@ -131,6 +143,9 @@ namespace AudioSync.Client.ViewModels
 			internal SourceCache<User, string> Users = new(u => u.Name);
 
 			internal SourceList<Song> History = new();
+
+			internal int SongProgressMax     = 1;
+			internal int SongProgressCurrent = 0;
 		}
 	}
 }

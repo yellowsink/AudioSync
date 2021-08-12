@@ -16,6 +16,7 @@ namespace AudioSync.Client.Views
 		private readonly HistoryManager         _historyManager = new();
 		private readonly Config                 _config;
 		private readonly DiscordPresenceManager _presenceManager;
+		private          SongProgressBarThread  _barThread;
 		private          DownloadThread?        _downloadThread;
 		private          Queue                  _queue = new();
 		private          ISyncAgent?            _syncAgent;

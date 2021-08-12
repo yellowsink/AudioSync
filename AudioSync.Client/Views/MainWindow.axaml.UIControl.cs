@@ -85,6 +85,12 @@ namespace AudioSync.Client.Views
 			}
 		}
 
+		private void UpdateSongProgressBar(int currentPos, int maxPos)
+		{
+			((MainWindowViewModel) DataContext!).SongProgressMax     = maxPos;
+			((MainWindowViewModel) DataContext!).SongProgressCurrent = currentPos;
+		}
+
 		[UsedImplicitly]
 		private void TextBoxAddSong_OnKeyUp(object? sender, KeyEventArgs keyEventArgs)
 		{

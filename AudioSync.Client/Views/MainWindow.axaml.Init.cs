@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using AudioSync.Client.Backend;
 using AudioSync.Client.ViewModels;
@@ -83,12 +82,16 @@ namespace AudioSync.Client.Views
 				}
 			};*/
 
+			// show users
 			((MainWindowViewModel) DataContext!).Users.Clear();
 			foreach (var user in await _syncAgent!.GetUsers())
 				((MainWindowViewModel) DataContext!).Users.AddOrUpdate(user);
 
+			// kick off download and progress bar threads
 #pragma warning disable 4014
 			Task.Factory.StartNew(_downloadThread!.Run().Wait);
+			_barThread = new SongProgressBarThread(UpdateSongProgressBar);
+			_barThread.Run();
 #pragma warning restore 4014
 
 			UpdateCacheView();
