@@ -23,10 +23,11 @@ namespace AudioSync.Client.Views
 				if (!cachedSong.HasValue) return; // song not in cache, so do nothing
 
 				_audioManager.File = cachedSong.Value.Item2;
+				
+				_barThread.Reset((int) await GetSecondsInSong(_queue.Songs[_queue.CurrentIndex]));
 			}
-
-			_barThread.Reset((int) await GetSecondsInSong(_queue.Songs[_queue.CurrentIndex]));
-
+			
+			_barThread.Resume();
 			Task.Factory.StartNew(_audioManager.Play).Wait();
 
 			UpdateNowPlayingMetadata();
