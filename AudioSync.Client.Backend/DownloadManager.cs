@@ -53,9 +53,9 @@ namespace AudioSync.Client.Backend
 			var isYtUrl = url.Contains("youtube.com");
 
 			// %(ext)s is a pattern that tells YTDL to insert the correct file extension
-			var args = $"{url} --print-json -o \"{filename}.{(isYtUrl ? "mp3" : "%(ext)s")}\"";
+			var args = $"{url} --print-json -o \"{filename}.%(ext)s\"";
 
-			if (isYtUrl) args += " -x --audio-format mp3";
+			if (isYtUrl) args += " -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0";
 
 			var startOptions = new ProcessStartInfo(_ytdlPath, args)
 			{
@@ -69,7 +69,12 @@ namespace AudioSync.Client.Backend
 
 			var ytdlOutput = JsonSerializer.Deserialize<YtdlOutputObject>(stdOut)!;
 
-			if (isYtUrl) ytdlOutput.Extension = "mp3";
+			if (isYtUrl)
+			{
+				ytdlOutput.Filename = ytdlOutput.Filename[Range.EndAt(ytdlOutput.Filename.Length - 5)]
+									+ ".mp3";
+				ytdlOutput.Extension = "mp3";
+			}
 
 			return (new FileInfo(Path.Combine(downloadFolder, ytdlOutput.Filename)), ytdlOutput.Extension);
 		}
