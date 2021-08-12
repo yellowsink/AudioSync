@@ -72,6 +72,10 @@ namespace AudioSync.Client.Views
 			// register event handlers
 			RegisterSyncEventHandlers();
 			RegisterDownloadEventHandlers();
+			
+			// this will have to do for now
+			_audioManager.FinishedPlaying += (_, _) => _queue.Next();
+			
 			// it no workey
 			/*_audioManager.FinishedPlaying += async (_, _) =>
 			{
