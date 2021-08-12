@@ -32,6 +32,7 @@ namespace AudioSync.Client
 				{
 					count               = 0;
 					songNeedsRestarting = false;
+					_restartSong        = false;
 				}
 				if (count == _songSeconds)
 					songNeedsRestarting = true;
@@ -46,15 +47,19 @@ namespace AudioSync.Client
 			_stop    = false;
 		}
 
-		public void Stop() => _stop = true;
-
+		public void Stop()   => _stop = true;
 		public void Pause()  => _paused = true;
 		public void Resume() => _paused = false;
+		public void PauseToStart()
+		{
+			Pause();
+			_updateProgress(0, _songSeconds);
+		}
 
 		public void Reset(int songSeconds)
 		{
+			_songSeconds    = songSeconds;
 			_restartSong = true;
-			_songSeconds = songSeconds;
 		}
 	}
 }

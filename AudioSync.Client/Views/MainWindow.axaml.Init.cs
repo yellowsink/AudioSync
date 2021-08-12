@@ -13,12 +13,16 @@ namespace AudioSync.Client.Views
 
 		private void RegisterSyncEventHandlers()
 		{
+#pragma warning disable 4014
 			_syncAgent!.TransportPlayEvent += (_, _) => Play();
+#pragma warning restore 4014
 			_syncAgent.TransportPauseEvent += (_, _) => Pause();
 			_syncAgent.TransportStopEvent  += (_, _) => Stop();
 
+#pragma warning disable 4014
 			_syncAgent.QueueNextEvent     += (_, _) => Next();
 			_syncAgent.QueuePreviousEvent += (_, _) => Previous();
+#pragma warning restore 4014
 
 			_syncAgent.UpdateUserEvent += (_, u) => UpdateUser(u);
 			_syncAgent.RemoveUserEvent += (_, u) => RemoveUser(u);

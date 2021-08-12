@@ -12,6 +12,7 @@
         <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
+        <PackageReference Include="Xabe.FFmpeg" Version="5.0.2" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\AudioSync.Client.Backend\AudioSync.Client.Backend.csproj" />

@@ -6,6 +6,7 @@ using AudioSync.Shared;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Xabe.FFmpeg;
 
 namespace AudioSync.Client.Views
 {
@@ -16,8 +17,8 @@ namespace AudioSync.Client.Views
 		private readonly HistoryManager         _historyManager = new();
 		private readonly Config                 _config;
 		private readonly DiscordPresenceManager _presenceManager;
-		private          SongProgressBarThread  _barThread;
-		private          DownloadThread?        _downloadThread;
+		private          SongProgressBarThread  _barThread = null!;
+		private          DownloadThread        _downloadThread = null!;
 		private          Queue                  _queue = new();
 		private          ISyncAgent?            _syncAgent;
 
@@ -75,10 +76,21 @@ namespace AudioSync.Client.Views
 		{
 			if (currentlyDownloading == null)
 				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.Ready).Wait);
-			else if (currentlyDownloading == _queue.Songs[_queue.CurrentIndex])
+			else if (currentlyDownloading.Equals(_queue.Songs[_queue.CurrentIndex]))
 				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.DownloadingCurrentSong).Wait);
 			else
 				Task.Factory.StartNew(_syncAgent!.SetStatus(UserStatus.DownloadingSongs).Wait);
+		}
+
+		public async Task<double> GetSecondsInSong(Song song)
+		{
+			var cacheItem = _cacheManager.GetFromCache(song);
+			if (cacheItem == null)
+				throw new Exception("Song is not in cache");
+			var file   = cacheItem.Value.Item2;
+			var length = (await FFmpeg.GetMediaInfo(file.FullName)).Duration;
+
+			return length.TotalSeconds;
 		}
 	}
 }

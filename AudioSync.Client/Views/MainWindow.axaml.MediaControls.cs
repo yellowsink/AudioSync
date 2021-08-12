@@ -10,7 +10,7 @@ namespace AudioSync.Client.Views
 	{
 		private void ShowMediaControls(bool show) => ((MainWindowViewModel) DataContext!).ShowMediaControls = show;
 
-		private void Play()
+		private async Task Play()
 		{
 			if (_audioManager.IsPlaying) return; // We're already playing, so do nothing
 
@@ -25,6 +25,8 @@ namespace AudioSync.Client.Views
 				_audioManager.File = cachedSong.Value.Item2;
 			}
 
+			_barThread.Reset((int) await GetSecondsInSong(_queue.Songs[_queue.CurrentIndex]));
+
 			Task.Factory.StartNew(_audioManager.Play).Wait();
 
 			UpdateNowPlayingMetadata();
@@ -33,6 +35,7 @@ namespace AudioSync.Client.Views
 		private void Pause()
 		{
 			if (_audioManager.IsPlaying) _audioManager.Pause();
+			_barThread.Pause();
 		}
 
 		private void Stop()
@@ -40,21 +43,22 @@ namespace AudioSync.Client.Views
 			if (_audioManager.Status != AudioManagerStatus.Idle) _audioManager.Stop();
 			_audioManager.File = null;
 			UpdateNowPlayingMetadata();
+			_barThread.PauseToStart();
 		}
 
-		private void Next()
+		private async Task Next()
 		{
 			Stop();
 			_queue.Next();
-			Play();
+			await Play();
 			UpdateUserStatus(_downloadThread?.CurrentlyDownloading);
 		}
 
-		private void Previous()
+		private async Task Previous()
 		{
 			Stop();
 			_queue.Previous();
-			Play();
+			await Play();
 			UpdateUserStatus(_downloadThread?.CurrentlyDownloading);
 		}
 
